@@ -1,0 +1,25 @@
+version: 1
+applications:
+  - appRoot: .
+    backend:
+      phases:
+        build:
+          commands:
+            - echo "Instalando dependencias"
+            - pip install -r requirements.txt
+            - python -m pip install --upgrade pip
+        postBuild:
+          commands:
+            - echo "Ejecutando el archivo principal"
+            - python app.py  # Asegúrate de que el nombre del archivo sea correcto
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - echo "Instalando dependencias de frontend (si las tienes)"
+        build:
+          commands:
+            - echo "Construyendo frontend (si aplica)"
+        postBuild:
+          commands:
+            - echo "Post build - Esto es solo para frontend, puedes omitirlo si no tienes frontend"
