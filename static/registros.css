@@ -1,0 +1,167 @@
+/* Configuración general */
+body, html {
+    margin: 0;
+    padding: 30px;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Contenedor principal */
+.main-container {
+    width: 40vw;
+    max-width: 400px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 20px;
+}
+
+/* Espacio para el logo */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.logo {
+    max-width: 250px;
+    height: auto;
+}
+
+/* Botón de agregar proyecto */
+.add-project-container {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.add-project-button {
+    background-color: #28a745;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-project-button:hover {
+    background-color: #218838;
+}
+
+/* Texto de introducción */
+.intro-text {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.intro-text h2 {
+    font-size: 20px;
+    color: #34495e;
+}
+
+/* Lista de proyectos */
+.records-container {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.record-item {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+}
+
+.record-item:hover {
+    background-color: #f2f2f2;
+}
+
+/* Menú inferior */
+.bottom-menu {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background-color: #f3f3f3;
+}
+
+.bottom-button {
+    background-color: #f8b126;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.bottom-button:hover {
+    background-color: #d9961e;
+}
+
+/* Botón de agregar nuevo proyecto */
+.add-project-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.add-project-button {
+    background-color: #f8b126;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-project-button:hover {
+    background-color: #d4971e;
+}
+
+/* Botones de proyectos */
+.records-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 10px;
+}
+
+.record-button {
+    background-color: #ffffff;
+    color: #34495e;
+    text-align: left;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.record-button small {
+    display: block;
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-top: 0px;
+}
+
+.record-button:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

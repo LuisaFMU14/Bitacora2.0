@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pantalla Principal</title>
+    <link rel="icon" href="/static/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/static/principalprincipal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">  
+</head>
+<body>
+    <!-- Contenedor principal -->
+    <div class="main-container">
+        
+        <!-- Espacio para el logo -->
+        <div class="logo-container">
+            <img src="/static/logo.png" alt="Logo de la empresa" class="logo">
+        </div>
+
+        <!-- Texto de introducción -->
+        <div class="intro-text">
+            <h2>¿Qué registro quieres realizar hoy?</h2>
+        </div>
+
+        <!-- Lista de botones de opciones -->
+        <div class="buttons-container">
+            <a href="/templates/index.html" class="a" id="bitacora-btn">
+                <i class="fas fa-file-alt"></i> <!-- Ícono de hoja -->
+                <span>Reporte de <br> bitácora</span>
+            </a>
+            <button class="menu-button" id="instalacion-btn">
+                <i class="fas fa-tools"></i> <!-- Ícono de herramientas -->
+                <span>Reporte de instalación</span>
+            </button>
+            <button class="menu-button" id="mantenimiento-btn">
+                <i class="fas fa-map-marker-alt"></i> <!-- Ícono de mapa -->
+                <span>Reporte de recorrido</span>
+            </button>
+            <button class="menu-button" id="pedido-btn">
+                <i class="fas fa-check-square"></i> <!-- Ícono de checklist -->
+                <span>Reporte de pedido</span>
+            </button>
+        </div>
+        <div class="bottom-menu">
+            <a href="/templates/paginaprincipal.html" class="bottom-button">
+                <i class="fas fa-home"></i>
+            </a>
+            <div class="dropdown">
+                <button id="dropdown-btn" class="bottom-button">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <div id="dropdown-menu" class="dropdown-menu">
+                    <a href="/templates/registros.html" class="dropdown-item">
+                        <i class="fas fa-clock"></i> Proyectos</a>
+                    <a href="/templates/inventario.html" class="dropdown-item">
+                        <i class="fas fa-clipboard-check"></i> Inventario</a>
+                </div>
+            </div>
+            <a href="/templates/usuario.html" class="bottom-button">
+                <i class="fas fa-user"></i>
+            </a>
+        </div>
+    <!-- Modal para adjuntar archivos -->
+    <div id="fileModal" class="modal">
+        <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Adjuntar Plano</h2>
+        <form>
+            <label for="fileInput">Selecciona un archivo o plano:</label>
+            <input type="file" id="fileInput" name="fileInput" />
+            <button type="submit" class="submit-btn">Subir</button>
+        </form>
+        </div>
+    </div>
+    
+        
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dropdownBtn = document.getElementById('dropdown-btn');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+
+        // Alternar el menú desplegable al hacer clic en el botón
+        dropdownBtn.addEventListener('click', function (event) {
+            event.stopPropagation(); // Evitar que el clic cierre el menú
+            dropdownMenu.classList.toggle('show');
+        });
+
+        // Cerrar el menú al hacer clic fuera de él
+        document.addEventListener('click', function (event) {
+            if (!dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+    });
+
+    // Obtener elementos
+    const fileModal = document.getElementById("fileModal");
+    const attachBtn = document.querySelector(".menu-option[data-action='adjuntar']");
+    const closeModal = document.querySelector(".close");
+
+    // Abrir modal al presionar "Adjuntar plano"
+    attachBtn.addEventListener("click", () => {
+        fileModal.style.display = "block";
+    });
+
+    // Cerrar modal al presionar la "X"
+    closeModal.addEventListener("click", () => {
+        fileModal.style.display = "none";
+    });
+
+    // Cerrar modal al hacer clic fuera de él
+    window.addEventListener("click", (event) => {
+        if (event.target === fileModal) {
+            fileModal.style.display = "none";
+    }
+    });
+
+</script>
+</html>

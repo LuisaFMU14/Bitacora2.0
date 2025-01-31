@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Sign Up</title>
+    <link rel="icon" href="/static/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/static/registro.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <div id="logo-container">
+                <img id="logo" src="/static/logo.png" alt="Logo">
+            </div>
+        </header>
+        <div class="screen">
+            <form class="form">
+                <p class="title">Registro</p>
+                    <div class="flex">
+                    <label>
+                        <input required="" placeholder="" type="text" class="input">
+                        <span>Nombre</span>
+                    </label>
+
+                    <label>
+                        <input required="" placeholder="" type="text" class="input">
+                        <span>Apellido</span>
+                    </label>
+                </div>  
+                        
+                <label>
+                    <input required="" placeholder="" type="email" class="input">
+                    <span>Correo electrónico</span>
+                </label> 
+                    
+                <label>
+                    <input required="" placeholder="" type="password" class="input">
+                    <span>Contraseña</span>
+                </label>
+                <label>
+                    <input required="" placeholder="" type="password" class="input">
+                    <span>Confirmar Contraseña</span>
+                </label>
+                <label>
+                    <input required="" placeholder="" type="text" class="input">
+                    <span>Empresa</span>
+                </label>
+                <label>
+                    <select required="" class="input">
+                        <option value="" disabled selected></option>
+                        <option value="admin">Administrador</option>
+                        <option value="editor">Director de obra</option>
+                        <option value="viewer">Agente de obra</option>
+                        <option value="guest">Gerencia</option>
+                    </select>
+                    <span>Rol</span>
+                </label>
+                <a href="/templates/PrincipalScreen.html" class="submit">INGRESAR</a>
+                <p class="signin">¿Ya tienes una cuenta? <a href="/templates/PrincipalScreen.html">Iniciar Sesión</a></p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
