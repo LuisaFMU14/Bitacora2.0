@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles del Proyecto</title>
-    <link rel="stylesheet" href="/static/projectdetails.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='projectdetails.css') }}">
 </head>
 <body>
     <div class="details-container">
@@ -52,12 +52,12 @@
         // Función para redirigir a los detalles de disciplina
         function redirectToDiscipline(discipline) {
             const project = encodeURIComponent(projectName);
-            window.location.href = `/templates/disciplinedetails.html?project=${project}&discipline=${encodeURIComponent(discipline)}`;
+            window.location.href = `{{ url_for('disciplinedetails') }}?project=${project}&discipline=${encodeURIComponent(discipline)}`;
         }
 
         // Función para volver a la lista de proyectos
         function goBack() {
-            window.location.href = "/templates/registros.html";
+            window.location.href = "{{ url_for('registros') }}";
         }
     </script>
 </body>
