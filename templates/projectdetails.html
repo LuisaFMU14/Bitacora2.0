@@ -52,7 +52,7 @@
         // Función para redirigir a los detalles de disciplina
         function redirectToDiscipline(discipline) {
             const project = encodeURIComponent(projectName);
-            window.location.href = `{{ url_for('disciplinedetails') }}?project=${project}&discipline=${encodeURIComponent(discipline)}`;
+            window.location.href = `{{ url_for('disciplinerecords') }}?project=${project}&discipline=${encodeURIComponent(discipline)}`;
         }
 
         // Función para volver a la lista de proyectos
