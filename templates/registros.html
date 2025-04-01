@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pantalla de Registros</title>
-    <link rel="icon" href="/static/logo.png" type="image/x-icon">
-    <link rel="stylesheet" href="/static/registros.css">
+    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ url_for('static', filename='registros.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">  
 </head>
 <body>
@@ -14,7 +14,7 @@
         
         <!-- Espacio para el logo -->
         <div class="logo-container">
-            <img src="/static/logo.png" alt="Logo de la empresa" class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo de la empresa" class="logo">
         </div>
 
         <!-- Texto de introducción -->
@@ -42,21 +42,21 @@
 
         <!-- Menú inferior -->
         <div class="bottom-menu">
-            <a href="/templates/paginaprincipal.html" class="bottom-button"><i class="fas fa-home"></i></a>
+            <a href="{{ url_for('paginaprincipal') }}" class="bottom-button"><i class="fas fa-home"></i></a>
             <button class="bottom-button"><i class="fas fa-user"></i></button>
-            <a href="/templates/registros.html" class="bottom-button"><i class="fas fa-clipboard-list"></i></a>
+            <a href="{{ url_for('registros') }}" class="bottom-button"><i class="fas fa-clipboard-list"></i></a>
         </div>
     </div>
 
     <script>
         function redirectToAddProject() {
             // Redirigir a la página para agregar un nuevo proyecto
-            window.location.href = "/templates/addproject.html";
+            window.location.href = "{{ url_for('addproject') }}";
         }
 
         function redirectToProjectDetails(projectName) {
             // Redirigir a la página de detalles del proyecto con el nombre como parámetro
-            window.location.href = `/templates/projectdetails.html?name=${encodeURIComponent(projectName)}`;
+            window.location.href = `{{ url_for('projectdetails') }}?name=${encodeURIComponent(projectName)}`;
         }
     </script>
 </body>
