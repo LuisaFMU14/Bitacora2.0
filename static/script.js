@@ -160,132 +160,45 @@ function sendPhotoData() {
 
 // Función para guardar el registro
 function saveRecord() {
-    // 1. Validar que el canvas está inicializado
-    const canvas = document.getElementById('photoCanvas');
-    if (!canvas) {
-        showError('No se encontró el elemento canvas');
-        return;
-    }
+    // Mostrar el mensaje de éxito inmediatamente
+    document.getElementById('successMessage').style.display = 'block';
 
-    // 2. Obtener la imagen en Base64 con validación
-    let fotoBase64;
-    try {
-        fotoBase64 = canvas.toDataURL('image/jpeg', 0.7);
-        
-        // Validar formato de la cadena Base64
-        if (typeof fotoBase64 !== 'string' || !fotoBase64.includes(',')) {
-            throw new Error('Formato de imagen no válido');
-        }
-    } catch (error) {
-        showError('Error al procesar la foto: ' + error.message);
-        return;
-    }
-
-    // 3. Extraer solo la parte Base64 (con validación)
-    const fotoParts = fotoBase64.split(',');
-    if (fotoParts.length < 2) {
-        showError('La foto no tiene el formato esperado');
-        return;
-    }
-    const pureBase64 = fotoParts[1];
-
-    // 4. Preparar datos del formulario
-    const formData = {
-        respuestas: {
-            disciplina: getValue('question_0'),
-            lugar: getValue('question_1'),
-            especialidad: getValue('question_2'),
-            descripcion: getValue('question_3'),
-            responsable: getValue('question_4'),
-            estado: getValue('question_5')
-        },
-        foto: pureBase64
+    const respuestas = {
+        disciplina : document.getElementById('question_0').value,
+        lugar: document.getElementById('question_1').value,
+        especialidad: document.getElementById('question_2').value,
+        descripcion: document.getElementById('question_3').value,
+        responsable: document.getElementById('question_4').value,
+        estado: document.getElementById('question_5').value,
     };
 
-    // 5. Validar campos obligatorios
-    if (!validateForm(formData)) return;
+    const canvas = document.getElementById('photoCanvas');
+    const foto = canvas.toDataURL(); // Obtener la imagen en formato Base64
 
-    // 6. Enviar datos (FETCH con manejo de errores mejorado)
-    sendDataToServer(formData);
-}
-
-// ----- Funciones auxiliares ----- //
-
-function getValue(elementId) {
-    const element = document.getElementById(elementId);
-    return element ? element.value.trim() : '';
-}
-
-function validateForm(formData) {
-    const requiredFields = ['disciplina', 'lugar', 'especialidad', 'descripcion'];
-    const missingFields = requiredFields.filter(field => !formData.respuestas[field]);
-    
-    if (missingFields.length > 0) {
-        showError(`Faltan campos requeridos: ${missingFields.join(', ')}`);
-        return false;
-    }
-    
-    if (!formData.foto) {
-        showError('Debe capturar una foto válida');
-        return false;
-    }
-    
-    return true;
-}
-
-function sendDataToServer(formData) {
-    const submitBtn = document.getElementById('save-record');
-    const originalText = submitBtn.textContent;
-    
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Enviando...';
-
-    fetch('/guardar-registro', {
+    // Hacer la solicitud al backend para guardar el registro
+    fetch('http://127.0.0.1:5000/guardar-registro', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            respuestas: respuestas,
+            foto: foto
+        })
     })
-    .then(handleResponse)
-    .then(handleSuccess)
-    .catch(handleError)
-    .finally(() => {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            alert('Error al guardar el registro: ' + data.error);
+        } else {
+            // Aquí puedes mostrar un mensaje o redirigir al usuario
+            alert('Registro guardado exitosamente!');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error en la conexión con el servidor.');
     });
-}
-
-function handleResponse(response) {
-    if (!response.ok) {
-        return response.json().then(errData => {
-            throw new Error(errData.error || `Error ${response.status}`);
-        });
-    }
-    return response.json();
-}
-
-function handleSuccess(data) {
-    if (data.error) throw new Error(data.error);
-    
-    const successMsg = document.getElementById('successMessage');
-    successMsg.textContent = '✅ Registro guardado correctamente';
-    successMsg.style.display = 'block';
-    successMsg.style.color = 'green';
-    
-    setTimeout(() => {
-        successMsg.style.display = 'none';
-    }, 3000);
-}
-
-function handleError(error) {
-    console.error('Error:', error);
-    showError(error.message || 'Error al guardar el registro');
-}
-
-function showError(message) {
-    const errorMsg = document.getElementById('successMessage');
-    errorMsg.textContent = `❌ ${message}`;
-    errorMsg.style.display = 'block';
-    errorMsg.style.color = 'red';
 }
 
 
