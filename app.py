@@ -93,27 +93,29 @@ def projectdetails():
 
 @app.route('/addproject', methods=['POST'])
 def add_project():
-    project_name = request.form['project-name']
-    start_date = request.form['start-date']
-    end_date = request.form['end-date']
-    director = request.form['director']
-    location = request.form['location']
-    coordinates = request.form['coordinates']
-    
-    # Crear el nuevo proyecto y agregarlo a la lista
-    new_project = {
-        'name': project_name,
-        'start_date': start_date,
-        'end_date': end_date,
-        'director': director,
-        'location': location,
-        'coordinates': coordinates
+    if request.method == 'POST':
+        project_name = request.form['project-name']
+        start_date = request.form['start-date']
+        end_date = request.form['end-date']
+        director = request.form['director']
+        location = request.form['location']
+        coordinates = request.form['coordinates']
+        
+        # Crear el nuevo proyecto y agregarlo a la lista
+        new_project = {
+            'name': project_name,
+            'start_date': start_date,
+            'end_date': end_date,
+            'director': director,
+            'location': location,
+            'coordinates': coordinates
 
-    }
-    projects.append(new_project)
-    
-    # Redirigir a la página principal (donde se muestra la lista de proyectos)
-    return redirect(url_for('registros.html'))
+        }
+        projects.append(new_project)
+        
+        # Redirigir a la página principal (donde se muestra la lista de proyectos)
+        return redirect(url_for('registros.html'))
+    return render_template('addproject.html')
 
 @app.route('/ask', methods=['POST'])
 def ask_question_route():
