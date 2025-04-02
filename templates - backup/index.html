@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Bitácora</title>
-    <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="/static/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
     <div id="app">
         <!-- Logo y encabezado -->
         <header>
             <div id="logo-container">
-                <img src="{{ url_for('static', filename='logo.png') }}" id="logo" alt="Logo">
+                <img src="/static/logo.png" id="logo" alt="Logo">
             </div>
             <h1>Registro de Actividades</h1>
         </header>
@@ -71,6 +71,6 @@
     </div>
     
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="/static/script.js"></script>
 </body>
 </html>
