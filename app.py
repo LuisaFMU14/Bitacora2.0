@@ -91,7 +91,7 @@ def disciplinerecords():
 def projectdetails():
     return render_template('projectdetails.html')
 
-@app.route('/addproject', methods=['POST'])
+@app.route('/addproject', methods=['GET', 'POST'])
 def add_project():
     if request.method == 'POST':
         project_name = request.form['project-name']
@@ -114,7 +114,7 @@ def add_project():
         projects.append(new_project)
         
         # Redirigir a la página principal (donde se muestra la lista de proyectos)
-        return redirect(url_for('registros.html'))
+        return redirect(url_for('registros'))
     return render_template('addproject.html')
 
 @app.route('/ask', methods=['POST'])
