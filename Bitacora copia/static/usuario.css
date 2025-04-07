@@ -1,0 +1,94 @@
+/* Estilos generales para el formulario y la página */
+.main-container {
+    width: 100%;
+    max-width: 400px; /* Mantener el tamaño para simular un celular */
+    margin: 0 auto; /* Centrar el contenedor */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: white;
+    font-family: Arial, sans-serif;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.logo {
+    max-width: 210px; /* Tamaño del logo más pequeño para móviles */
+    height: auto;
+}
+
+/* Estilos para el formulario */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="file"] {
+    width: 100%;
+    max-width: 100%; /* Asegura que los inputs ocupen el 100% del ancho */
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-sizing: border-box; /* Asegura que el padding no afecte el tamaño total */
+}
+
+.submit-button {
+    background-color: #f8b126;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.submit-button:hover {
+    background-color: #f3bd65;
+}
+
+/* Menú inferior */
+.bottom-menu {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background-color: #f3f3f3;
+}
+.bottom-button {
+    background-color: #ffd073;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;  /* Ajuste del tamaño del ícono */
+}
+
+.bottom-button .icon {
+    max-width: 50px; /* Tamaño del logo de registros */
+    height: auto;
+}
+
+.bottom-button i {
+    font-size: 24px;  /* Tamaño del icono */
+}
+
+.bottom-button:hover {
+    background-color: #f8c96c
+}

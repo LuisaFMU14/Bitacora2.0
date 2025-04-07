@@ -1,0 +1,130 @@
+/* Configuración general de la pantalla */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Contenedor principal */
+.main-container {
+    width: 40vw;
+    max-width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Estilo del logo */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.logo {
+    max-width: 210px;
+    height: auto;
+}
+
+/* Estilo del formulario */
+.form-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 20px;
+    color: #34495e;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 14px;
+    color: #34495e;
+    margin: 10px 0 5px;
+}
+
+input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+button[type="button"], button[type="submit"] {
+    padding: 10px;
+    background-color: #f8b126;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+}
+
+button[type="button"]:hover, button[type="submit"]:hover {
+    background-color: #f59b00;
+}
+
+#location-container {
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+}
+
+#location {
+    width: 70%;
+    padding: 10px;
+    font-size: 14px;
+}
+
+button[type="button"] {
+    width: 45%;
+}
+
+/* Menú inferior */
+.bottom-menu {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background-color: #f3f3f3;
+    max-width: 100%;
+}
+
+.bottom-button {
+    background-color: #f8b126;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+/* Ajustes responsivos */
+@media screen and (max-width: 480px) {
+    .main-container {
+        max-width: 100%;
+    }
+
+    .logo {
+        max-width: 80px;
+    }
+
+    .bottom-button {
+        font-size: 12px;
+        padding: 8px 10px;
+    }
+}
