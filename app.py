@@ -94,27 +94,39 @@ def projectdetails():
 @app.route('/addproject', methods=['GET', 'POST'])
 def add_project():
     if request.method == 'POST':
-        project_name = request.form['project-name']
-        start_date = request.form['start-date']
-        end_date = request.form['end-date']
-        director = request.form['director']
-        location = request.form['location']
-        coordinates = request.form['coordinates']
+        try:
+            project_name = request.form['project-name']
+            start_date = request.form['start-date']
+            end_date = request.form['end-date']
+            director = request.form['director']
+            location = request.form['location']
+            coordinates = request.form['coordinates']
         
-        # Crear el nuevo proyecto y agregarlo a la lista
-        new_project = {
-            'name': project_name,
-            'start_date': start_date,
-            'end_date': end_date,
-            'director': director,
-            'location': location,
-            'coordinates': coordinates
-
-        }
-        projects.append(new_project)
+            # Crear el nuevo proyecto y agregarlo a la lista
+            # Crear el contenido del proyecto
+            project_content = f"""
+            Nombre del Proyecto: {project_name}
+            Fecha de Inicio: {start_date}
+            Fecha de Fin: {end_date}
+            Director: {director}
+            Ubicación: {location}
+            Coordenadas: {coordinates}
+            """
+            # Nombre único para el archivo
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            blob_name = f"proyectos/proyecto_{timestamp}.txt"
+            ##projects.append(new_project)
+            # Subir a Azure Blob Storage
+            blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+            blob_client.upload_blob(project_content, content_settings=ContentSettings(content_type='text/plain'))
         
-        # Redirigir a la página principal (donde se muestra la lista de proyectos)
-        return redirect(url_for('registros'))
+            # Redirigir a la página principal (donde se muestra la lista de proyectos)
+            return redirect(url_for('registros'))
+        except KeyError as e:
+            return f"Falta el campo requerido: {str(e)}", 400
+        except Exception as e:
+            return f"Error al guardar el proyecto: {str(e)}", 500
+        
     return render_template('addproject.html')
 
 @app.route('/ask', methods=['POST'])
