@@ -192,7 +192,7 @@ body, html {
 }
 
 /* Mostrar menú cuando está activo */
-.dropdown-menu.show {
+.dropdown-menu2.show {
     display: block;
 }
 
