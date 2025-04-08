@@ -133,39 +133,6 @@ body, html {
     background-color: #d4971e;
 }
 
-/* Botones de proyectos */
-.records-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 0 10px;
-}
-
-.record-button {
-    background-color: #ffffff;
-    color: #34495e;
-    text-align: left;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, box-shadow 0.3s;
-}
-
-.record-button small {
-    display: block;
-    font-size: 14px;
-    color: #7f8c8d;
-    margin-top: 0px;
-}
-
-.record-button:hover {
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
 /* Estilo del contenedor desplegable */
 .dropdown {
     position: relative;
@@ -207,3 +174,38 @@ body, html {
 .dropdown-menu2.show {
     display: block;
 }
+
+/* Botones de proyectos */
+.records-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 10px;
+}
+
+.record-button {
+    background-color: #ffffff;
+    color: #34495e;
+    text-align: left;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.record-button small {
+    display: block;
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-top: 0px;
+}
+
+.record-button:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
