@@ -91,7 +91,6 @@ def disciplinerecords():
 def projectdetails():
     return render_template('projectdetails.html')
 
-
 @app.route('/addproject', methods=['GET', 'POST'])
 def add_project():
     if request.method == 'POST':
