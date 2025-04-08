@@ -61,20 +61,7 @@
     </div>
 
     <script>
-        function redirectToAddProject() {
-            // Redirigir a la página para agregar un nuevo proyecto
-            window.location.href = "{{ url_for('add_project') }}";
-        }
-
-        function redirectToProjectDetails(projectName) {
-            // Redirigir a la página de detalles del proyecto con el nombre como parámetro
-            //window.location.href = `{{ url_for('projectdetails') }}?name=${encodeURIComponent(projectName)}`;
-            window.location.href = `{{ url_for('paginaprincipal') }}?name=${encodeURIComponent(projectName)}`;
-        }
-    </script>
-</body>
-<script>
-    document.addEventListener('DOMContentLoaded2', function () {
+        document.addEventListener('DOMContentLoaded2', function () {
         const dropdownBtn2 = document.getElementById('dropdown-btn2');
         const dropdownMenu2 = document.getElementById('dropdown-menu2');
 
@@ -90,6 +77,18 @@
                 dropdownMenu2.classList.remove('show');
             }
         });
-    });
-</script>
+        
+        function redirectToAddProject() {
+            // Redirigir a la página para agregar un nuevo proyecto
+            window.location.href = "{{ url_for('add_project') }}";
+        }
+
+        function redirectToProjectDetails(projectName) {
+            // Redirigir a la página de detalles del proyecto con el nombre como parámetro
+            //window.location.href = `{{ url_for('projectdetails') }}?name=${encodeURIComponent(projectName)}`;
+            window.location.href = `{{ url_for('paginaprincipal') }}?name=${encodeURIComponent(projectName)}`;
+        }
+        });
+    </script>
+</body>
 </html>
