@@ -203,7 +203,3 @@ body, html {
     color: #fff;
 }
 
-/* Mostrar menú cuando está activo */
-.dropdown-menu.show {
-    display: block;
-}
