@@ -45,12 +45,12 @@
             <a href="{{ url_for('registros') }}" class="bottom-button"><i class="fas fa-home"></i></a>
             <!--<button class="bottom-button"><i class="fas fa-user"></i></button>-->
             <div class="dropdown">
-                <button id="dropdown-btn2" class="bottom-button">
+                <button id="dropdown-btn" class="bottom-button">
                     <i class="fas fa-plus"></i>
                 </button>
-                <div id="dropdown-menu2" class="dropdown-menu">
+                <div id="dropdown-menu" class="dropdown-menu">
                     <a href="{{ url_for('registros') }}" class="dropdown-item">
-                        <i class="fas fa-clock"></i> Proyectos</a>
+                        <i class="fas fa-clock"></i> Historial</a>
                     <a href="{{ url_for('inventario') }}" class="dropdown-item">
                         <i class="fas fa-clipboard-check"></i> Inventario</a>
                 </div>
@@ -61,23 +61,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded2', function () {
-        const dropdownBtn2 = document.getElementById('dropdown-btn2');
-        const dropdownMenu2 = document.getElementById('dropdown-menu2');
-
-        // Alternar el menú desplegable al hacer clic en el botón
-        dropdownBtn2.addEventListener('click', function (event) {
-            event.stopPropagation(); // Evitar que el clic cierre el menú
-            dropdownMenu2.classList.toggle('show');
-        });
-
-        // Cerrar el menú al hacer clic fuera de él
-        document.addEventListener('click', function (event) {
-            if (!dropdownMenu2.contains(event.target)) {
-                dropdownMenu2.classList.remove('show');
-            }
-        });
-        
+               
         function redirectToAddProject() {
             // Redirigir a la página para agregar un nuevo proyecto
             window.location.href = "{{ url_for('add_project') }}";
@@ -88,7 +72,24 @@
             //window.location.href = `{{ url_for('projectdetails') }}?name=${encodeURIComponent(projectName)}`;
             window.location.href = `{{ url_for('paginaprincipal') }}?name=${encodeURIComponent(projectName)}`;
         }
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdownBtn = document.getElementById('dropdown-btn');
+            const dropdownMenu = document.getElementById('dropdown-menu');
+
+            // Alternar el menú desplegable al hacer clic en el botón
+            dropdownBtn.addEventListener('click', function (event) {
+                event.stopPropagation(); // Evitar que el clic cierre el menú
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Cerrar el menú al hacer clic fuera de él
+            document.addEventListener('click', function (event) {
+                if (!dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
         });
+
     </script>
 </body>
 </html>
