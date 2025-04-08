@@ -108,6 +108,15 @@ body, html {
     font-size: 20px;
 }
 
+.bottom-button .icon {
+    max-width: 50px; /* Tamaño del logo de registros */
+    height: auto;
+}
+
+.bottom-button i {
+    font-size: 24px;  /* Tamaño del icono */
+}
+
 .bottom-button:hover {
     background-color: #d9961e;
 }
@@ -131,6 +140,18 @@ body, html {
 
 .add-project-button:hover {
     background-color: #d4971e;
+}
+
+/* Ajustes responsivos para los botones */
+@media screen and (max-width: 480px) {
+    .bottom-button {
+        font-size: 18px;  /* Reducir tamaño de icono en pantallas pequeñas */
+        padding: 8px 10px;
+    }
+
+    .bottom-button i {
+        font-size: 20px;
+    }
 }
 
 /* Estilo del contenedor desplegable */
