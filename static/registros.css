@@ -161,7 +161,7 @@ body, html {
 }
 
 /* Estilo del menú desplegable */
-.dropdown-menu2 {
+.dropdown-menu {
     display: none; /* Oculto por defecto */
     position: absolute;
     bottom: 50px; /* Aparece encima del botón */
