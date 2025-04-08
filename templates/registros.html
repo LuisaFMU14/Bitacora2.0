@@ -43,20 +43,21 @@
         <!-- Menú inferior -->
         <div class="bottom-menu">
             <a href="{{ url_for('registros') }}" class="bottom-button"><i class="fas fa-home"></i></a>
-            <button class="bottom-button"><i class="fas fa-user"></i></button>
+            <!--<button class="bottom-button"><i class="fas fa-user"></i></button>-->
+            <div class="dropdown">
+                <button id="dropdown-btn" class="bottom-button">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <div id="dropdown-menu" class="dropdown-menu">
+                    <a href="{{ url_for('registros') }}" class="dropdown-item">
+                        <i class="fas fa-clock"></i> Proyectos</a>
+                    <a href="{{ url_for('inventario') }}" class="dropdown-item">
+                        <i class="fas fa-clipboard-check"></i> Inventario</a>
+                </div>
+            </div>
             <a href="{{ url_for('registros') }}" class="bottom-button"><i class="fas fa-clipboard-list"></i></a>
         </div>
-        <div class="dropdown">
-            <button id="dropdown-btn" class="bottom-button">
-                <i class="fas fa-plus"></i>
-            </button>
-            <div id="dropdown-menu" class="dropdown-menu">
-                <a href="{{ url_for('registros') }}" class="dropdown-item">
-                    <i class="fas fa-clock"></i> Proyectos</a>
-                <a href="{{ url_for('inventario') }}" class="dropdown-item">
-                    <i class="fas fa-clipboard-check"></i> Inventario</a>
-            </div>
-        </div>
+        
     </div>
 
     <script>
