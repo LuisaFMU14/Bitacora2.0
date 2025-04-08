@@ -165,3 +165,45 @@ body, html {
     background-color: #f9f9f9;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+/* Estilo del contenedor desplegable */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Estilo del menú desplegable */
+.dropdown-menu {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    bottom: 50px; /* Aparece encima del botón */
+    left: 0;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 10px 0;
+    z-index: 1000;
+    min-width: 150px;
+    text-align: center;
+}
+
+/* Opciones del menú */
+.dropdown-item {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #34495e;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.dropdown-item:hover {
+    background-color: #f3bd65;
+    color: #fff;
+}
+
+/* Mostrar menú cuando está activo */
+.dropdown-menu.show {
+    display: block;
+}
