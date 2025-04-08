@@ -92,7 +92,7 @@ def projectdetails():
     return render_template('projectdetails.html')
 
 @app.route('/history')
-def disciplinerecords():
+def history():
     return render_template('history.html')
 
 @app.route('/addproject', methods=['GET', 'POST'])
