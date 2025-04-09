@@ -117,7 +117,7 @@ def add_project():
             """
             # Nombre único para el archivo
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            blob_name = f"proyectos/proyecto_{timestamp}.txt"
+            blob_name = f"proyectos/proyecto_{project_name}.txt"
             ##projects.append(new_project)
             # Subir a Azure Blob Storage
             blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
