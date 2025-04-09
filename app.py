@@ -11,8 +11,11 @@ from reportlab.pdfgen import canvas
 from flask_cors import CORS
 from datetime import datetime
 from azure.storage.blob import ContentSettings
+from dotenv import load_dotenv
 
 
+# Cargar variables de entorno
+load_dotenv('config/settings.env')  # Ruta relativa al archivo .env
 
 app = Flask(__name__,template_folder='templates')
 CORS(app)
@@ -20,8 +23,8 @@ CORS(app)
 projects = []
 
 # Conecta con el servicio de Blob Storage de Azure
-connection_string = "DefaultEndpointsProtocol=https;AccountName=<nombre_cuenta>;AccountKey=<clave_de_acceso>;EndpointSuffix=core.windows.net"
-container_name = "registros" 
+connection_string = os.getenv('AZURE_STORAGE_CONNECTION_STRING')
+container_name = os.getenv('AZURE_CONTAINER_NAME')
 
 
 # Inicializa el cliente de BlobServiceClient
