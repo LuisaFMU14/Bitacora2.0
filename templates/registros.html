@@ -38,6 +38,13 @@
             <button class="record-button" onclick="redirectToProjectDetails('Proyecto C')">
                 Proyecto C<br><small>Fecha: 2024-09-20</small>
             </button>
+
+            <!-- Proyectos dinámicos desde Azure Blob Storage -->
+            {% for project in blob_projects %}
+            <button class="record-button" onclick="redirectToProjectDetails('{{ project.name }}')">
+                {{ project.name }}<br><small>Fecha: {{ project.date }}</small>
+            </button>
+            {% endfor %}
         </div>
 
         <!-- Menú inferior -->
