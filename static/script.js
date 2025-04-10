@@ -155,9 +155,7 @@ function sendPhotoData() {
         console.log(foto); // Verifica que el Base64 es correcto
 
         // Realiza la solicitud POST para enviar el Base64
-        //fetch('/guardar-registro', {
-        fetch("{{ url_for('guardar_registro') }}", {
-            
+        fetch('/guardar-registro', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
