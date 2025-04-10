@@ -19,9 +19,6 @@
 
         <!-- Contenedor del formulario -->
         <div id="form-container">
-            <!-- Campo oculto para almacenar el nombre del proyecto -->
-            <input type="hidden" id="project-name">
-
             <div class="form-group">
                 <label for="discipline">Disciplina</label>
                 <select id="discipline" name="discipline" class="form-control">
@@ -82,23 +79,5 @@
     
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-
-    <script>
-        // Script para capturar el parámetro del proyecto desde la URL
-        document.addEventListener('DOMContentLoaded', function() {
-            // Obtener el parámetro del proyecto de la URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const projectName = urlParams.get('project');
-            
-            // Guardar el nombre del proyecto en el campo oculto
-            if (projectName) {
-                document.getElementById('project-name').value = projectName;
-                console.log("Proyecto cargado:", projectName);
-            } else {
-                console.log("No se encontró un proyecto en la URL");
-            }
-        });
-    </script>
-
 </body>
 </html>

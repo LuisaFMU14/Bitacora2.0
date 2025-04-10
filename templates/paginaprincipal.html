@@ -115,17 +115,6 @@
         if (event.target === fileModal) {
             fileModal.style.display = "none";
     }
-
-    // Obtener el parámetro del proyecto de la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const projectName = urlParams.get('project');
-    
-    // Modificar el enlace al formulario de bitácora para incluir el proyecto
-    const bitacoraBtn = document.getElementById('bitacora-btn');
-    if (bitacoraBtn && projectName) {
-        bitacoraBtn.href = `{{ url_for('index') }}?project=${encodeURIComponent(projectName)}`;
-    }
-
     });
 
 </script>
