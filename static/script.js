@@ -187,7 +187,7 @@ function saveRecord() {
     document.getElementById('successMessage').style.display = 'block';
 
     const respuestas = {
-        disciplina : document.getElementById('question_0').value,
+        //disciplina : document.getElementById('question_0').value,
         lugar: document.getElementById('question_1').value,
         especialidad: document.getElementById('question_2').value,
         descripcion: document.getElementById('question_3').value,
@@ -231,11 +231,7 @@ document.getElementById('successMessage').style.display = 'block';
 
 // Empezar el proceso de preguntas en cuanto cargue la página
 window.onload = function() {
-    // Iniciar el cuestionario después del retardo
-    setTimeout(() => {
-        console.log("Iniciando cuestionario de voz...");
-        askNextQuestion();
-    }, 3000); // 5000 milisegundos = 5 segundos
+    askNextQuestion();
 };
 
 
