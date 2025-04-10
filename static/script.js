@@ -81,11 +81,8 @@ function startCamera() {
         navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
             video.srcObject = stream;
             cameraContainer.style.display = 'block';  // Mostrar la cámara
-            takePhotoButton.style.display = 'flex';  // Mostrar el botón "Tomar foto"
+            takePhotoButton.style.display = 'block';  // Mostrar el botón "Tomar foto"
             startCameraButton.style.display = 'none'; // Ocultar el botón "Iniciar cámara"
-        }).catch(function(error) {
-            console.error("Error al acceder a la cámara: ", error);
-            alert("No se puede acceder a la cámara. Asegúrate de que esté conectada y habilitada.");
         });
     } else {
         alert("No se puede acceder a la cámara.");
@@ -96,47 +93,40 @@ function startCamera() {
 function takePhoto() {
     const canvas = document.getElementById('photoCanvas');
     const videoElement = document.getElementById('videoElement');
-    const photoThumbnails = document.getElementById('photoThumbnails');
 
     // Validar que el video esté transmitiendo
-    if (!video || video.readyState !== 4) { // 4 = HAVE_ENOUGH_DATA
+    if (video.readyState !== 4) { // 4 = HAVE_ENOUGH_DATA
         alert('La cámara no está lista. Espere un momento.');
         return;
     }
-    try{
-        // Dibuja la imagen del video en el canvas
-        canvas.width = videoElement.videoWidth;
-        canvas.height = videoElement.videoHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        // Obtén la imagen en formato Base64
-        const fotoBase64 = canvas.toDataURL('image/jpeg', 0.8);
-        // Guarda la imagen como Base64 en el input para enviarla
-        document.getElementById('base64-photo').value = fotoBase64;
-        // Muestra la foto como miniatura para asegurarse de que se capturó correctamente
-        //const photoThumbnails = document.getElementById('photoThumbnails');
-        photoThumbnails.innerHTML = `<img src="${fotoBase64}" width="100px">`;
+    // Dibuja la imagen del video en el canvas
+    canvas.width = videoElement.videoWidth;
+    canvas.height = videoElement.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        // Verificar formato correcto
-        if (!fotoBase64.startsWith('data:image/jpeg;base64,')) {
-            throw new Error('Formato de imagen no válido');
-        }
-        
-        // Verificar longitud mínima
-        if (fotoBase64.length < 100) {
-            throw new Error('La imagen es demasiado pequeña');
-        }
+    // Obtén la imagen en formato Base64
+    const fotoBase64 = canvas.toDataURL('image/jpeg', 0.7);
+    // Muestra la foto como miniatura para asegurarse de que se capturó correctamente
+    const photoThumbnails = document.getElementById('photoThumbnails');
+    photoThumbnails.innerHTML = `<img src="${fotoBase64}" width="100px">`;
 
-        // Guarda la imagen como Base64 en el input para enviarla
-        document.getElementById('base64-photo').value = fotoBase64;
-    } catch (error) {
-        console.error("Error al tomar la foto:", error);
-        alert("Error al tomar la foto: " + error.message);
+    // Verificar formato correcto
+    if (!fotoBase64.startsWith('data:image/jpeg;base64,')) {
+        throw new Error('Formato de imagen no válido');
     }
+    
+    // Verificar longitud mínima
+    if (fotoBase64.length < 100) {
+        throw new Error('La imagen es demasiado pequeña');
+    }
+
+    // Guarda la imagen como Base64 en el input para enviarla
+    document.getElementById('base64-photo').value = fotoBase64;
 }
-//const foto = document.getElementById('base64-photo').value;
-//console.log(foto);
+const foto = document.getElementById('base64-photo').value;
+console.log(foto);
 
 
 // Función para agregar la miniatura de la foto
