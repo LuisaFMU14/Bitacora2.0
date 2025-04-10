@@ -32,10 +32,6 @@ container_name = "registros"
 # Inicializa el cliente de BlobServiceClient
 blob_service_client = BlobServiceClient.from_connection_string(connection_string)
 
-def generar_id():
-    """Genera un ID de 6 dígitos numéricos"""
-    return ''.join(random.choice(string.digits) for _ in range(6))
-
 # Función para subir archivos a Azure Blob Storage
 def upload_to_blob(file_name, data, content_type):
     try:
@@ -168,14 +164,10 @@ def add_project():
             director = request.form['director']
             location = request.form['location']
             coordinates = request.form['coordinates']
-
-            # Generar ID único para el proyecto
-            project_id = generar_id()
-
+        
             # Crear el nuevo proyecto y agregarlo a la lista
             # Crear el contenido del proyecto
             project_content = f"""
-            ID del Proyecto: {project_id}
             Nombre del Proyecto: {project_name}
             Fecha de Inicio: {start_date}
             Fecha de Fin: {end_date}
@@ -187,7 +179,7 @@ def add_project():
                         
             # Nombre único para el archivo
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            blob_name = f"proyectos/{project_name}/{project_name}_{project_id}.txt"
+            blob_name = f"proyectos/{project_name}/{project_name}.txt"
             ##projects.append(new_project)
             # Subir a Azure Blob Storage
             blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
@@ -226,19 +218,17 @@ def guardar_registro():
         foto_base64 = data.get('foto')
         respuestas = data.get('respuestas')
         nombre_proyecto = data.get('nombre_proyecto')
-        project_id = data.get('project_id')
 
         if not foto_base64 or not respuestas:
             return jsonify({"error": "Faltan datos."}), 400
 
-        registro_id = generar_id()  # ID único para este registro
         # Validar y sanitizar el nombre del proyecto
-        #nombre_proyecto_limpio = "".join(c for c in nombre_proyecto if c.isalnum() or c in (' ', '_', '-')).rstrip()
-        #nombre_proyecto_limpio = nombre_proyecto_limpio.replace(' ', '_')
+        nombre_proyecto_limpio = "".join(c for c in nombre_proyecto if c.isalnum() or c in (' ', '_', '-')).rstrip()
+        nombre_proyecto_limpio = nombre_proyecto_limpio.replace(' ', '_')
 
         # Procesar la imagen Base64
         foto_data = base64.b64decode(foto_base64.split(',')[1])
-        imagen_nombre = f"proyectos/{nombre_proyecto}/Registro_Bitácora{project_id}.png"
+        imagen_nombre = f"foto_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
 
         # Guardar la imagen en Azure Blob Storage
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=imagen_nombre)
@@ -246,7 +236,7 @@ def guardar_registro():
 
         # Crear el archivo .txt con las respuestas
         respuestas_texto = "\n".join([f"{clave}: {valor}" for clave, valor in respuestas.items()])
-        archivo_nombre = f"proyectos/{nombre_proyecto}/registro_{project_id}.txt"
+        archivo_nombre = f"registro_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
 
         # Guardar el archivo .txt en Azure Blob Storage
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=archivo_nombre)
