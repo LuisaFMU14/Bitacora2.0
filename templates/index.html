@@ -55,7 +55,10 @@
             <div class="centrar">
                 <button id="start-camera" style="display:none;" onclick="startCamera()">Iniciar cámara</button>
                 <!-- Botón de tomar foto redondo -->
-                <button id="take-photo" class="round-button" style="display:none;" onclick="takePhoto()"></button>
+                <!--<button id="take-photo" class="round-button" style="display:none;" onclick="takePhoto()"></button>-->
+                <button id="take-photo" class="round-button" style="display:none;" onclick="takePhoto()">
+                    <i class="fas fa-camera"></i>
+                </button>
                 <!-- Botón de adjuntar archivos -->
                 <button id="attach-clip" class="clip-button" onclick="triggerFileInput()">📎</button>
                 <input type="file" id="file-input" class="file-input" accept="image/*" style="display:none;">
