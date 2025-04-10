@@ -12,8 +12,11 @@ from flask_cors import CORS
 from datetime import datetime
 from azure.storage.blob import ContentSettings
 from dotenv import load_dotenv
+<<<<<<< HEAD
 import random
 import string
+=======
+>>>>>>> parent of d15ca4a (updates)
 
 
 
