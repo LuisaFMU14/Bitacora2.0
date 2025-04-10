@@ -12,6 +12,8 @@ from flask_cors import CORS
 from datetime import datetime
 from azure.storage.blob import ContentSettings
 from dotenv import load_dotenv
+import ramdom
+import string
 
 
 # Cargar variables de entorno
@@ -177,7 +179,7 @@ def add_project():
                         
             # Nombre único para el archivo
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            blob_name = f"proyectos/{project_name}.txt"
+            blob_name = f"proyectos/{project_name}/{project_name}.txt"
             ##projects.append(new_project)
             # Subir a Azure Blob Storage
             blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
@@ -215,9 +217,14 @@ def guardar_registro():
         data = request.get_json()
         foto_base64 = data.get('foto')
         respuestas = data.get('respuestas')
+        nombre_proyecto = data.get('nombre_proyecto')
 
         if not foto_base64 or not respuestas:
             return jsonify({"error": "Faltan datos."}), 400
+
+        # Validar y sanitizar el nombre del proyecto
+        nombre_proyecto_limpio = "".join(c for c in nombre_proyecto if c.isalnum() or c in (' ', '_', '-')).rstrip()
+        nombre_proyecto_limpio = nombre_proyecto_limpio.replace(' ', '_')
 
         # Procesar la imagen Base64
         foto_data = base64.b64decode(foto_base64.split(',')[1])
