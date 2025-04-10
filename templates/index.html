@@ -6,6 +6,7 @@
     <title>Registro de Bitácora</title>
     <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div id="app">
@@ -20,15 +21,8 @@
         <!-- Contenedor del formulario -->
         <div id="form-container">
             <div class="form-group">
-                <label for="discipline">Disciplina</label>
-                <select id="discipline" name="discipline" class="form-control">
-                    <option value="">Seleccione una disciplina</option>
-                    <option value="HVAC">Electricidad</option>
-                    <option value="RCI">Fontanería</option>
-                    <option value="MEP">Albañilería</option>
-                    <option value="ARQUITECTURA">Carpintería</option>
-                    <option value="ESTRUCTURA">Pintura</option>
-                </select>
+                <label for="question_0">Disciplina</label>
+                <input type="text" id="question_0" readonly>
             </div>
             <div class="form-group">
                 <label for="question_0">Lugar de obra:</label>
@@ -62,7 +56,10 @@
             <div class="centrar">
                 <button id="start-camera" style="display:none;" onclick="startCamera()">Iniciar cámara</button>
                 <!-- Botón de tomar foto redondo -->
-                <button id="take-photo" class="round-button" style="display:none;" onclick="takePhoto()"></button>
+                <!--<button id="take-photo" class="round-button" style="display:none;" onclick="takePhoto()"></button>-->
+                <button id="take-photo" class="round-button" style="display:none;" onclick="takePhoto()">
+                    <i class="fas fa-camera"></i>
+                </button>
                 <!-- Botón de adjuntar archivos -->
                 <button id="attach-clip" class="clip-button" onclick="triggerFileInput()">📎</button>
                 <input type="file" id="file-input" class="file-input" accept="image/*" style="display:none;">
@@ -79,5 +76,23 @@
     
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <script>
+        // Script para capturar el parámetro del proyecto desde la URL
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obtener el parámetro del proyecto de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectName = urlParams.get('project');
+            
+            // Guardar el nombre del proyecto en el campo oculto
+            if (projectName) {
+                document.getElementById('project-name').value = projectName;
+                console.log("Proyecto cargado:", projectName);
+            } else {
+                console.log("No se encontró un proyecto en la URL");
+            }
+        });
+    </script>
+
 </body>
 </html>

@@ -38,6 +38,13 @@
             <button class="record-button" onclick="redirectToProjectDetails('Proyecto C')">
                 Proyecto C<br><small>Fecha: 2024-09-20</small>
             </button>
+
+            <!-- Proyectos dinámicos desde Azure Blob Storage -->
+            {% for project in blob_projects %}
+            <button class="record-button" onclick="redirectToProjectDetails('{{ project.name }}')">
+                {{ project.name }}<br><small>Fecha: {{ project.date }}</small>
+            </button>
+            {% endfor %}
         </div>
 
         <!-- Menú inferior -->
@@ -70,7 +77,7 @@
         function redirectToProjectDetails(projectName) {
             // Redirigir a la página de detalles del proyecto con el nombre como parámetro
             //window.location.href = `{{ url_for('projectdetails') }}?name=${encodeURIComponent(projectName)}`;
-            window.location.href = `{{ url_for('paginaprincipal') }}?name=${encodeURIComponent(projectName)}`;
+            window.location.href = `{{ url_for('paginaprincipal') }}?project=${encodeURIComponent(projectName)}`;
         }
         document.addEventListener('DOMContentLoaded', function () {
             const dropdownBtn = document.getElementById('dropdown-btn');
