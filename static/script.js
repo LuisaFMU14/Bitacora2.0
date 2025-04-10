@@ -176,6 +176,8 @@ function sendPhotoData() {
 
 // Función para guardar el registro
 function saveRecord() {
+    // Obtener el proyecto relacionado
+    const projectName = document.getElementById('project-name').value;
     const fotoBase64 = document.getElementById('base64-photo').value;
     // Mostrar el mensaje de éxito inmediatamente
     document.getElementById('successMessage').style.display = 'block';
