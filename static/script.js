@@ -1,6 +1,7 @@
 // Variables globales
 let currentQuestionIndex = 0;
 const questions = [
+    "¿Cuál es la disciplina?",
     "¿Cuál es el lugar de la obra?",
     "¿Cuál es la especialidad?",
     "Describe las actividades realizadas.",
@@ -180,7 +181,7 @@ function saveRecord() {
     document.getElementById('successMessage').style.display = 'block';
 
     const respuestas = {
-        //disciplina : document.getElementById('question_0').value,
+        disciplina : document.getElementById('question_0').value,
         lugar: document.getElementById('question_1').value,
         especialidad: document.getElementById('question_2').value,
         descripcion: document.getElementById('question_3').value,
