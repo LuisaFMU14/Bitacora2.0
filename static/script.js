@@ -152,7 +152,7 @@ function sendPhotoData() {
         console.log(foto); // Verifica que el Base64 es correcto
 
         // Realiza la solicitud POST para enviar el Base64
-        fetch('/guardar-registro', {
+        fetch('http://127.0.0.1:5000/guardar-registro', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -195,7 +195,7 @@ function saveRecord() {
     const foto = canvas.toDataURL(); // Obtener la imagen en formato Base64
 
     // Hacer la solicitud al backend para guardar el registro
-    fetch('/guardar-registro', {
+    fetch('http://127.0.0.1:5000/guardar-registro', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
