@@ -1,7 +1,6 @@
 // Variables globales
 let currentQuestionIndex = 0;
 const questions = [
-    "¿Cuál es la disciplina?",
     "¿Cuál es el lugar de la obra?",
     "¿Cuál es la especialidad?",
     "Describe las actividades realizadas.",
