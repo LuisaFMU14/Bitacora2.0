@@ -195,7 +195,7 @@ function saveRecord() {
     const foto = canvas.toDataURL(); // Obtener la imagen en formato Base64
 
     // Hacer la solicitud al backend para guardar el registro
-    fetch('http://127.0.0.1:5000/guardar-registro', {
+    fetch('/guardar-registro', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
