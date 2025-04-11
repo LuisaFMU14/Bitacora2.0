@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for
+from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash
 import azure.cognitiveservices.speech as speechsdk
 from azure.storage.blob import BlobServiceClient,BlobClient,ContainerClient
 import base64
@@ -189,6 +189,34 @@ def add_project():
             return f"Error al guardar el proyecto: {str(e)}", 500
         
     return render_template('addproject.html')
+
+@app.route('/delete_project', methods=['POST'])
+def delete_project():
+    try:
+        project_name = request.args.get('project-name')
+        
+        if not project_name:
+            flash('No se especificó un nombre de proyecto', 'error')
+            return redirect(url_for('registros'))
+        
+        # Inicializar cliente de servicio de blob
+        blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+        container_client = blob_service_client.get_container_client(container_name)
+        
+        # Obtener una lista de todos los blobs relacionados con este proyecto
+        # Asumimos que los blobs relacionados comienzan con el nombre del proyecto
+        blob_list = container_client.list_blobs(name_starts_with=project_name)
+        
+        # Eliminar cada blob relacionado con el proyecto
+        for blob in blob_list:
+            container_client.delete_blob(blob.name)
+        
+        flash(f'Proyecto "{project_name}" eliminado correctamente', 'success')
+        return redirect(url_for('registros'))
+    
+    except Exception as e:
+        flash(f'Error al eliminar el proyecto: {str(e)}', 'error')
+        return redirect(url_for('registros')), 500
 
 @app.route('/ask', methods=['POST'])
 def ask_question_route():
