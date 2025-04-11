@@ -13,7 +13,7 @@ body, html {
 /* Contenedor principal */
 .main-container {
     width: 70vw;
-    max-width: 300px;
+    max-width: 600px;
     height: 100%;
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
