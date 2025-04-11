@@ -41,6 +41,13 @@
                 <span>Reporte de pedido</span>
             </button>
         </div>
+        <!-- Botón para eliminar proyecto -->
+        <div class="delete-project-container">
+            <button class="delete-project-button" id="delete-project-btn">
+                <i class="fas fa-trash-alt"></i>
+                <span>Eliminar Proyecto</span>
+            </button>
+        </div>
         <div class="bottom-menu">
             <a href="{{ url_for('registros') }}" class="bottom-button">
                 <i class="fas fa-home"></i>
@@ -63,16 +70,26 @@
     <!-- Modal para adjuntar archivos -->
     <div id="fileModal" class="modal">
         <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Adjuntar Plano</h2>
-        <form>
-            <label for="fileInput">Selecciona un archivo o plano:</label>
-            <input type="file" id="fileInput" name="fileInput" />
-            <button type="submit" class="submit-btn">Subir</button>
-        </form>
+            <span class="close">&times;</span>
+            <h2>Adjuntar Plano</h2>
+            <form>
+                <label for="fileInput">Selecciona un archivo o plano:</label>
+                <input type="file" id="fileInput" name="fileInput" />
+                <button type="submit" class="submit-btn">Subir</button>
+            </form>
         </div>
     </div>
-    
+    <!-- Modal de confirmación para eliminar proyecto -->
+    <div id="confirmModal" class="confirm-modal">
+        <div class="confirm-modal-content">
+            <h3>¿Estás seguro de eliminar este proyecto?</h3>
+            <p>Esta acción no se puede deshacer.</p>
+            <div class="confirm-modal-buttons">
+                <button id="confirm-yes" class="confirm-yes">Sí, eliminar</button>
+                <button id="confirm-no" class="confirm-no">Cancelar</button>
+            </div>
+        </div>
+    </div>
         
     </div>
 </body>
@@ -80,6 +97,24 @@
     document.addEventListener('DOMContentLoaded', function () {
         const dropdownBtn = document.getElementById('dropdown-btn');
         const dropdownMenu = document.getElementById('dropdown-menu');
+        const deleteProjectBtn = document.getElementById('delete-project-btn');
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmYesBtn = document.getElementById('confirm-yes');
+        const confirmNoBtn = document.getElementById('confirm-no');
+        const currentProjectName = document.getElementById('current-project-name');
+
+        // Obtener el parámetro del proyecto de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectName = urlParams.get('project');
+        
+        // Mostrar el nombre del proyecto actual
+        if (projectName) {
+            currentProjectName.textContent = "Proyecto: " + decodeURIComponent(projectName);
+        } else {
+            currentProjectName.textContent = "No hay proyecto seleccionado";
+            // Ocultar el botón de eliminar si no hay proyecto
+            deleteProjectBtn.style.display = 'none';
+        }
 
         // Alternar el menú desplegable al hacer clic en el botón
         dropdownBtn.addEventListener('click', function (event) {
