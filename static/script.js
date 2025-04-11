@@ -81,11 +81,8 @@ function startCamera() {
         navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
             video.srcObject = stream;
             cameraContainer.style.display = 'block';  // Mostrar la cámara
-            takePhotoButton.style.display = 'flex';  // Mostrar el botón "Tomar foto"
+            takePhotoButton.style.display = 'block';  // Mostrar el botón "Tomar foto"
             startCameraButton.style.display = 'none'; // Ocultar el botón "Iniciar cámara"
-        }).catch(function(error) {
-            console.error("Error al acceder a la cámara: ", error);
-            alert("No se puede acceder a la cámara. Asegúrate de que esté conectada y habilitada.");
         });
     } else {
         alert("No se puede acceder a la cámara.");
@@ -98,7 +95,7 @@ function takePhoto() {
     const videoElement = document.getElementById('videoElement');
 
     // Validar que el video esté transmitiendo
-    if (videoElement.readyState !== 4) { // 4 = HAVE_ENOUGH_DATA
+    if (video.readyState !== 4) { // 4 = HAVE_ENOUGH_DATA
         alert('La cámara no está lista. Espere un momento.');
         return;
     }
@@ -155,9 +152,7 @@ function sendPhotoData() {
         console.log(foto); // Verifica que el Base64 es correcto
 
         // Realiza la solicitud POST para enviar el Base64
-        //fetch('/guardar-registro', {
-        fetch("{{ url_for('guardar_registro') }}", {
-            
+        fetch('/guardar-registro', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -183,7 +178,6 @@ function sendPhotoData() {
 function saveRecord() {
     // Obtener el proyecto relacionado
     const projectName = document.getElementById('project-name').value;
-    // Obtener la foto en Base64
     const fotoBase64 = document.getElementById('base64-photo').value;
     // Mostrar el mensaje de éxito inmediatamente
     document.getElementById('successMessage').style.display = 'block';
@@ -201,8 +195,7 @@ function saveRecord() {
     const foto = canvas.toDataURL(); // Obtener la imagen en formato Base64
 
     // Hacer la solicitud al backend para guardar el registro
-    //fetch('http://127.0.0.1:5000/guardar-registro', {
-    fetch("{{ url_for('guardar_registro') }}", {
+    fetch('http://127.0.0.1:5000/guardar-registro', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -225,5 +218,30 @@ function saveRecord() {
         console.error('Error:', error);
         alert('Error en la conexión con el servidor.');
     });
+}
+
+
+
+document.getElementById('successMessage').style.display = 'block';
+
+
+// Empezar el proceso de preguntas en cuanto cargue la página
+window.onload = function() {
+    askNextQuestion();
+};
+
+
+ // Abrir modal al presionar "Adjuntar plano"
+ attachBtn.addEventListener("click", () => {
+    fileModal.style.display = "block";
+});
+
+// Cerrar modal al presionar la "X"
+closeModal.addEventListener("click", () => {
+    fileModal.style.display = "none";
+});
+
+function triggerFileInput() {
+    document.getElementById('file-input').click();
 }
 
