@@ -14,13 +14,21 @@ body, html {
 .main-container {
     width: 70vw;
     max-width: 400px;
-    height: 100vh;
+    height: 100%;
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 0 auto;
     padding: 20px;
     /*border-radius: 10px;*/
     box-sizing: border-box;
+}
+
+/* Contenedor del contenido (todo excepto el menú inferior) */
+.content-container {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Lista de proyectos - AHORA CON SCROLL INTERNO */
