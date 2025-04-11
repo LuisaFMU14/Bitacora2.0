@@ -11,15 +11,16 @@ body, html {
 
 /* Estilos generales para el formulario y la página */
 .main-container {
-    width: 100%;
-    max-width: 400px; /* Mantener el tamaño para simular un celular */
-    margin: 0 auto; /* Centrar el contenedor */
-    padding: 20px;
+    width: 70vw;
+    max-width: 400px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    background-color: white;
-    font-family: Arial, sans-serif;
-    overflow: hidden;  /* Evitar que haya scroll innecesario */
+    overflow: hidden;
+    padding: 20px;
     box-sizing: border-box;
 }
 
