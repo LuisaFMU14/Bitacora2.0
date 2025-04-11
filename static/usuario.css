@@ -38,15 +38,7 @@ body, html {
     
 }
 
-/* Lista de proyectos - AHORA CON SCROLL INTERNO */
-.records-container {
-    flex: 1;
-    overflow-y: auto;
-    list-style-type: none;
-    padding: 10px;
-    margin: 0;
-    margin-bottom: 10px;
-}
+
 
 /* Contenedor de cabecera (logo y título) */
 .header {
@@ -64,6 +56,26 @@ body, html {
 .logo {
     max-width: 210px; /* Tamaño del logo más pequeño para móviles */
     height: auto;
+}
+
+.intro-text {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.intro-text h2 {
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+/* Lista de proyectos - AHORA CON SCROLL INTERNO */
+.form-container {
+    flex: 1;
+    overflow-y: auto;
+    list-style-type: none;
+    padding: 0 20px;
+    margin: 0;
+    margin-bottom: 10px;
 }
 
 /* Estilos para el formulario */
