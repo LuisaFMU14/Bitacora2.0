@@ -25,6 +25,9 @@ body, html {
     font-family: Arial, sans-serif;
     overflow: hidden;  /* Evitar que haya scroll innecesario */
     box-sizing: border-box;
+    /* Estructura flexible para permitir scroll en la sección del formulario */
+    display: flex;
+    flex-direction: column;
 }
 
 /* Contenedor de contenido (todo excepto el menú inferior) */
