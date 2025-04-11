@@ -92,3 +92,20 @@ input[type="file"] {
 .bottom-button:hover {
     background-color: #f8c96c
 }
+
+/* Ajustes responsivos para los botones */
+@media screen and (max-width: 480px) {
+    .bottom-button {
+        font-size: 18px;  /* Reducir tamaño de icono en pantallas pequeñas */
+        padding: 8px 10px;
+    }
+
+    .bottom-button i {
+        font-size: 20px;
+    }
+}
+
+/* Mostrar menú cuando está activo */
+.dropdown-menu.show {
+    display: block;
+}
