@@ -8,7 +8,7 @@ body, html {
     justify-content: center;
     align-items: center;
     height: 100%;
-    
+    overflow: hidden; /* Previene scroll en toda la página */
 }
 
 
@@ -35,7 +35,7 @@ body, html {
     flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Evita que este contenedor genere scroll */
+    
 }
 
 /* Lista de proyectos - AHORA CON SCROLL INTERNO */
