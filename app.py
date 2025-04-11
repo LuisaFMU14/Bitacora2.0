@@ -14,7 +14,6 @@ from azure.storage.blob import ContentSettings
 from dotenv import load_dotenv
 
 
-
 # Cargar variables de entorno
 #load_dotenv('config/settings.env')  # Ruta relativa al archivo .env
 
@@ -174,8 +173,6 @@ def add_project():
             Ubicación: {location}
             Coordenadas: {coordinates}
             """
-
-                        
             # Nombre único para el archivo
             timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
             blob_name = f"proyectos/proyecto_{project_name}.txt"
