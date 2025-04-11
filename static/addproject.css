@@ -32,7 +32,7 @@ body, html {
 }
 
 /* Lista de proyectos - AHORA CON SCROLL INTERNO */
-.records-container {
+.form-container {
     flex: 1;
     overflow-y: auto;
     list-style-type: none;
