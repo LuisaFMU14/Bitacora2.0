@@ -123,8 +123,8 @@ input[type="file"] {
 .bottom-menu {
     display: flex;
     justify-content: space-around;
-    padding: 20px;
-    background-color: #f3f3f3;
+    padding: 10px;
+    background-color: #ffffff;
 }
 .bottom-button {
     background-color: #ffd073;
