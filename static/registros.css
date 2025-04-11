@@ -1,24 +1,27 @@
 /* Configuración general */
 body, html {
     margin: 0;
-    padding: 0;
+    padding: 30px;
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
-    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 /* Contenedor principal */
 .main-container {
-    width: 100%;
+    width: 40vw;
     max-width: 400px;
     height: 100vh;
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    position: relative;
+    padding: 20px;
 }
 
 /* Espacio para el logo */
@@ -26,7 +29,6 @@ body, html {
     display: flex;
     justify-content: center;
     padding: 10px 0;
-    flex-shrink: 0;
 }
 
 .logo {
@@ -34,33 +36,11 @@ body, html {
     height: auto;
 }
 
-/* Contenido principal con scroll */
-.content-container {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 20px 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Texto de introducción */
-.intro-text {
-    text-align: center;
-    margin: 10px 0;
-    flex-shrink: 0;
-}
-
-.intro-text h2 {
-    font-size: 20px;
-    color: #34495e;
-}
-
 /* Botón de agregar proyecto */
 .add-project-container {
     display: flex;
     justify-content: center;
     margin: 15px 0;
-    flex-shrink: 0;
 }
 
 .add-project-button {
@@ -72,65 +52,50 @@ body, html {
     cursor: pointer;
     font-size: 16px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 300px;
 }
 
 .add-project-button:hover {
     background-color: #218838;
 }
 
-/* Lista de proyectos */
-.records-container {
-    flex: 1;
-    overflow-y: auto;
-    padding: 0 0 80px; /* Espacio para el menú inferior */
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+/* Texto de introducción */
+.intro-text {
+    text-align: center;
+    margin-top: 10px;
 }
 
-.record-button {
-    background-color: #ffffff;
+.intro-text h2 {
+    font-size: 20px;
     color: #34495e;
-    text-align: left;
+}
+
+/* Lista de proyectos */
+.records-container {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.record-item {
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    font-size: 16px;
+    margin-bottom: 10px;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s, box-shadow 0.3s;
-    width: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 
-.record-button small {
-    display: block;
-    font-size: 14px;
-    color: #7f8c8d;
-    margin-top: 5px;
+.record-item:hover {
+    background-color: #f2f2f2;
 }
 
-.record-button:hover {
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Menú inferior fijo */
+/* Menú inferior */
 .bottom-menu {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    max-width: 400px;
-    margin: 0 auto;
     display: flex;
     justify-content: space-around;
     padding: 10px;
     background-color: #f3f3f3;
-    z-index: 1000;
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
 }
 
 .bottom-button {
@@ -143,12 +108,50 @@ body, html {
     font-size: 20px;
 }
 
+.bottom-button .icon {
+    max-width: 50px; /* Tamaño del logo de registros */
+    height: auto;
+}
+
 .bottom-button i {
-    font-size: 24px;
+    font-size: 24px;  /* Tamaño del icono */
 }
 
 .bottom-button:hover {
     background-color: #d9961e;
+}
+
+/* Botón de agregar nuevo proyecto */
+.add-project-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.add-project-button {
+    background-color: #f8b126;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-project-button:hover {
+    background-color: #d4971e;
+}
+
+/* Ajustes responsivos para los botones */
+@media screen and (max-width: 480px) {
+    .bottom-button {
+        font-size: 18px;  /* Reducir tamaño de icono en pantallas pequeñas */
+        padding: 8px 10px;
+    }
+
+    .bottom-button i {
+        font-size: 20px;
+    }
 }
 
 /* Estilo del contenedor desplegable */
@@ -159,24 +162,21 @@ body, html {
 
 /* Estilo del menú desplegable */
 .dropdown-menu {
-    display: none;
+    display: none; /* Oculto por defecto */
     position: absolute;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 50px; /* Aparece encima del botón */
+    left: 0;
+    right: 0;
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     padding: 10px 0;
-    z-index: 1001;
+    z-index: 1000;
     min-width: 150px;
     text-align: center;
 }
 
-.dropdown-menu.show {
-    display: block;
-}
-
+/* Opciones del menú */
 .dropdown-item {
     display: block;
     padding: 10px 20px;
@@ -191,23 +191,40 @@ body, html {
     color: #fff;
 }
 
-/* Ajustes responsivos */
-@media screen and (max-width: 480px) {
-    .main-container {
-        max-width: 100%;
-    }
-    
-    .bottom-button {
-        font-size: 18px;
-        padding: 8px 10px;
-    }
-    
-    .bottom-button i {
-        font-size: 20px;
-    }
-    
-    .records-container {
-        padding-bottom: 70px;
-    }
+/* Mostrar menú cuando está activo */
+.dropdown-menu.show {
+    display: block;
 }
 
+/* Botones de proyectos */
+.records-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 10px;
+}
+
+.record-button {
+    background-color: #ffffff;
+    color: #34495e;
+    text-align: left;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.record-button small {
+    display: block;
+    font-size: 14px;
+    color: #7f8c8d;
+    margin-top: 0px;
+}
+
+.record-button:hover {
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
