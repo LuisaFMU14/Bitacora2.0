@@ -15,10 +15,11 @@ body, html {
     max-width: 400px; /* Mantener el tamaño para simular un celular */
     margin: 0 auto; /* Centrar el contenedor */
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     background-color: white;
     font-family: Arial, sans-serif;
+    overflow: hidden;  /* Evitar que haya scroll innecesario */
     box-sizing: border-box;
 }
 
