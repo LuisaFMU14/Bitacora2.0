@@ -11,7 +11,7 @@ body, html {
 
 /* Contenedor principal */
 .main-container {
-    width: 40vw;
+    width: 60vw;
     max-width: 400px;
     height: 100vh;
     display: flex;
