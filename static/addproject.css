@@ -5,7 +5,7 @@ body, html {
     background-color: #f0f0f0;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     height: 100%;
     /*box-sizing: border-box;*/
 }
@@ -16,6 +16,7 @@ body, html {
     max-width: 400px;
     height: 100vh;
     background-color: #ffffff;
+    justify-content: space-between;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     border-radius: 10px;
