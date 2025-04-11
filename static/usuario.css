@@ -7,6 +7,7 @@ body, html {
     justify-content: center;
     align-items: center;
     height: 100%;
+    overflow: hidden; /* Previene scroll en toda la página */
 }
 
 /* Estilos generales para el formulario y la página */
@@ -21,6 +22,17 @@ body, html {
     font-family: Arial, sans-serif;
     overflow: hidden;  /* Evitar que haya scroll innecesario */
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column; /* Organiza los elementos en columna */
+    position: relative; /* Necesario para posicionamiento relativo */
+}
+
+/* Contenedor de cabecera (logo y título) */
+.header {
+    padding: 15px 20px;
+    background-color: white;
+    z-index: 2;
+    border-bottom: 1px solid #eee;
 }
 
 /* Contenedor de contenido (todo excepto el menú inferior) */
@@ -63,8 +75,11 @@ form {
 }
 
 label {
+    display: block;
     font-size: 16px;
     margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
 }
 
 input[type="text"],
@@ -97,22 +112,36 @@ input[type="file"] {
 /* Menú inferior */
 .bottom-menu {
     display: flex;
-    justify-content: space-around;
-    padding: 10px;
+    justify-content: center; /* Centrar el botón en lugar de space-around */
+    padding: 12px;
     background-color: #f3f3f3;
+    border-top: 1px solid #ddd;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    z-index: 2;
+    box-sizing: border-box;
 }
 .bottom-button {
     background-color: #ffd073;
     color: white;
-    padding: 10px 15px;
-    border-radius: 10px;
+    /*padding: 10px 15px;*/
+    /*border-radius: 10px;*/
+    width: 50px; /* Tamaño fijo para el botón */
+    height: 50px; /* Tamaño fijo para el botón */
+    border-radius: 50%; /* Botón circular */
     border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     font-size: 20px;  /* Ajuste del tamaño del ícono */
 }
 
 .bottom-button .icon {
-    max-width: 50px; /* Tamaño del logo de registros */
+    max-width: 24px; /* Tamaño del logo de registros */
     height: auto;
 }
 
@@ -126,6 +155,13 @@ input[type="file"] {
 
 /* Ajustes responsivos para los botones */
 @media screen and (max-width: 480px) {
+    .main-container {
+        max-width: 100%; /* Ocupa todo el ancho en móviles pequeños */
+        height: 100%;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    
     .bottom-button {
         font-size: 18px;  /* Reducir tamaño de icono en pantallas pequeñas */
         padding: 8px 10px;
@@ -133,6 +169,10 @@ input[type="file"] {
 
     .bottom-button i {
         font-size: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
     }
 }
 
