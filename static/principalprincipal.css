@@ -144,6 +144,34 @@ body, html {
     }
 }
 
+/* Estilos para el botón de eliminar proyecto */
+.delete-project-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.delete-project-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.delete-project-button:hover {
+    background-color: #e60000;
+}
+
+.delete-project-button i {
+    margin-right: 8px;
+}
 
 /* Estilo del contenedor desplegable */
 .dropdown {
@@ -239,7 +267,51 @@ body, html {
 .submit-btn:hover {
     background-color: #f8b126;
 }
+/* Estilos para el modal de confirmación */
+.confirm-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
 
+.confirm-modal-content {
+    background-color: white;
+    margin: 20% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.confirm-modal-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.confirm-yes {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.confirm-no {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
 
 /* Ajustes para pantallas pequeñas */
 @media screen and (max-width: 480px) {
