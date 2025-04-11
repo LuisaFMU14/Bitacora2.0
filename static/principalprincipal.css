@@ -1,13 +1,12 @@
 /* Configuración general de la pantalla */
 body, html {
     margin: 0;
-    padding: 30px;
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100%;
 }
 
 /* Contenedor principal, que se adapta al tamaño de la pantalla */
