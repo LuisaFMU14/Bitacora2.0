@@ -17,41 +17,35 @@
             <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo de la empresa" class="logo">
         </div>
 
-        <!-- Contenedor de contenido con scroll -->
-        <div class="content-container">
+        <!-- Texto de introducción -->
+        <div class="intro-text">
+            <h2>Lista de Registros</h2>
+        </div>
 
-            <!-- Texto de introducción -->
-            <div class="intro-text">
-                <h2>Lista de Registros</h2>
-            </div>
+        <!-- Botón para agregar nuevo proyecto -->
+        <div class="add-project-container">
+            <button class="add-project-button" onclick="redirectToAddProject()">Agregar Nuevo Proyecto</button>
+        </div>
 
-            <!-- Botón para agregar nuevo proyecto -->
-            <div class="add-project-container">
-                <button class="add-project-button" onclick="redirectToAddProject()">Agregar Nuevo Proyecto</button>
-            </div>
+        <!-- Lista de proyectos como botones -->
+        <div class="records-container">
+            <button class="record-button" onclick="redirectToProjectDetails('Proyecto Bitacora')">
+                Proyecto A<br><small>Fecha: 2024-09-22</small>
+            </button>
+            <button class="record-button" onclick="redirectToProjectDetails('Proyecto B')">
+                Proyecto B<br><small>Fecha: 2024-09-21</small>
+            </button>
+            <button class="record-button" onclick="redirectToProjectDetails('Proyecto C')">
+                Proyecto C<br><small>Fecha: 2024-09-20</small>
+            </button>
 
-            <!-- Lista de proyectos con scroll -->
-            <div class="records-container">
-
-            <!-- Lista de proyectos como botones -->
-            <div class="records-container">
-                <button class="record-button" onclick="redirectToProjectDetails('Proyecto Bitacora')">
-                    Proyecto A<br><small>Fecha: 2024-09-22</small>
-                </button>
-                <button class="record-button" onclick="redirectToProjectDetails('Proyecto B')">
-                    Proyecto B<br><small>Fecha: 2024-09-21</small>
-                </button>
-                <button class="record-button" onclick="redirectToProjectDetails('Proyecto C')">
-                    Proyecto C<br><small>Fecha: 2024-09-20</small>
-                </button>
-
-                <!-- Proyectos dinámicos desde Azure Blob Storage -->
-                {% for project in blob_projects %}
-                <button class="record-button" onclick="redirectToProjectDetails('{{ project.name }}')">
-                    {{ project.name }}<br><small>Fecha: {{ project.date }}</small>
-                </button>
-                {% endfor %}
-            </div>
+            <!-- Proyectos dinámicos desde Azure Blob Storage -->
+            {% for project in blob_projects %}
+            <button class="record-button" onclick="redirectToProjectDetails('{{ project.name }}')">
+                {{ project.name }}<br><small>Fecha: {{ project.date }}</small>
+            </button>
+            {% endfor %}
+        </div>
 
         <!-- Menú inferior (ahora fijo)-->
         <div class="bottom-menu">
