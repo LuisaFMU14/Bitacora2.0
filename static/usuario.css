@@ -88,7 +88,7 @@ form {
 }
 
 label {
-    font-size: 16px;
+    font-size: 14px;
     margin-bottom: 5px;
 }
 
@@ -98,7 +98,7 @@ input[type="tel"],
 input[type="file"] {
     width: 100%;
     max-width: 100%; /* Asegura que los inputs ocupen el 100% del ancho */
-    padding: 8px;
+    padding: 6px;
     font-size: 14px;
     border-radius: 5px;
     border: 1px solid #ddd;
@@ -123,7 +123,7 @@ input[type="file"] {
 .bottom-menu {
     display: flex;
     justify-content: space-around;
-    padding: 15px;
+    padding: 20px;
     background-color: #f3f3f3;
 }
 .bottom-button {
