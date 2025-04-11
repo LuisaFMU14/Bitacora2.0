@@ -66,7 +66,7 @@ def get_projects_from_blob():
         container_client = blob_service_client.get_container_client(container_name)
         
         # Listar los blobs en el directorio de proyectos
-        blobs = list(container_client.list_blobs(name_starts_with="proyectos/"))
+        blobs = list(container_client.list_blobs(name_starts_with="Proyectos/"))
         
         for blob in blobs:
             if blob.name.endswith('.txt'):
