@@ -18,31 +18,34 @@
             <h2>Agregar Nuevo Proyecto</h2>
         </div>
 
-        <!-- Formulario para agregar el proyecto -->
-        <form id="project-form" action="{{ url_for('add_project') }}" method="POST">
-            <label for="project-name">Nombre del Proyecto:</label>
-            <input type="text" id="project-name" name="project-name" required placeholder="Ingrese el nombre del proyecto">
+         <!-- Contenedor del formulario con scroll -->
+        <div class="form-container">
+            <!-- Formulario para agregar el proyecto -->
+            <form id="project-form" action="{{ url_for('add_project') }}" method="POST">
+                <label for="project-name">Nombre del Proyecto:</label>
+                <input type="text" id="project-name" name="project-name" required placeholder="Ingrese el nombre del proyecto">
 
-            <label for="start-date">Fecha de Inicio:</label>
-            <input type="date" id="start-date" name="start-date" required>
+                <label for="start-date">Fecha de Inicio:</label>
+                <input type="date" id="start-date" name="start-date" required>
 
-            <label for="end-date">Fecha de Fin:</label>
-            <input type="date" id="end-date" name="end-date" required>
+                <label for="end-date">Fecha de Fin:</label>
+                <input type="date" id="end-date" name="end-date" required>
 
-            <label for="director">Director de la Obra:</label>
-            <input type="text" id="director" name="director" required placeholder="Nombre del director">
+                <label for="director">Director de la Obra:</label>
+                <input type="text" id="director" name="director" required placeholder="Nombre del director">
 
-            <label for="location">Ubicación (Municipio):</label>
-            <input type="text" id="location" name="location" required placeholder="Municipio" readonly>
+                <label for="location">Ubicación (Municipio):</label>
+                <input type="text" id="location" name="location" required placeholder="Municipio" readonly>
 
-            <label for="coordinates">Coordenadas (Latitud, Longitud):</label>
-            <input type="text" id="coordinates" name="coordinates" required placeholder="Coordenadas" readonly>
-            <div id="location-container">
-                <button type="button" id="get-location" onclick="getLocation()">Obtener Ubicación</button>
-            </div>
+                <label for="coordinates">Coordenadas (Latitud, Longitud):</label>
+                <input type="text" id="coordinates" name="coordinates" required placeholder="Coordenadas" readonly>
+                <div id="location-container">
+                    <button type="button" id="get-location" onclick="getLocation()">Obtener Ubicación</button>
+                </div>
 
-            <button type="submit">Guardar Proyecto</button>
-        </form>
+                <button type="submit">Guardar Proyecto</button>
+            </form>
+        </div>
 
         <div class="bottom-menu">
             <!--<a href="{{ url_for('paginaprincipal') }}" class="bottom-button"><i class="fas fa-home"></i></a>-->
