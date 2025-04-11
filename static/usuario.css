@@ -2,6 +2,7 @@
 .main-container {
     width: 40vw;
     max-width: 400px; /* Mantener el tamaño para simular un celular */
+    height: 100vh;
     margin: 0 auto; /* Centrar el contenedor */
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
