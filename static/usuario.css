@@ -8,6 +8,25 @@
     border-radius: 10px;
     background-color: white;
     font-family: Arial, sans-serif;
+    box-sizing: border-box;
+}
+
+/* Contenedor de contenido (todo excepto el menú inferior) */
+.content-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Evita que este contenedor genere scroll */
+}
+
+/* Lista de proyectos - AHORA CON SCROLL INTERNO */
+.records-container {
+    flex: 1;
+    overflow-y: auto;
+    list-style-type: none;
+    padding: 10px;
+    margin: 0;
+    margin-bottom: 10px;
 }
 
 .logo-container {
