@@ -13,7 +13,7 @@ body, html {
 .main-container {
     width: 100%;
     max-width: 400px; /* Mantener el tamaño para simular un celular */
-    height: 105vh;
+    height: 110vh;
     margin: 0 auto; /* Centrar el contenedor */
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
