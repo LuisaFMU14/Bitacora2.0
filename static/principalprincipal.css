@@ -21,7 +21,26 @@ body, html {
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;  /* Evitar que haya scroll innecesario */
-    
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Contenedor de contenido (todo excepto el menú inferior) */
+.content-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Evita que este contenedor genere scroll */
+}
+
+/* Lista de proyectos - AHORA CON SCROLL INTERNO */
+.records-container {
+    flex: 1;
+    overflow-y: auto;
+    list-style-type: none;
+    padding: 10px;
+    margin: 0;
+    margin-bottom: 10px;
 }
 
 /* Espacio del logo */
