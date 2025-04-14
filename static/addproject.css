@@ -20,6 +20,8 @@ body, html {
     padding: 20px;
     /*border-radius: 10px;*/
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Contenedor del contenido (todo excepto el menú inferior) */
@@ -56,11 +58,11 @@ body, html {
 /* Estilo del formulario */
 .form-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 h2 {
-    font-size: 17px;
+    font-size: 16px;
     color: #34495e;
 }
 
@@ -70,21 +72,21 @@ form {
 }
 
 label {
-    font-size: 12px;
+    font-size: 11px;
     color: #34495e;
-    margin: 10px 0 5px;
+    margin: 8px 0 3px;
 }
 
 input {
     padding: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
+    border-radius: 4px;
+    font-size: 12px;
 }
 
 button[type="button"], button[type="submit"] {
-    padding: 10px;
+    padding: 8px;
     background-color: #f8b126;
     color: white;
     border: none;
@@ -101,7 +103,7 @@ button[type="button"]:hover, button[type="submit"]:hover {
 #location-container {
     display: flex;
     justify-content: center;
-    padding: 5px;
+    padding: 4px;
 }
 
 #location {
