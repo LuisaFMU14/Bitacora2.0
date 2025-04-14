@@ -64,6 +64,8 @@
         function redirectToProjectDetails(projectName) {
             // Redirigir a la página de detalles del proyecto con el nombre como parámetro
             //window.location.href = `{{ url_for('projectdetails') }}?name=${encodeURIComponent(projectName)}`;
+            // Verifica que el nombre del proyecto no esté vacío
+            if (!projectName) return;
             window.location.href = `{{ url_for('historialregistro') }}?name=${encodeURIComponent(projectName)}`;
         }
     </script>
