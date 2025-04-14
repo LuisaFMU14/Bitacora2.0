@@ -152,6 +152,10 @@ def usuario():
 def inventario():
     return render_template('inventario.html')
 
+@app.route('/historialRegistro')
+def inventario():
+    return render_template('historialRegistro.html')
+
 @app.route('/disciplinerecords')
 def disciplinerecords():
     return render_template('disciplinerecords.html')
