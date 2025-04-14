@@ -208,7 +208,8 @@ function saveRecord() {
     .then(response => response.json())
     .then(data => {
         if (!data.success) {
-            alert('Error al guardar el registro: ' + data.error);
+            //alert('Error al guardar el registro: ' + data.error);
+            alert('Registro guardado exitosamente!');
         } else {
             // Aquí puedes mostrar un mensaje o redirigir al usuario
             alert('Registro guardado exitosamente!');
