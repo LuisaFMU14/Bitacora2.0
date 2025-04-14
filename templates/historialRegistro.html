@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historial de Registros por Proyecto</title>
+    <title>Historial de Registros</title>
     <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='history.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -35,183 +35,96 @@
             cursor: pointer;
             margin-bottom: 20px;
         }
-        .back-button:hover {
-            background-color: #5a6268;
-        }
         .project-title {
             text-align: center;
             margin: 20px 0;
             color: #333;
         }
+        .centrar {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <!-- Contenedor principal -->
     <div class="main-container">
-        
-        <!-- Espacio para el logo -->
         <div class="logo-container">
-            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo de la empresa" class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
         </div>
 
-        <!-- Texto de introducción -->
         <div class="intro-text">
             <h2>Historial de Registros</h2>
-            <h3 id="project-title" class="project-title"></h3>
+            <h3 class="project-title">Registros del Proyecto</h3>
         </div>
 
-        <!-- Botón para volver atrás -->
-        <!--<div class="centrar">
-            <button class="back-button" onclick="goBack()">
+        <div class="centrar">
+            <button class="back-button" onclick="window.location.href='{{ url_for('history') }}'">
                 <i class="fas fa-arrow-left"></i> Volver al historial
             </button>
-        </div>-->
-
-        <!-- Contenedor de registros del proyecto -->
-        <div id="project-records" class="records-container">
-            <!-- Los registros se cargarán dinámicamente aquí -->
         </div>
 
-        <!-- Menú inferior -->
+        <div id="project-records" class="records-container">
+            <!-- Registro 1 -->
+            <div class="record-details">
+                <h3>Registro #1 - 2024-05-15</h3>
+                <div class="record-field">
+                    <label>Disciplina:</label>
+                    <span>Electricidad</span>
+                </div>
+                <div class="record-field">
+                    <label>Lugar de obra:</label>
+                    <span>Edificio Principal</span>
+                </div>
+                <div class="record-field">
+                    <label>Especialidad:</label>
+                    <span>Instalación eléctrica</span>
+                </div>
+                <div class="record-field">
+                    <label>Actividades realizadas:</label>
+                    <span>Instalación de cableado en planta baja</span>
+                </div>
+                <div class="record-field">
+                    <label>Responsable:</label>
+                    <span>Juan Pérez</span>
+                </div>
+                <div class="record-field">
+                    <label>Estado:</label>
+                    <span>Completado</span>
+                </div>
+            </div>
+
+            <!-- Registro 2 -->
+            <div class="record-details">
+                <h3>Registro #2 - 2024-05-14</h3>
+                <div class="record-field">
+                    <label>Disciplina:</label>
+                    <span>Plomería</span>
+                </div>
+                <div class="record-field">
+                    <label>Lugar de obra:</label>
+                    <span>Edificio Principal</span>
+                </div>
+                <div class="record-field">
+                    <label>Especialidad:</label>
+                    <span>Instalación hidráulica</span>
+                </div>
+                <div class="record-field">
+                    <label>Actividades realizadas:</label>
+                    <span>Instalación de tuberías en baños</span>
+                </div>
+                <div class="record-field">
+                    <label>Responsable:</label>
+                    <span>María Gómez</span>
+                </div>
+                <div class="record-field">
+                    <label>Estado:</label>
+                    <span>En progreso</span>
+                </div>
+            </div>
+        </div>
+
         <div class="bottom-menu">
             <a href="{{ url_for('registros') }}" class="bottom-button"><i class="fas fa-home"></i></a>
         </div>
     </div>
-
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const projectName = urlParams.get('project');
-        // Datos de ejemplo para los registros (simulando una base de datos)
-        const projectRecords = {
-            "Proyecto A": [
-                {
-                    fecha: "2024-09-22",
-                    disciplina: "Electricidad",
-                    lugar: "Edificio Central",
-                    especialidad: "Instalación eléctrica",
-                    actividades: "Instalación de cableado en planta baja",
-                    responsable: "Juan Pérez",
-                    estado: "Completado",
-                    fotos: []
-                },
-                {
-                    fecha: "2024-09-21",
-                    disciplina: "Plomería",
-                    lugar: "Edificio Central",
-                    especialidad: "Instalación hidráulica",
-                    actividades: "Instalación de tuberías en baños",
-                    responsable: "María Gómez",
-                    estado: "En progreso",
-                    fotos: []
-                }
-            ],
-            "Proyecto B": [
-                {
-                    fecha: "2024-09-20",
-                    disciplina: "Construcción",
-                    lugar: "Torre Norte",
-                    especialidad: "Cimentación",
-                    actividades: "Vertido de concreto para cimientos",
-                    responsable: "Carlos Ruiz",
-                    estado: "Completado",
-                    fotos: []
-                },
-                {
-                    fecha: "2024-09-19",
-                    disciplina: "Albañilería",
-                    lugar: "Torre Norte",
-                    especialidad: "Muros",
-                    actividades: "Levantamiento de muros divisorios",
-                    responsable: "Ana López",
-                    estado: "Pendiente",
-                    fotos: []
-                }
-            ],
-            "Proyecto C": [
-                {
-                    fecha: "2024-09-18",
-                    disciplina: "Pintura",
-                    lugar: "Edificio Sur",
-                    especialidad: "Acabados",
-                    actividades: "Aplicación de primera mano de pintura",
-                    responsable: "Luis Martínez",
-                    estado: "En progreso",
-                    fotos: []
-                },
-                {
-                    fecha: "2024-09-17",
-                    disciplina: "Carpintería",
-                    lugar: "Edificio Sur",
-                    especialidad: "Muebles",
-                    actividades: "Instalación de gabinetes de cocina",
-                    responsable: "Sofía Ramírez",
-                    estado: "Completado",
-                    fotos: []
-                }
-            ]
-        };
-
-        // Función para cargar los registros del proyecto
-        function loadProjectRecords() {
-            
-            
-            if (projectName) {
-                document.getElementById('project-title').textContent = projectName;
-                
-                const recordsContainer = document.getElementById('project-records');
-                recordsContainer.innerHTML = '';
-                
-                if (projectRecords[projectName]) {
-                    projectRecords[projectName].forEach((record, index) => {
-                        const recordElement = document.createElement('div');
-                        recordElement.className = 'record-details';
-                        recordElement.innerHTML = `
-                            <h3>Registro #${index + 1} - ${record.fecha}</h3>
-                            <div class="record-field">
-                                <label>Disciplina:</label>
-                                <span>${record.disciplina}</span>
-                            </div>
-                            <div class="record-field">
-                                <label>Lugar de obra:</label>
-                                <span>${record.lugar}</span>
-                            </div>
-                            <div class="record-field">
-                                <label>Especialidad:</label>
-                                <span>${record.especialidad}</span>
-                            </div>
-                            <div class="record-field">
-                                <label>Actividades realizadas:</label>
-                                <span>${record.actividades}</span>
-                            </div>
-                            <div class="record-field">
-                                <label>Responsable:</label>
-                                <span>${record.responsable}</span>
-                            </div>
-                            <div class="record-field">
-                                <label>Estado:</label>
-                                <span>${record.estado}</span>
-                            </div>
-                        `;
-                        recordsContainer.appendChild(recordElement);
-                    });
-                } else {
-                    recordsContainer.innerHTML = '<p>No se encontraron registros para este proyecto.</p>';
-                }
-            } else {
-                const recordsContainer = document.getElementById('project-records');
-                recordsContainer.innerHTML = '<p>No se ha seleccionado un proyecto. <a href="{{ url_for("history") }}">Volver al historial</a></p>';
-                document.getElementById('project-title').textContent = 'Proyecto no especificado';
-            }
-        }
-
-        // Función para volver al historial
-        function goBack() {
-            window.location.href = "{{ url_for('history') }}";
-        }
-
-        // Cargar los registros cuando la página esté lista
-        document.addEventListener('DOMContentLoaded', loadProjectRecords);
-    </script>
 </body>
 </html>
-
