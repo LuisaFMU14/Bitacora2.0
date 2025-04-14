@@ -136,6 +136,14 @@ def registros():
 
     return render_template('registros.html', blob_projects=blob_projects, static_projects=static_projects)
 
+# Ruta para la vista "history"
+@app.route('/history')
+def history():
+    # Obtener proyectos del Blob Storage
+    blob_projects = get_projects_from_blob()
+
+    return render_template('history.html', blob_projects=blob_projects)
+
 @app.route('/usuario')
 def usuario():
     return render_template('usuario.html')
@@ -266,10 +274,7 @@ def guardar_registro():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Ruta para la vista "history"
-@app.route('/history')
-def history():
-    return render_template('history.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
