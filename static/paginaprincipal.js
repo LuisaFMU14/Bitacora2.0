@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    console.log("DOM fully loaded");
+
     const dropdownBtn = document.getElementById('dropdown-btn');
     const dropdownMenu = document.getElementById('dropdown-menu');
     const deleteProjectBtn = document.getElementById('delete-project-btn');
@@ -6,9 +8,16 @@ document.addEventListener('DOMContentLoaded', function () {
     const confirmYesBtn = document.getElementById('confirm-yes');
     const confirmNoBtn = document.getElementById('confirm-no');
 
+    // Verificar si los elementos existen
+    console.log("deleteProjectBtn exists:", !!deleteProjectBtn);
+    console.log("confirmModal exists:", !!confirmModal);
+    console.log("confirmYesBtn exists:", !!confirmYesBtn);
+    console.log("confirmNoBtn exists:", !!confirmNoBtn);
+
     // Obtener el parámetro del proyecto de la URL
     const urlParams = new URLSearchParams(window.location.search);
     const projectName = urlParams.get('project');
+    console.log("Project name from URL:", projectName);
 
     // Alternar el menú desplegable al hacer clic en el botón
     dropdownBtn.addEventListener('click', function (event) {
