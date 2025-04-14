@@ -201,7 +201,12 @@ def add_project():
 @app.route('/delete_project', methods=['GET', 'POST'])
 def delete_project():
     try:
-        project_name = request.args.get('project_name')
+        # Para depuración
+        app.logger.info(f"Delete project request received. Method: {request.method}")
+        app.logger.info(f"Request args: {request.args}")
+        
+        project_name = request.args.get('project')
+        app.logger.info(f"Project name: {project_name}")
         
         if not project_name:
             flash('No se especificó un nombre de proyecto', 'error')
