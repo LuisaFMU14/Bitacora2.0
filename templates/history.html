@@ -19,15 +19,15 @@
 
         <!-- Texto de introducción -->
         <div class="intro-text">
-            <h2>Historial de Registros por Proyectos</h2>
+            <h2>Lista de Proyectos</h2>
         </div>
 
-        <!-- Botón para agregar nuevo proyecto 
+        <!-- Botón para agregar nuevo proyecto -->
         <div class="add-project-container">
             <button class="add-project-button" onclick="redirectToAddProject()">Agregar Nuevo Proyecto</button>
-        </div> -->
+        </div>
 
-        <!-- Lista de proyectos como botones -->
+        <!-- Lista de proyectos como botones con scroll-->
         <div class="records-container">
             <button class="record-button" onclick="redirectToProjectDetails('Proyecto Bitacora')">
                 Proyecto A<br><small>Fecha: 2024-09-22</small>
@@ -47,15 +47,28 @@
             {% endfor %}
         </div>
 
-        <!-- Menú inferior -->
+        <!-- Menú inferior (ahora fijo)-->
         <div class="bottom-menu">
             <a href="{{ url_for('registros') }}" class="bottom-button"><i class="fas fa-home"></i></a>
-            <button class="bottom-button"><i class="fas fa-user"></i></button>
-            <a href="{{ url_for('registros') }}" class="bottom-button"><i class="fas fa-clipboard-list"></i></a>
+            <!--<button class="bottom-button"><i class="fas fa-user"></i></button>-->
+            <div class="dropdown">
+                <button id="dropdown-btn" class="bottom-button">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <div id="dropdown-menu" class="dropdown-menu">
+                    <a href="{{ url_for('history') }}" class="dropdown-item">
+                        <i class="fas fa-clipboard-list"></i> Historial</a>
+                    <a href="{{ url_for('inventario') }}" class="dropdown-item">
+                        <i class="fas fa-clipboard-check"></i> Inventario</a>
+                </div>
+            </div>
+            <a href="{{ url_for('usuario') }}" class="bottom-button"><i class="fas fa-user"></i></a>
         </div>
+        
     </div>
 
     <script>
+               
         function redirectToAddProject() {
             // Redirigir a la página para agregar un nuevo proyecto
             window.location.href = "{{ url_for('add_project') }}";
@@ -64,8 +77,26 @@
         function redirectToProjectDetails(projectName) {
             // Redirigir a la página de detalles del proyecto con el nombre como parámetro
             //window.location.href = `{{ url_for('projectdetails') }}?name=${encodeURIComponent(projectName)}`;
-            window.location.href = `{{ url_for('paginaprincipal') }}?name=${encodeURIComponent(projectName)}`;
+            window.location.href = `{{ url_for('paginaprincipal') }}?project=${encodeURIComponent(projectName)}`;
         }
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdownBtn = document.getElementById('dropdown-btn');
+            const dropdownMenu = document.getElementById('dropdown-menu');
+
+            // Alternar el menú desplegable al hacer clic en el botón
+            dropdownBtn.addEventListener('click', function (event) {
+                event.stopPropagation(); // Evitar que el clic cierre el menú
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Cerrar el menú al hacer clic fuera de él
+            document.addEventListener('click', function (event) {
+                if (!dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        });
+
     </script>
 </body>
 </html>
