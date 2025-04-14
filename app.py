@@ -198,7 +198,7 @@ def add_project():
         
     return render_template('addproject.html')
 
-@app.route('/delete_project', methods=['POST'])
+@app.route('/delete_project', methods=['GET', 'POST'])
 def delete_project():
     try:
         project_name = request.args.get('project')
@@ -213,13 +213,18 @@ def delete_project():
         
         # Obtener una lista de todos los blobs relacionados con este proyecto
         # Asumimos que los blobs relacionados comienzan con el nombre del proyecto
-        blob_list = container_client.list_blobs(name_starts_with=project_name)
-        
+        blob_list = container_client.list_blobs(name_starts_with=f"Proyectos/{project_name}/")
+        deleted = False
         # Eliminar cada blob relacionado con el proyecto
         for blob in blob_list:
             container_client.delete_blob(blob.name)
+            deleted = True
+
+        if deleted:
+            flash(f'Proyecto "{project_name}" eliminado correctamente', 'success')
+        else:
+            flash(f'No se encontraron archivos para el proyecto "{project_name}"', 'warning')
         
-        flash(f'Proyecto "{project_name}" eliminado correctamente', 'success')
         return redirect(url_for('registros'))
     
     except Exception as e:
