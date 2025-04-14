@@ -86,7 +86,7 @@ input {
 }
 
 button[type="button"], button[type="submit"] {
-    padding: 5px;
+    padding: 8px;
     background-color: #f8b126;
     color: white;
     border: none;
