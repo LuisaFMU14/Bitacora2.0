@@ -231,10 +231,10 @@ window.onload = function() {
 };
 
 
- // Abrir modal al presionar "Adjuntar plano"
- attachBtn.addEventListener("click", () => {
-    fileModal.style.display = "block";
-});
+// Abrir modal al presionar "Adjuntar plano"
+//attachBtn.addEventListener("click", () => {
+    //fileModal.style.display = "block";
+//});
 
 // Cerrar modal al presionar la "X"
 closeModal.addEventListener("click", () => {
