@@ -61,11 +61,11 @@
         </div>
 
         <!-- Botón para volver atrás -->
-        <div class="centrar">
+        <!--<div class="centrar">
             <button class="back-button" onclick="goBack()">
                 <i class="fas fa-arrow-left"></i> Volver al historial
             </button>
-        </div>
+        </div>-->
 
         <!-- Contenedor de registros del proyecto -->
         <div id="project-records" class="records-container">
@@ -79,6 +79,8 @@
     </div>
 
     <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const projectName = urlParams.get('project');
         // Datos de ejemplo para los registros (simulando una base de datos)
         const projectRecords = {
             "Proyecto A": [
@@ -151,8 +153,7 @@
 
         // Función para cargar los registros del proyecto
         function loadProjectRecords() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const projectName = urlParams.get('project');
+            
             
             if (projectName) {
                 document.getElementById('project-title').textContent = projectName;
