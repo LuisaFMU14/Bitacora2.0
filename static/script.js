@@ -237,9 +237,9 @@ window.onload = function() {
 //});
 
 // Cerrar modal al presionar la "X"
-closeModal.addEventListener("click", () => {
-    fileModal.style.display = "none";
-});
+//closeModal.addEventListener("click", () => {
+    //fileModal.style.display = "none";
+//});
 
 function triggerFileInput() {
     document.getElementById('file-input').click();
