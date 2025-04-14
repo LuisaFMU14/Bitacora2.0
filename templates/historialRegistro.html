@@ -197,7 +197,9 @@
                     recordsContainer.innerHTML = '<p>No se encontraron registros para este proyecto.</p>';
                 }
             } else {
-                window.location.href = "{{ url_for('history') }}";
+                const recordsContainer = document.getElementById('project-records');
+                recordsContainer.innerHTML = '<p>No se ha seleccionado un proyecto. <a href="{{ url_for("history") }}">Volver al historial</a></p>';
+                document.getElementById('project-title').textContent = 'Proyecto no especificado';
             }
         }
 
