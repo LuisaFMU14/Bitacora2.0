@@ -218,7 +218,7 @@ def delete_project():
         
         # Obtener una lista de todos los blobs relacionados con este proyecto
         # Asumimos que los blobs relacionados comienzan con el nombre del proyecto
-        blob_list = container_client.list_blobs(name_starts_with=f"Proyectos/{project_name}/")
+        blob_list = container_client.list_blobs(name_starts_with=f"Proyectos/Proyecto {project_name}/")
         deleted = False
         # Eliminar cada blob relacionado con el proyecto
         for blob in blob_list:
