@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Verificar si los elementos existen antes de agregar eventos
+    // Evento para mostrar el modal de confirmación
     if (deleteProjectBtn) {
         deleteProjectBtn.addEventListener('click', function() {
             if (confirmModal) {
@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Evento para confirmar la eliminación
     if (confirmYesBtn) {
         confirmYesBtn.addEventListener('click', function() {
             if (projectName) {
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Evento para cancelar la eliminación
     if (confirmNoBtn) {
         confirmNoBtn.addEventListener('click', function() {
             if (confirmModal) {
