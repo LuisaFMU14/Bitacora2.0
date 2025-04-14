@@ -3,10 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pantalla de Registros</title>
+    <title>Historial de Registros por Proyecto</title>
     <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='history.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .record-details {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .record-details h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .record-field {
+            margin-bottom: 8px;
+        }
+        .record-field label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .back-button {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+        .project-title {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
     <!-- Contenedor principal -->
@@ -19,53 +56,158 @@
 
         <!-- Texto de introducción -->
         <div class="intro-text">
-            <h2>Historial de Registros por Proyectos</h2>
+            <h2>Historial de Registros</h2>
+            <h3 id="project-title" class="project-title"></h3>
         </div>
 
-        <!-- Botón para agregar nuevo proyecto 
-        <div class="add-project-container">
-            <button class="add-project-button" onclick="redirectToAddProject()">Agregar Nuevo Proyecto</button>
-        </div> -->
+        <!-- Botón para volver atrás -->
+        <div class="centrar">
+            <button class="back-button" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Volver al historial
+            </button>
+        </div>
 
-        <!-- Lista de proyectos como botones -->
-        <div class="records-container">
-            <button class="record-button" onclick="redirectToProjectDetails('Proyecto Bitacora')">
-                Proyecto A<br><small>Fecha: 2024-09-22</small>
-            </button>
-            <button class="record-button" onclick="redirectToProjectDetails('Proyecto B')">
-                Proyecto B<br><small>Fecha: 2024-09-21</small>
-            </button>
-            <button class="record-button" onclick="redirectToProjectDetails('Proyecto C')">
-                Proyecto C<br><small>Fecha: 2024-09-20</small>
-            </button>
-
-            <!-- Proyectos dinámicos desde Azure Blob Storage -->
-            {% for project in blob_projects %}
-            <button class="record-button" onclick="redirectToProjectDetails('{{ project.name }}')">
-                {{ project.name }}<br><small>Fecha: {{ project.date }}</small>
-            </button>
-            {% endfor %}
+        <!-- Contenedor de registros del proyecto -->
+        <div id="project-records" class="records-container">
+            <!-- Los registros se cargarán dinámicamente aquí -->
         </div>
 
         <!-- Menú inferior -->
         <div class="bottom-menu">
             <a href="{{ url_for('registros') }}" class="bottom-button"><i class="fas fa-home"></i></a>
-            <!--<button class="bottom-button"><i class="fas fa-user"></i></button>-->
-            <!--<a href="{{ url_for('registros') }}" class="bottom-button"><i class="fas fa-clipboard-list"></i></a>-->
         </div>
     </div>
 
     <script>
-        function redirectToAddProject() {
-            // Redirigir a la página para agregar un nuevo proyecto
-            window.location.href = "{{ url_for('add_project') }}";
+        // Datos de ejemplo para los registros (simulando una base de datos)
+        const projectRecords = {
+            "Proyecto A": [
+                {
+                    fecha: "2024-09-22",
+                    disciplina: "Electricidad",
+                    lugar: "Edificio Central",
+                    especialidad: "Instalación eléctrica",
+                    actividades: "Instalación de cableado en planta baja",
+                    responsable: "Juan Pérez",
+                    estado: "Completado",
+                    fotos: []
+                },
+                {
+                    fecha: "2024-09-21",
+                    disciplina: "Plomería",
+                    lugar: "Edificio Central",
+                    especialidad: "Instalación hidráulica",
+                    actividades: "Instalación de tuberías en baños",
+                    responsable: "María Gómez",
+                    estado: "En progreso",
+                    fotos: []
+                }
+            ],
+            "Proyecto B": [
+                {
+                    fecha: "2024-09-20",
+                    disciplina: "Construcción",
+                    lugar: "Torre Norte",
+                    especialidad: "Cimentación",
+                    actividades: "Vertido de concreto para cimientos",
+                    responsable: "Carlos Ruiz",
+                    estado: "Completado",
+                    fotos: []
+                },
+                {
+                    fecha: "2024-09-19",
+                    disciplina: "Albañilería",
+                    lugar: "Torre Norte",
+                    especialidad: "Muros",
+                    actividades: "Levantamiento de muros divisorios",
+                    responsable: "Ana López",
+                    estado: "Pendiente",
+                    fotos: []
+                }
+            ],
+            "Proyecto C": [
+                {
+                    fecha: "2024-09-18",
+                    disciplina: "Pintura",
+                    lugar: "Edificio Sur",
+                    especialidad: "Acabados",
+                    actividades: "Aplicación de primera mano de pintura",
+                    responsable: "Luis Martínez",
+                    estado: "En progreso",
+                    fotos: []
+                },
+                {
+                    fecha: "2024-09-17",
+                    disciplina: "Carpintería",
+                    lugar: "Edificio Sur",
+                    especialidad: "Muebles",
+                    actividades: "Instalación de gabinetes de cocina",
+                    responsable: "Sofía Ramírez",
+                    estado: "Completado",
+                    fotos: []
+                }
+            ]
+        };
+
+        // Función para cargar los registros del proyecto
+        function loadProjectRecords() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectName = urlParams.get('project');
+            
+            if (projectName) {
+                document.getElementById('project-title').textContent = projectName;
+                
+                const recordsContainer = document.getElementById('project-records');
+                recordsContainer.innerHTML = '';
+                
+                if (projectRecords[projectName]) {
+                    projectRecords[projectName].forEach((record, index) => {
+                        const recordElement = document.createElement('div');
+                        recordElement.className = 'record-details';
+                        recordElement.innerHTML = `
+                            <h3>Registro #${index + 1} - ${record.fecha}</h3>
+                            <div class="record-field">
+                                <label>Disciplina:</label>
+                                <span>${record.disciplina}</span>
+                            </div>
+                            <div class="record-field">
+                                <label>Lugar de obra:</label>
+                                <span>${record.lugar}</span>
+                            </div>
+                            <div class="record-field">
+                                <label>Especialidad:</label>
+                                <span>${record.especialidad}</span>
+                            </div>
+                            <div class="record-field">
+                                <label>Actividades realizadas:</label>
+                                <span>${record.actividades}</span>
+                            </div>
+                            <div class="record-field">
+                                <label>Responsable:</label>
+                                <span>${record.responsable}</span>
+                            </div>
+                            <div class="record-field">
+                                <label>Estado:</label>
+                                <span>${record.estado}</span>
+                            </div>
+                        `;
+                        recordsContainer.appendChild(recordElement);
+                    });
+                } else {
+                    recordsContainer.innerHTML = '<p>No se encontraron registros para este proyecto.</p>';
+                }
+            } else {
+                window.location.href = "{{ url_for('history') }}";
+            }
         }
 
-        function redirectToProjectDetails(projectName) {
-            // Redirigir a la página de detalles del proyecto con el nombre como parámetro
-            //window.location.href = `{{ url_for('projectdetails') }}?name=${encodeURIComponent(projectName)}`;
-            window.location.href = `{{ url_for('paginaprincipal') }}?name=${encodeURIComponent(projectName)}`;
+        // Función para volver al historial
+        function goBack() {
+            window.location.href = "{{ url_for('history') }}";
         }
+
+        // Cargar los registros cuando la página esté lista
+        document.addEventListener('DOMContentLoaded', loadProjectRecords);
     </script>
 </body>
 </html>
