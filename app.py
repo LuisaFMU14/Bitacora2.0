@@ -153,7 +153,7 @@ def inventario():
     return render_template('inventario.html')
 
 @app.route('/historialRegistro')
-def inventario():
+def historialregistro():
     return render_template('historialRegistro.html')
 
 @app.route('/disciplinerecords')
