@@ -19,7 +19,7 @@ from office365.sharepoint.listitems.listitem import ListItem
 
 
 # Configura SharePoint (modifica con tus datos)
-SHAREPOINT_SITE_URL = "https://iacsas.sharepoint.com/sites/Pruebasproyectossantiago/Lists/Registros%20de%20Bitcora/AllItems.aspx"
+SHAREPOINT_SITE_URL = "https://iacsas.sharepoint.com/sites/Pruebasproyectossantiago"
 SHAREPOINT_DOC_LIBRARY = "Documentos%20Compartidos"  # Nombre de la biblioteca
 SHAREPOINT_USER = "santiago.giraldo@iac.com.co"
 SHAREPOINT_PASSWORD = "Latumbanuncamuere3"
