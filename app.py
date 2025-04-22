@@ -20,7 +20,7 @@ from office365.sharepoint.listitems.listitem import ListItem
 
 # Configura SharePoint (modifica con tus datos)
 SHAREPOINT_SITE_URL = "https://iacsas.sharepoint.com/sites/Pruebasproyectossantiago"
-SHAREPOINT_DOC_LIBRARY = "Documentos%20Compartidos"  # Nombre de la biblioteca
+LIST_NAME = "Registros de Bitácora"  # Nombre de la biblioteca
 SHAREPOINT_USER = "santiago.giraldo@iac.com.co"
 SHAREPOINT_PASSWORD = "Latumbanuncamuere3"
 
@@ -52,7 +52,7 @@ def save_to_sharepoint_list(respuestas, photo_url=None):
         ctx = ClientContext(SHAREPOINT_SITE_URL, ctx_auth)
         
         # Obtener la lista y su tipo de entidad
-        sp_list = ctx.web.lists.get_by_title("BitacoraRegistros")
+        sp_list = ctx.web.lists.get_by_title(LIST_NAME)
         ctx.load(sp_list, ["ListItemEntityTypeFullName"])  # ¡Clave faltante!
         ctx.execute_query()  # Ejecutar la consulta para obtener el metadata
         
