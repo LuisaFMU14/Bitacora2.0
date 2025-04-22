@@ -10,6 +10,34 @@ const questions = [
 ];
 const responses = [];
 
+async function saveToSharePointList() {
+    try {
+        const respuestas = {
+            disciplina: document.getElementById('question_0').value,
+            lugar: document.getElementById('question_1').value,
+            especialidad: document.getElementById('question_2').value,
+            descripcion: document.getElementById('question_3').value,
+            responsable: document.getElementById('question_4').value,
+            estado: document.getElementById('question_5').value
+        };
+
+        const response = await fetch('/guardar-en-lista-sharepoint', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ respuestas })
+        });
+
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Error al guardar");
+        
+        alert("¡Registro guardado en la lista de SharePoint!");
+        console.log("ID del registro:", result.id_registro);
+    } catch (error) {
+        console.error("Error:", error);
+        alert(`Error: ${error.message}`);
+    }
+}
+
 // Función para iniciar la grabación de voz
 function startSpeechRecognition() {
     if (!('webkitSpeechRecognition' in window)) {

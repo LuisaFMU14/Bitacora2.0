@@ -12,6 +12,17 @@ from flask_cors import CORS
 from datetime import datetime
 from azure.storage.blob import ContentSettings
 from dotenv import load_dotenv
+from office365.sharepoint.client_context import ClientContext
+from office365.runtime.auth.authentication_context import AuthenticationContext
+from office365.sharepoint.lists.list import List
+from office365.sharepoint.listitems.listitem import ListItem
+
+
+# Configura SharePoint (modifica con tus datos)
+SHAREPOINT_SITE_URL = "https://tuempresa.sharepoint.com/sites/TuSitio"
+SHAREPOINT_DOC_LIBRARY = "Documentos%20Compartidos"  # Nombre de la biblioteca
+SHAREPOINT_USER = "santiago.giraldo@iac.com.co"
+SHAREPOINT_PASSWORD = "tucontraseña"
 
 
 # Cargar variables de entorno
@@ -29,6 +40,63 @@ container_name = "registros"
 
 # Inicializa el cliente de BlobServiceClient
 blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+def save_to_sharepoint_list(respuestas, photo_url=None):
+    """Guarda los datos como un elemento en una lista de SharePoint"""
+    try:
+        # Autenticación
+        ctx_auth = AuthenticationContext(SHAREPOINT_SITE_URL)
+        if not ctx_auth.acquire_token_for_user(SHAREPOINT_USER, SHAREPOINT_PASSWORD):
+            raise Exception("Error de autenticación en SharePoint")
+        
+        ctx = ClientContext(SHAREPOINT_SITE_URL, ctx_auth)
+        
+        # Obtener la lista por nombre
+        sp_list = ctx.web.lists.get_by_title("BitacoraRegistros")
+        
+        # Propiedades del nuevo elemento
+        new_item = {
+            "Title": f"Registro-{datetime.now().strftime('%Y%m%d')}",
+            "Disciplina": respuestas.get('disciplina', ''),
+            "LugarObra": respuestas.get('lugar', ''),
+            "Especialidad": respuestas.get('especialidad', ''),
+            "Descripcion": respuestas.get('descripcion', ''),
+            "Responsable": respuestas.get('responsable', ''),
+            "Estado": respuestas.get('estado', ''),
+            "FechaRegistro": datetime.now().isoformat(),
+            "Foto": photo_url  # Opcional: URL de la foto si se subió aparte
+        }
+        
+        # Añadir el elemento
+        item = sp_list.add_item(new_item).execute_query()
+        print(f"Registro guardado en lista SharePoint (ID: {item.id})")
+        return True
+        
+    except Exception as e:
+        print(f"Error al guardar en lista SharePoint: {str(e)}")
+        return False
+
+# Función para subir archivos a SharePoint
+def upload_to_sharepoint(file_name, file_content):
+    """Función dedicada para subir archivos a SharePoint"""
+    try:
+        # Autenticación
+        ctx_auth = AuthenticationContext(SHAREPOINT_SITE_URL)
+        if not ctx_auth.acquire_token_for_user(SHAREPOINT_USER, SHAREPOINT_PASSWORD):
+            raise Exception("Error de autenticación en SharePoint")
+        
+        ctx = ClientContext(SHAREPOINT_SITE_URL, ctx_auth)
+        
+        # Subir archivo a la biblioteca
+        target_folder = ctx.web.get_folder_by_server_relative_url(SHAREPOINT_DOC_LIBRARY)
+        target_file = target_folder.upload_file(file_name, file_content).execute_query()
+        
+        print(f"Archivo '{file_name}' subido a SharePoint: {target_file.serverRelativeUrl}")
+        return True
+    except Exception as e:
+        print(f"Error en SharePoint: {str(e)}")
+        return False
+
 
 # Función para subir archivos a Azure Blob Storage
 def upload_to_blob(file_name, data, content_type):
@@ -253,7 +321,72 @@ def ask_question_route():
     else:
         return jsonify({'error': 'Error al sintetizar la pregunta.'}), 500
 
+@app.route('/guardar-en-lista-sharepoint', methods=['POST'])
+def guardar_en_lista_sharepoint():
+    """Endpoint exclusivo para guardar en listas de SharePoint"""
+    try:
+        data = request.get_json()
+        respuestas = data.get('respuestas')
+        
+        if not respuestas:
+            return jsonify({"error": "Faltan datos"}), 400
 
+        # Guardar en lista (sin foto adjunta)
+        success = save_to_sharepoint_list(respuestas)
+        
+        if success:
+            return jsonify({
+                "success": True,
+                "mensaje": "Registro guardado en lista de SharePoint",
+                "id_registro": success
+            }), 200
+        else:
+            raise Exception("Error al guardar en la lista")
+            
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
+
+
+@app.route('/guardar-registro-sharepoint', methods=['POST'])
+def guardar_registro_sharepoint():
+    """Endpoint exclusivo para SharePoint"""
+    try:
+        data = request.get_json()
+        foto_base64 = data.get('foto')
+        respuestas = data.get('respuestas')
+
+        if not foto_base64 or not respuestas:
+            return jsonify({"error": "Faltan datos"}), 400
+
+        # Procesar imagen
+        foto_data = base64.b64decode(foto_base64.split(',')[1])
+        imagen_nombre = f"foto_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        
+        # Procesar respuestas
+        respuestas_texto = "\n".join([f"{k}: {v}" for k, v in respuestas.items()])
+        registro_nombre = f"registro_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+
+        # Subir a SharePoint (sin afectar Azure)
+        success_photo = upload_to_sharepoint(imagen_nombre, foto_data)
+        success_registro = upload_to_sharepoint(registro_nombre, respuestas_texto.encode('utf-8'))
+
+        if success_photo and success_registro:
+            return jsonify({
+                "success": True,
+                "mensaje": "Registro guardado en SharePoint",
+                "archivos": [imagen_nombre, registro_nombre]
+            }), 200
+        else:
+            raise Exception("Error al subir uno o más archivos a SharePoint")
+
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 500
 
 
 @app.route('/guardar-registro', methods=['POST'])
