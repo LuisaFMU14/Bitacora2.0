@@ -20,7 +20,7 @@ from office365.sharepoint.listitems.listitem import ListItem
 
 # Configura SharePoint (modifica con tus datos)
 SHAREPOINT_SITE_URL = "https://iacsas.sharepoint.com/sites/Pruebasproyectossantiago"
-LIST_NAME = "Registros de Bitácora"  # Nombre de la biblioteca
+LIST_NAME = "BitacoraRegistros"  # Nombre de la biblioteca
 SHAREPOINT_USER = "santiago.giraldo@iac.com.co"
 SHAREPOINT_PASSWORD = "Latumbanuncamuere3"
 
