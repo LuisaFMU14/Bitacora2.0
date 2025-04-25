@@ -139,13 +139,13 @@ def registros():
     blob_projects = get_projects_from_blob()
 
     # Combinar con proyectos estáticos si es necesario
-    static_projects = [
-        {'name': 'Proyecto A', 'date': '2024-09-22'},
-        {'name': 'Proyecto B', 'date': '2024-09-21'},
-        {'name': 'Proyecto C', 'date': '2024-09-20'}
-    ]
+    #static_projects = [
+        #{'name': 'Proyecto A', 'date': '2024-09-22'},
+        #{'name': 'Proyecto B', 'date': '2024-09-21'},
+        #{'name': 'Proyecto C', 'date': '2024-09-20'}
+    #]
 
-    return render_template('registros.html', blob_projects=blob_projects, static_projects=static_projects)
+    return render_template('registros.html', blob_projects=blob_projects)
 
 # Ruta para la vista "history"
 @app.route('/history')
