@@ -185,7 +185,29 @@ def add_project():
             director = request.form['director']
             location = request.form['location']
             coordinates = request.form['coordinates']
-        
+
+             # Conexión a SharePoint
+            ctx_auth = AuthenticationContext(SHAREPOINT_SITE_URL)
+            if ctx_auth.acquire_token_for_user(SHAREPOINT_USER, SHAREPOINT_PASSWORD):
+
+                ctx = ClientContext(SHAREPOINT_SITE_URL, ctx_auth)
+                
+                # Obtener la lista de SharePoint
+                sp_list = ctx.web.lists.get_by_title(LIST_NAME)
+
+                # Crear el item en SharePoint
+                item_properties = {
+                    'Title': project_name,
+                    'FechaInicio': start_date,
+                    'FechaFin': end_date,
+                    'Director': director,
+                    'Ubicacion': location,
+                    'Coordenadas': coordinates
+                }
+                
+                new_item = sp_list.add_item(item_properties)
+                ctx.execute_query()
+
             # Crear el nuevo proyecto y agregarlo a la lista
             # Crear el contenido del proyecto
             project_content = f"""
