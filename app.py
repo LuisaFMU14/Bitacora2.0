@@ -315,7 +315,7 @@ def guardar_registro():
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=archivo_nombre)
         blob_client.upload_blob(respuestas_texto, overwrite=True, content_settings=ContentSettings(content_type='text/plain'))
 
-        # 2. Guardar en SharePoint (nueva funcionalidad)
+        # Guardar en SharePoint (nueva funcionalidad)
         try:
             ctx_auth = AuthenticationContext(SHAREPOINT_SITE_URL)
             if ctx_auth.acquire_token_for_user(SHAREPOINT_USER, SHAREPOINT_PASSWORD):
@@ -325,7 +325,6 @@ def guardar_registro():
                 # Mapeo de campos a SharePoint
                 item_properties = {
                     'Title': f"Registro_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
-                    'Proyecto': respuestas.get('nombre_proyecto', ''),
                     'Disciplina': respuestas.get('disciplina', ''),
                     'LugarObra': respuestas.get('lugar_obra', ''),
                     'Especialidad': respuestas.get('especialidad', ''),
@@ -333,7 +332,7 @@ def guardar_registro():
                     'Responsable': respuestas.get('responsable', ''),
                     'Estado': respuestas.get('estado_actividad', 'Pendiente'),          
                     'FechaRegistro': datetime.now().isoformat(),
-                    'FotoURL': foto_base64,
+                    'Foto': foto_base64,
                 }
                 
                 new_item = registros_list.add_item(item_properties)
