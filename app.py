@@ -353,42 +353,42 @@ def guardar_en_lista_sharepoint():
 
 
 @app.route('/guardar-registro-sharepoint', methods=['POST'])
-def guardar_registro_sharepoint():
+def guardar_registro_sharepoint(respuestas, foto_base64):
     """Endpoint exclusivo para SharePoint"""
     try:
-        data = request.get_json()
-        foto_base64 = data.get('foto')
-        respuestas = data.get('respuestas')
-
-        if not foto_base64 or not respuestas:
-            return jsonify({"error": "Faltan datos"}), 400
-
-        # Procesar imagen
-        foto_data = base64.b64decode(foto_base64.split(',')[1])
-        imagen_nombre = f"foto_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        # Autenticación
+        ctx_auth = AuthenticationContext(SHAREPOINT_SITE_URL)
+        if not ctx_auth.acquire_token_for_user(SHAREPOINT_USER, SHAREPOINT_PASSWORD):
+            raise Exception("Error de autenticación en SharePoint")
         
-        # Procesar respuestas
-        respuestas_texto = "\n".join([f"{k}: {v}" for k, v in respuestas.items()])
-        registro_nombre = f"registro_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-
-        # Subir a SharePoint (sin afectar Azure)
-        success_photo = upload_to_sharepoint(imagen_nombre, foto_data)
-        success_registro = upload_to_sharepoint(registro_nombre, respuestas_texto.encode('utf-8'))
-
-        if success_photo and success_registro:
-            return jsonify({
-                "success": True,
-                "mensaje": "Registro guardado en SharePoint",
-                "archivos": [imagen_nombre, registro_nombre]
-            }), 200
-        else:
-            raise Exception("Error al subir uno o más archivos a SharePoint")
-
+        ctx = ClientContext(SHAREPOINT_SITE_URL, ctx_auth)
+        
+        # Obtener la lista y su tipo de entidad
+        sp_list = ctx.web.lists.get_by_title("RegistrosBitacora")
+        ctx.load(sp_list, ["ListItemEntityTypeFullName"])
+        ctx.execute_query()
+        
+        # Propiedades del nuevo registro
+        new_item = {
+            "Title": f"Registro-{datetime.now().strftime('%Y%m%d-%H%M%S')}",
+            "Disciplina": respuestas.get('disciplina', ''),
+            "LugarObra": respuestas.get('lugar', ''),
+            "Especialidad": respuestas.get('especialidad', ''),
+            "Descripcion": respuestas.get('descripcion', ''),
+            "Responsable": respuestas.get('responsable', ''),
+            "Estado": respuestas.get('estado', ''),
+            "FechaRegistro": datetime.now().isoformat(),
+            "FotoURL": foto_base64
+        }
+        
+        # Añadir el elemento
+        item = sp_list.add_item(new_item, sp_list.ListItemEntityTypeFullName).execute_query()
+        print(f"Registro guardado en lista SharePoint (ID: {item.id})")
+        return item.id
+        
     except Exception as e:
-        return jsonify({
-            "success": False,
-            "error": str(e)
-        }), 500
+        print(f"Error al guardar registro en SharePoint: {str(e)}")
+        return False
 
 
 @app.route('/guardar-registro', methods=['POST'])
@@ -409,6 +409,9 @@ def guardar_registro():
         # Guardar la imagen en Azure Blob Storage
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=imagen_nombre)
         blob_client.upload_blob(foto_data, overwrite=True, content_settings=ContentSettings(content_type='image/png'))
+
+        # Guardar en SharePoint
+        sharepoint_id = guardar_registro_sharepoint(respuestas, foto_base64)
 
         # Crear el archivo .txt con las respuestas
         respuestas_texto = "\n".join([f"{clave}: {valor}" for clave, valor in respuestas.items()])
