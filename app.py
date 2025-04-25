@@ -21,6 +21,7 @@ from office365.sharepoint.listitems.listitem import ListItem
 # Configura SharePoint (modifica con tus datos)
 SHAREPOINT_SITE_URL = "https://iacsas.sharepoint.com/sites/Pruebasproyectossantiago"
 LIST_NAME = "Proyectos"  # Nombre de la biblioteca
+LIST_NAME_REGISTROS = "RegistrosBitacora"
 SHAREPOINT_USER = "santiago.giraldo@iac.com.co"
 SHAREPOINT_PASSWORD = "Latumbanuncamuere3"
 
@@ -313,6 +314,34 @@ def guardar_registro():
         # Guardar el archivo .txt en Azure Blob Storage
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=archivo_nombre)
         blob_client.upload_blob(respuestas_texto, overwrite=True, content_settings=ContentSettings(content_type='text/plain'))
+
+        # 2. Guardar en SharePoint (nueva funcionalidad)
+        try:
+            ctx_auth = AuthenticationContext(SHAREPOINT_SITE_URL)
+            if ctx_auth.acquire_token_for_user(SHAREPOINT_USER, SHAREPOINT_PASSWORD):
+                ctx = ClientContext(SHAREPOINT_SITE_URL, ctx_auth)
+                registros_list = ctx.web.lists.get_by_title(LIST_NAME_REGISTROS)
+                
+                # Mapeo de campos a SharePoint
+                item_properties = {
+                    'Title': f"Registro_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+                    'Proyecto': respuestas.get('nombre_proyecto', ''),
+                    'Disciplina': respuestas.get('disciplina', ''),
+                    'LugarObra': respuestas.get('lugar_obra', ''),
+                    'Especialidad': respuestas.get('especialidad', ''),
+                    'Descripcion': respuestas.get('descripcion_actividades', ''),
+                    'Responsable': respuestas.get('responsable', ''),
+                    'Estado': respuestas.get('estado_actividad', 'Pendiente'),          
+                    'FechaRegistro': datetime.now().isoformat(),
+                    'FotoURL': foto_base64,
+                }
+                
+                new_item = registros_list.add_item(item_properties)
+                ctx.execute_query()
+        except Exception as sp_ex:
+            app.logger.error(f"Error al guardar en SharePoint: {str(sp_ex)}")
+            # No falla la operación, solo registra el error
+
 
         return jsonify({"mensaje": "Registro guardado exitosamente."}), 200
 
