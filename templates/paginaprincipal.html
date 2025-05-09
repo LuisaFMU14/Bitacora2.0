@@ -53,18 +53,25 @@
         <div class="bottom-menu">
             <a href="{{ url_for('registros') }}" class="bottom-button">
                 <i class="fas fa-home"></i>
-            </a>
-            <div class="dropdown">
-                <button id="dropdown-btn" class="bottom-button">
-                    <i class="fas fa-user-plus"></i>
-                </button>
-                <div id="dropdown-menu" class="dropdown-menu">
-                    <a href="{{ url_for('registros') }}" class="dropdown-item">
-                        <i class="fas fa-clock"></i> Proyectos</a>
-                    <a href="{{ url_for('inventario') }}" class="dropdown-item">
-                        <i class="fas fa-clipboard-check"></i> Inventario</a>
+            </a>            
+            <button id="share-project-btn" class="bottom-button">
+                <i class="fas fa-user-plus"></i>
+            </button>
+            <!-- Modal para compartir proyecto -->
+            <div id="shareModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <h2>Compartir proyecto</h2>
+                    <form id="shareForm">
+                        <div class="input-group">
+                            <label for="email">Correo electrónico:</label>
+                            <input type="email" id="email" name="email" required placeholder="ejemplo@empresa.com">
+                        </div>
+                        <button type="submit" class="submit-btn">Enviar invitación</button>
+                    </form>
                 </div>
             </div>
+                
             <a href="{{ url_for('usuario') }}" class="bottom-button">
                 <i class="fas fa-user"></i>
             </a>
