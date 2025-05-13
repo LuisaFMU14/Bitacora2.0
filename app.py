@@ -118,6 +118,11 @@ def get_projects_from_blob():
     
     return projects
 
+@app.after_request
+def add_header(response):
+    response.headers["ngrok-skip-browser-warning"] = "true"
+    return response
+
 @app.route('/')
 def principalscreen():
     return render_template('PrincipalScreen.html')
