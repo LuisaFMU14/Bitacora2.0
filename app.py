@@ -16,7 +16,17 @@ from office365.sharepoint.client_context import ClientContext
 from office365.runtime.auth.authentication_context import AuthenticationContext
 from office365.sharepoint.lists.list import List
 from office365.sharepoint.listitems.listitem import ListItem
+import psycopg2
+from werkzeug.security import generate_password_hash, check_password_hash
 
+# Configuración PostgreSQL
+POSTGRES_CONFIG = {
+    "host": "localhost",
+    "database": "Bitacora",
+    "user": "postgres",  # Normalmente 'postgres' por defecto
+    "password": "Daniel2030#",
+    "port": "5432"  # Puerto predeterminado de PostgreSQL
+}
 
 # Configura SharePoint (modifica con tus datos)
 SHAREPOINT_SITE_URL = "https://iacsas.sharepoint.com/sites/Pruebasproyectossantiago"
@@ -41,6 +51,50 @@ container_name = "registros"
 
 # Inicializa el cliente de BlobServiceClient
 blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+def create_user(nombre, apellido, email, password, cargo, rol, empresa):
+    try:
+        conn = psycopg2.connect(**POSTGRES_CONFIG)
+        cursor = conn.cursor()
+        
+        hashed_password = generate_password_hash(password)
+        
+        cursor.execute(
+            """INSERT INTO usuario (name, apellido, email, password, empresa, cargo, rol)
+               VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+            (nombre, apellido, email, hashed_password, empresa, cargo, rol)
+        )
+        
+        user_id = cursor.fetchone()[0]
+        conn.commit()
+        return user_id
+    except psycopg2.Error as e:
+        print(f"Error al crear usuario: {e}")
+        return None
+    finally:
+        if conn:
+            conn.close()
+
+def verify_user(email, password):
+    try:
+        conn = psycopg2.connect(**POSTGRES_CONFIG)
+        cursor = conn.cursor()
+        
+        cursor.execute(
+            "SELECT id, password FROM usuario WHERE email = %s",
+            (email,)
+        )
+        
+        user = cursor.fetchone()
+        if user and check_password_hash(user[1], password):
+            return user[0]  # Devuelve el ID del usuario
+        return None
+    except psycopg2.Error as e:
+        print(f"Error al verificar usuario: {e}")
+        return None
+    finally:
+        if conn:
+            conn.close()
 
 # Función para subir archivos a Azure Blob Storage
 def upload_to_blob(file_name, data, content_type):
@@ -131,9 +185,43 @@ def principalscreen():
 def paginaprincipal():
     return render_template('paginaprincipal.html')
 
-@app.route('/registro')
+@app.route('/registro', methods=['GET', 'POST'])
 def registro():
+    if request.method == 'POST':
+        nombre = request.form.get('nombre')
+        apellido = request.form.get('apellido')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+        empresa = request.form.get('empresa')
+        cargo = request.form.get('cargo')
+        rol = request.form.get('rol')
+        
+        if password != confirm_password:
+            flash('Las contraseñas no coinciden', 'error')
+            return redirect(url_for('registro'))
+        
+        user_id = create_user(nombre, apellido, email, password, empresa, cargo, rol)
+        if user_id:
+            flash('Registro exitoso. Por favor inicie sesión.', 'success')
+            return redirect(url_for('principalscreen'))
+        else:
+            flash('Error al registrar el usuario', 'error')
+    
     return render_template('registro.html')
+
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.form.get('email')
+    password = request.form.get('password')
+    
+    user_id = verify_user(email, password)
+    if user_id:
+        # Aquí puedes implementar sesiones o JWT
+        return redirect(url_for('paginaprincipal'))
+    else:
+        flash('Email o contraseña incorrectos', 'error')
+        return redirect(url_for('principalscreen'))
 
 @app.route('/index')
 def index():
