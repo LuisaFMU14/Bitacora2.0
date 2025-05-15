@@ -29,10 +29,8 @@
         <div class="records-container">
             <!-- Proyectos dinámicos desde base de datos -->
             {% for project in db_projects %}
-            <button class="record-button" 
-                    onclick="window.location.href='{{ url_for('historialRegistro') }}?project_id={{ project.id }}&project_name={{ project.name|urlencode }}'">
-                {{ project.name }}<br>
-                <small>Fecha: {{ project.date }}</small>
+            <button class="record-button" onclick="redirectToProjectDetails('{{ project.name }}', '{{ project.id }}')">
+                {{ project.name }}<br><small>Fecha: {{ project.fecha_inicio }}</small>
             </button>
             {% else %}
             <div class="no-projects">
