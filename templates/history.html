@@ -7,6 +7,8 @@
     <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='history.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">  
+    <!-- SweetAlert para mensajes -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <!-- Contenedor principal -->
@@ -19,16 +21,21 @@
 
         <!-- Texto de introducción -->
         <div class="intro-text">
-            <h2>Historial de Registros por Proyectos</h2>
+            <h2>Mis Proyectos</h2>
+            <p>Selecciona un proyecto para ver su historial</p>
         </div>
 
         <!-- Lista de proyectos como botones -->
         <div class="records-container">
             <!-- Proyectos dinámicos desde Azure Blob Storage -->
-            {% for project in blob_projects %}
-            <button class="record-button" onclick="redirectToProjectDetails('{{ project.name }}')">
-                {{ project.name }}<br><small>Fecha: {{ project.date }}</small>
+            {% for project in user_projects %}
+            <button class="record-button" onclick="redirectToProjectDetails('{{ project.id_proyecto }}')">
+                {{ project.nombre_proyecto }}<br><small>Inicio: {{ project.fecha_inicio }}</small>
             </button>
+            {% else %}
+            <div class="no-projects">
+                <p>No tienes proyectos registrados</p>
+            </div>
             {% endfor %}
         </div>
 
@@ -44,11 +51,12 @@
             window.location.href = "{{ url_for('add_project') }}";
         }
 
-        function redirectToProjectDetails(projectName) {
+        function redirectToProjectDetails(projectId, projectName) {
             // Verifica que el nombre del proyecto no esté vacío
             if (!projectName) return;
-            window.location.href = `{{ url_for('historialregistro') }}?name=${encodeURIComponent(projectName)}`;
+            window.location.href = `{{ url_for('historialregistro') }}?project_id=${projectId}&project_name=${encodeURIComponent(projectName)}`;
         }
+        
     </script>
 </body>
 </html>
