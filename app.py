@@ -125,6 +125,7 @@ def create_project(user_id, nombre, fecha_inicio, fecha_fin, director, ubicacion
             conn.close()
 
 def get_user_projects(user_id):
+    conn = None
     try:
         conn = psycopg2.connect(**POSTGRES_CONFIG)
         #conn = get_db_connection()
@@ -141,8 +142,8 @@ def get_user_projects(user_id):
             projects.append({
                 'user_id': row[0],
                 'name': row[1],
-                'date': row[2].strftime('%Y-%m-%d'),
-                'director': row[3]
+                'fecha_inicio': row[2].strftime('%Y-%m-%d'),
+                'director_obra': row[3]
             })
         
         return projects
@@ -319,7 +320,7 @@ def registros():
     
     # Combinar proyectos (o usar solo los de PostgreSQL)
     return render_template('registros.html', 
-                         projects=db_projects)
+                         db_projects=db_projects)
 
 # Ruta para la vista "history"
 @app.route('/history')
