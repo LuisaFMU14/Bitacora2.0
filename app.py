@@ -67,7 +67,7 @@ def create_user(nombre, apellido, email, password, cargo, rol, empresa):
         
         cursor.execute(
             """INSERT INTO usuario (name, apellido, email, password, cargo, rol, empresa)
-               VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+               VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING user_id""",
             (nombre, apellido, email, hashed_password, cargo, rol, empresa)
         )
         
