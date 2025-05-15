@@ -61,9 +61,9 @@ def create_user(nombre, apellido, email, password, cargo, rol, empresa):
         hashed_password = generate_password_hash(password)
         
         cursor.execute(
-            """INSERT INTO usuario (name, apellido, email, password, empresa, cargo, rol)
+            """INSERT INTO usuario (name, apellido, email, password, cargo, rol, empresa)
                VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id""",
-            (nombre, apellido, email, hashed_password, empresa, cargo, rol)
+            (nombre, apellido, email, hashed_password, cargo, rol, empresa)
         )
         
         user_id = cursor.fetchone()[0]
