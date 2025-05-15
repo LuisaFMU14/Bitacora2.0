@@ -18,6 +18,10 @@ from office365.sharepoint.lists.list import List
 from office365.sharepoint.listitems.listitem import ListItem
 import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask import session
+import secrets
+
+
 
 # Configuración PostgreSQL
 POSTGRES_CONFIG = {
@@ -40,7 +44,8 @@ SHAREPOINT_PASSWORD = "Latumbanuncamuere3"
 #load_dotenv('config/settings.env')  # Ruta relativa al archivo .env
 
 app = Flask(__name__,template_folder='templates')
-app.secret_key = '78787878tyg8987652vgdfdf3445'
+app.secret_key = secrets.token_hex(16)  # Clave secreta para sesiones
+#app.secret_key = '78787878tyg8987652vgdfdf3445'
 CORS(app)
 
 projects = []
@@ -93,6 +98,57 @@ def verify_user(email, password):
     except psycopg2.Error as e:
         print(f"Error al verificar usuario: {e}")
         return None
+    finally:
+        if conn:
+            conn.close()
+
+def create_project(user_id, nombre, fecha_inicio, fecha_fin, director, ubicacion, coordenadas):
+    try:
+        conn = psycopg2.connect(**POSTGRES_CONFIG)
+        #conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute(
+            """INSERT INTO proyectos (nombre_proyecto, fecha_inicio, fecha_fin, director_obra, ubicacion, coordenadas, user_id)
+               VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id_proyecto""",
+            (nombre, fecha_inicio, fecha_fin, director, ubicacion, coordenadas, user_id)
+        )
+        
+        project_id = cursor.fetchone()[0]
+        conn.commit()
+        return project_id
+    except psycopg2.Error as e:
+        print(f"Error al crear proyecto: {e}")
+        return None
+    finally:
+        if conn:
+            conn.close()
+
+def get_user_projects(user_id):
+    try:
+        conn = psycopg2.connect(**POSTGRES_CONFIG)
+        #conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute(
+            """SELECT id_proyecto, nombre_proyecto, fecha_inicio, director_obra 
+               FROM proyectos WHERE user_id = %s ORDER BY fecha_inicio DESC""",
+            (user_id,)
+        )
+        
+        projects = []
+        for row in cursor.fetchall():
+            projects.append({
+                'id': row[0],
+                'name': row[1],
+                'date': row[2].strftime('%Y-%m-%d'),
+                'director': row[3]
+            })
+        
+        return projects
+    except psycopg2.Error as e:
+        print(f"Error al obtener proyectos: {e}")
+        return []
     finally:
         if conn:
             conn.close()
@@ -224,6 +280,8 @@ def login():
     user_id = verify_user(email, password)
     if user_id:
         # Aquí puedes implementar sesiones o JWT
+        session['user_id'] = user_id #Establecer sesión
+        flash('Inicio de sesión exitoso', 'success')
         return redirect(url_for('paginaprincipal'))
     else:
         flash('Email o contraseña incorrectos', 'error')
@@ -233,6 +291,7 @@ def login():
 def index():
     return render_template('index.html')
 
+'''
 @app.route('/registros')
 def registros():
     # Obtener proyectos del Blob Storage
@@ -246,6 +305,21 @@ def registros():
     #]
 
     return render_template('registros.html', blob_projects=blob_projects)
+'''
+@app.route('/registros')
+def registros():
+    if 'user_id' not in session:
+        return redirect(url_for('principalscreen'))
+    
+    # Obtener proyectos de PostgreSQL
+    db_projects = get_user_projects(session['user_id'])
+    
+    # Obtener proyectos de Azure Blob (si aún los necesitas)
+    #blob_projects = get_projects_from_blob()  # Tu función existente
+    
+    # Combinar proyectos (o usar solo los de PostgreSQL)
+    return render_template('registros.html', 
+                         projects=db_projects)
 
 # Ruta para la vista "history"
 @app.route('/history')
@@ -275,8 +349,12 @@ def disciplinerecords():
 def projectdetails():
     return render_template('projectdetails.html')
 
+'''
 @app.route('/addproject', methods=['GET', 'POST'])
 def add_project():
+    if 'user_id' not in session:
+        return redirect(url_for('principalscreen'))
+    
     if request.method == 'POST':
         try:
             project_name = request.form['project-name']
@@ -334,44 +412,79 @@ def add_project():
             return f"Error al guardar el proyecto: {str(e)}", 500
         
     return render_template('addproject.html')
-
-@app.route('/delete_project', methods=['GET', 'POST'])
-def delete_project():
-    try:
-        # Para depuración
-        app.logger.info(f"Delete project request received. Method: {request.method}")
-        app.logger.info(f"Request args: {request.args}")
-        
-        project_name = request.args.get('project')
-        app.logger.info(f"Project name: {project_name}")
-        
-        if not project_name:
-            flash('No se especificó un nombre de proyecto', 'error')
-            return redirect(url_for('registros'))
-        
-        # Inicializar cliente de servicio de blob
-        blob_service_client = BlobServiceClient.from_connection_string(connection_string)
-        container_client = blob_service_client.get_container_client(container_name)
-        
-        # Obtener una lista de todos los blobs relacionados con este proyecto
-        # Asumimos que los blobs relacionados comienzan con el nombre del proyecto
-        blob_list = container_client.list_blobs(name_starts_with=f"Proyectos/{project_name}/")
-        deleted = False
-        # Eliminar cada blob relacionado con el proyecto
-        for blob in blob_list:
-            container_client.delete_blob(blob.name)
-            deleted = True
-
-        if deleted:
-            flash(f'Proyecto "{project_name}" eliminado correctamente', 'success')
-        else:
-            flash(f'No se encontraron archivos para el proyecto "{project_name}"', 'warning')
-        
-        return redirect(url_for('registros'))
+'''
+@app.route('/addproject', methods=['GET', 'POST'])
+def add_project():
+    if 'user_id' not in session:  # Asegúrate de tener el user_id en la sesión
+        return redirect(url_for('principalscreen'))
     
+    if request.method == 'POST':
+        try:
+            # Obtener datos del formulario
+            project_data = {
+                'name': request.form['project-name'],
+                'start_date': request.form['start-date'],
+                'end_date': request.form['end-date'],
+                'director': request.form['director'],
+                'location': request.form['location'],
+                'coordinates': request.form['coordinates'],
+                'user_id': session['user_id']  # ID del usuario actual
+            }
+            
+            # Guardar en PostgreSQL
+            project_id = create_project(
+                project_data['user_id'],
+                project_data['name'],
+                project_data['start_date'],
+                project_data['end_date'],
+                project_data['director'],
+                project_data['location'],
+                project_data['coordinates']
+            )
+            
+            if project_id:
+                flash('Proyecto creado exitosamente', 'success')
+                return redirect(url_for('registros'))
+            else:
+                flash('Error al crear el proyecto', 'error')
+                
+        except Exception as e:
+            flash(f'Error al guardar el proyecto: {str(e)}', 'error')
+    
+    return render_template('addproject.html')
+
+
+@app.route('/delete_project', methods=['POST'])
+def delete_project():
+    if 'user_id' not in session:
+        return redirect(url_for('principalscreen'))
+    
+    try:
+        project_id = request.form.get('project_id')
+        
+        conn = psycopg2.connect(**POSTGRES_CONFIG)
+        cursor = conn.cursor()
+        
+        # Verificar que el proyecto pertenece al usuario
+        cursor.execute(
+            "DELETE FROM proyectos WHERE id_proyecto = %s AND user_id = %s RETURNING nombre_proyecto",
+            (project_id, session['user_id'])
+        )
+        
+        deleted_project = cursor.fetchone()
+        if deleted_project:
+            conn.commit()
+            flash(f'Proyecto "{deleted_project[0]}" eliminado', 'success')
+        else:
+            flash('No se pudo eliminar el proyecto', 'error')
+            
     except Exception as e:
-        flash(f'Error al eliminar el proyecto: {str(e)}', 'error')
-        return redirect(url_for('registros')), 500
+        flash(f'Error al eliminar proyecto: {str(e)}', 'error')
+    finally:
+        if conn:
+            conn.close()
+    
+    return redirect(url_for('registros'))
 
 @app.route('/ask', methods=['POST'])
 def ask_question_route():
