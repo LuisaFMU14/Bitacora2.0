@@ -40,6 +40,7 @@ SHAREPOINT_PASSWORD = "Latumbanuncamuere3"
 #load_dotenv('config/settings.env')  # Ruta relativa al archivo .env
 
 app = Flask(__name__,template_folder='templates')
+app.secret_key = '78787878tyg8987652vgdfdf3445'
 CORS(app)
 
 projects = []
