@@ -44,7 +44,7 @@
             <!-- Proyectos dinámicos desde PostgreSQL -->
             {% for project in db_projects %}
             <button class="record-button" onclick="redirectToProjectDetails('{{ project.name }}', '{{ project.id }}')">
-                {{ project.name }}<br><small>Fecha: {{ project.date }}</small>
+                {{ project.name }}<br><small>Fecha: {{ project.fecha_inicio }}</small>
             </button>
             {% endfor %}
         </div>
