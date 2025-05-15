@@ -87,7 +87,7 @@ def verify_user(email, password):
         cursor = conn.cursor()
         
         cursor.execute(
-            "SELECT id, password FROM usuario WHERE email = %s",
+            "SELECT user_id, password FROM usuario WHERE email = %s",
             (email,)
         )
         
