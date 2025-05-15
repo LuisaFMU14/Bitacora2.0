@@ -283,7 +283,7 @@ def login():
         # Aquí puedes implementar sesiones o JWT
         session['user_id'] = user_id #Establecer sesión
         flash('Inicio de sesión exitoso', 'success')
-        return redirect(url_for('paginaprincipal'))
+        return redirect(url_for('registros'))
     else:
         flash('Email o contraseña incorrectos', 'error')
         return redirect(url_for('principalscreen'))
