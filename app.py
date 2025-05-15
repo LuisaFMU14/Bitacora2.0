@@ -139,7 +139,7 @@ def get_user_projects(user_id):
         projects = []
         for row in cursor.fetchall():
             projects.append({
-                'id': row[0],
+                'user_id': row[0],
                 'name': row[1],
                 'date': row[2].strftime('%Y-%m-%d'),
                 'director': row[3]
