@@ -346,7 +346,12 @@ def inventario():
     return render_template('inventario.html')
 
 @app.route('/historialRegistro')
-def historialregistro():
+def historialRegistro():
+
+    # Verificar si el usuario está autenticado
+    if 'user_id' not in session:
+        return redirect(url_for('principalscreen'))
+    
     # Obtener el ID del proyecto desde los parámetros de la URL
     project_id = request.args.get('project_id')
     project_name = request.args.get('project_name', 'Proyecto')
