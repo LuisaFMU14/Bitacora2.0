@@ -6,6 +6,8 @@
     <title>Login/Sign Up</title>
     <link rel="icon" href="/static/logo.png" type="image/x-icon">
     <link rel="stylesheet" href="/static/registro.css">
+    <!-- Agregamos SweetAlert para mensajes -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div id="app">
@@ -15,9 +17,9 @@
             </div>
         </header>
         <div class="screen">
-            <form class="form" method="POST" action="{{ url_for('registro') }}">
+            <form class="form" method="POST" action="{{ url_for('registro') }}" id="registerForm">
                 <p class="title">Registro</p>
-                    <div class="flex">
+                <div class="flex">
                     <label>
                         <input required name="nombre" placeholder="" type="text" class="input">
                         <span>Nombre</span>
@@ -35,11 +37,11 @@
                 </label> 
                     
                 <label>
-                    <input required name="password" placeholder="" type="password" class="input">
+                    <input required name="password" placeholder="" type="password" class="input" id="password">
                     <span>Contraseña</span>
                 </label>
                 <label>
-                    <input required name="confirm_password" placeholder="" type="password" class="input">
+                    <input required name="confirm_password" placeholder="" type="password" class="input" id="confirmPassword">
                     <span>Confirmar Contraseña</span>
                 </label>
                 <label>
@@ -60,7 +62,8 @@
                     </select>
                     <span>Rol</span>
                 </label>
-                <a href="{{ url_for('principalscreen') }}" class="submit">REGISTRARSE</a>
+                <!-- Cambiamos el <a> por un botón de submit -->
+                <button type="submit" class="submit">REGISTRARSE</button>
                 <p class="signin">¿Ya tienes una cuenta? <a href="{{ url_for('principalscreen') }}">Iniciar Sesión</a></p>
             </form>
         </div>
