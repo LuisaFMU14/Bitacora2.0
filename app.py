@@ -216,6 +216,11 @@ def login():
     email = request.form.get('email')
     password = request.form.get('password')
     
+    # Validación básica de campos vacíos
+    if not email or not password:
+        flash('Por favor ingrese ambos campos: email y contraseña', 'error')
+        return redirect(url_for('principalscreen'))
+
     user_id = verify_user(email, password)
     if user_id:
         # Aquí puedes implementar sesiones o JWT
