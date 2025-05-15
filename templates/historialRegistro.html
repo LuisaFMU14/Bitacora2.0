@@ -63,7 +63,43 @@
         </div>
 
         <div id="project-records" class="records-container">
-            <!-- Registro 1 -->
+            {% if registros %}
+                {% for registro in registros %}
+                <div class="record-details">
+                    <h3>Registro #{{ registro.id }} - {{ registro.fecha }}</h3>
+                    <div class="record-field">
+                        <label>Disciplina:</label>
+                        <span>{{ registro.disciplina }}</span>
+                    </div>
+                    <div class="record-field">
+                        <label>Lugar de obra:</label>
+                        <span>{{ registro.lugar_obra }}</span>
+                    </div>
+                    <div class="record-field">
+                        <label>Especialidad:</label>
+                        <span>{{ registro.especialidad }}</span>
+                    </div>
+                    <div class="record-field">
+                        <label>Actividades realizadas:</label>
+                        <span>{{ registro.actividades }}</span>
+                    </div>
+                    <div class="record-field">
+                        <label>Responsable:</label>
+                        <span>{{ registro.responsable }}</span>
+                    </div>
+                    <div class="record-field">
+                        <label>Estado:</label>
+                        <span>{{ registro.estado }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No hay registros para este proyecto</p>
+            {% endif %}
+        </div>
+        <!--
+        <div id="project-records" class="records-container">
+            
             <div class="record-details">
                 <h3>Registro #1 - 2024-05-15</h3>
                 <div class="record-field">
@@ -92,7 +128,7 @@
                 </div>
             </div>
 
-            <!-- Registro 2 -->
+            
             <div class="record-details">
                 <h3>Registro #2 - 2024-05-14</h3>
                 <div class="record-field">
@@ -120,7 +156,7 @@
                     <span>En progreso</span>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="bottom-menu">
             <a href="{{ url_for('registros') }}" class="bottom-button"><i class="fas fa-home"></i></a>

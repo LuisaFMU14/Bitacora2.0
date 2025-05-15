@@ -347,7 +347,41 @@ def inventario():
 
 @app.route('/historialRegistro')
 def historialregistro():
-    return render_template('historialRegistro.html')
+    # Obtener el ID del proyecto desde los parámetros de la URL
+    project_id = request.args.get('project_id')
+    project_name = request.args.get('project_name', 'Proyecto')
+    
+    # Aquí puedes agregar lógica para obtener registros reales de la base de datos
+    # Por ahora usaremos los datos quemados como solicitaste
+    
+    # Datos quemados de ejemplo (2 registros)
+    registros = [
+        {
+            'id': 1,
+            'fecha': '2024-05-15',
+            'disciplina': 'Electricidad',
+            'lugar_obra': 'Edificio Principal',
+            'especialidad': 'Instalación eléctrica',
+            'actividades': 'Instalación de cableado en planta baja',
+            'responsable': 'Juan Pérez',
+            'estado': 'Completado'
+        },
+        {
+            'id': 2,
+            'fecha': '2024-05-14',
+            'disciplina': 'Plomería',
+            'lugar_obra': 'Edificio Principal',
+            'especialidad': 'Instalación hidráulica',
+            'actividades': 'Instalación de tuberías en baños',
+            'responsable': 'María Gómez',
+            'estado': 'En progreso'
+        }
+    ]
+    
+    return render_template('historialRegistro.html',
+                         registros=registros,
+                         project_name=project_name,
+                         project_id=project_id)
 
 @app.route('/disciplinerecords')
 def disciplinerecords():
