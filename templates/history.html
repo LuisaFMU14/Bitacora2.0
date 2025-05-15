@@ -28,9 +28,9 @@
         <!-- Lista de proyectos como botones -->
         <div class="records-container">
             <!-- Proyectos dinámicos desde Azure Blob Storage -->
-            {% for project in user_projects %}
-            <button class="record-button" onclick="redirectToProjectDetails('{{ project.id_proyecto }}')">
-                {{ project.nombre_proyecto }}<br><small>Inicio: {{ project.fecha_inicio }}</small>
+            {% for project in db_projects %}
+            <button class="record-button" onclick="redirectToProjectDetails('{{ project.name }}', '{{ project.id }}')">
+                {{ project.name }}<br><small>Fecha: {{ project.fecha_inicio }}</small>
             </button>
             {% else %}
             <div class="no-projects">
