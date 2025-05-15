@@ -334,7 +334,7 @@ def history():
     #blob_projects = get_projects_from_blob()  # Tu función existente
     
     # Combinar proyectos (o usar solo los de PostgreSQL)
-    return render_template('registros.html', 
+    return render_template('history.html', 
                          db_projects=db_projects)
 
 @app.route('/usuario')
