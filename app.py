@@ -327,43 +327,15 @@ def registros():
 def history():
     # Obtener proyectos del Blob Storage
     #blob_projects = get_projects_from_blob()
-    if 'user_id' not in session:
-        return redirect(url_for('principalscreen'))
+    # Obtener proyectos de PostgreSQL
+    db_projects = get_user_projects(session['user_id'])
     
-
-    try:
-        # Obtener proyectos con conteo de registros
-        conn = psycopg2.connect(**POSTGRES_CONFIG)
-        cursor = conn.cursor()
-        
-        cursor.execute("""
-            SELECT p.*, COUNT(r.id_registro) as total_registros
-            FROM proyectos p
-            LEFT JOIN registros_bitacora r ON p.id_proyecto = r.id_proyecto
-            WHERE p.user_id = %s
-            GROUP BY p.id_proyecto
-            ORDER BY p.fecha_inicio DESC
-        """, (session['user_id'],))
-        
-        projects = []
-        for row in cursor.fetchall():
-            projects.append({
-                'id_proyecto': row[0],
-                'nombre_proyecto': row[1],
-                'fecha_inicio': row[2],
-                'fecha_fin': row[3],
-                'director_obra': row[4]
-                #'total_registros': row[7]  # El COUNT viene en la posición 7
-            })
-        
-        return render_template('history.html', user_projects=projects)
-        
-    except psycopg2.Error as e:
-        flash(f'Error al cargar proyectos: {str(e)}', 'error')
-        return render_template('history.html', user_projects=[])
-    finally:
-        if conn:
-            conn.close()
+    # Obtener proyectos de Azure Blob (si aún los necesitas)
+    #blob_projects = get_projects_from_blob()  # Tu función existente
+    
+    # Combinar proyectos (o usar solo los de PostgreSQL)
+    return render_template('registros.html', 
+                         db_projects=db_projects)
 
 @app.route('/usuario')
 def usuario():
