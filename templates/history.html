@@ -22,24 +22,8 @@
             <h2>Historial de Registros por Proyectos</h2>
         </div>
 
-        <!-- Botón para agregar nuevo proyecto 
-        <div class="add-project-container">
-            <button class="add-project-button" onclick="redirectToAddProject()">Agregar Nuevo Proyecto</button>
-        </div> -->
-
         <!-- Lista de proyectos como botones -->
         <div class="records-container">
-            <!--
-            <button class="record-button" onclick="redirectToProjectDetails('Proyecto Bitacora')">
-                Proyecto A<br><small>Fecha: 2024-09-22</small>
-            </button>
-            <button class="record-button" onclick="redirectToProjectDetails('Proyecto B')">
-                Proyecto B<br><small>Fecha: 2024-09-21</small>
-            </button>
-            <button class="record-button" onclick="redirectToProjectDetails('Proyecto C')">
-                Proyecto C<br><small>Fecha: 2024-09-20</small>
-            </button> -->
-
             <!-- Proyectos dinámicos desde Azure Blob Storage -->
             {% for project in blob_projects %}
             <button class="record-button" onclick="redirectToProjectDetails('{{ project.name }}')">
@@ -51,8 +35,6 @@
         <!-- Menú inferior -->
         <div class="bottom-menu">
             <a href="{{ url_for('registros') }}" class="bottom-button"><i class="fas fa-home"></i></a>
-            <!--<button class="bottom-button"><i class="fas fa-user"></i></button>-->
-            <!--<a href="{{ url_for('registros') }}" class="bottom-button"><i class="fas fa-clipboard-list"></i></a>-->
         </div>
     </div>
 
@@ -63,8 +45,6 @@
         }
 
         function redirectToProjectDetails(projectName) {
-            // Redirigir a la página de detalles del proyecto con el nombre como parámetro
-            //window.location.href = `{{ url_for('projectdetails') }}?name=${encodeURIComponent(projectName)}`;
             // Verifica que el nombre del proyecto no esté vacío
             if (!projectName) return;
             window.location.href = `{{ url_for('historialregistro') }}?name=${encodeURIComponent(projectName)}`;
