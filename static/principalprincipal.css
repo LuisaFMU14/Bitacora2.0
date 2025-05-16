@@ -100,7 +100,7 @@ body, html {
     color: rgb(0, 0, 0);                 /* Color del texto */
     padding: 15px;                /* Espaciado interno */
     width: 70%; 
-    border: 1px solid #f8b126;                  /* Ancho del botón */
+    border: 2px solid #f8b126;                  /* Ancho del botón */
     border-radius: 10px; 
     border-color: #f8b126;         /* Bordes redondeados */
     text-align: center;           /* Centrar texto */
