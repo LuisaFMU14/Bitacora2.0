@@ -102,14 +102,14 @@ body, html {
     width: 90%;                   /* Ancho del botón */
     border-radius: 10px; 
     border-color: #f8b126;         /* Bordes redondeados */
-    text-align: justify;           /* Centrar texto */
+    text-align: center;           /* Centrar texto */
     text-decoration: none;        /* Quitar subrayado */
     font-size: 16px;              /* Tamaño de fuente */
     margin: 0 auto;              /* Centrar horizontalmente */
 }
 
 .a:hover {
-    background-color: #f3bd65;    /* Color de fondo al pasar el mouse */
+    background-color: #412801;    /* Color de fondo al pasar el mouse */
 }
 
 /* Asegúrate de que el icono se vea bien */
