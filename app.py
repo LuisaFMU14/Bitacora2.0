@@ -241,6 +241,23 @@ def principalscreen():
 
 @app.route('/paginaprincipal')
 def paginaprincipal():
+    if 'user_id' not in session:
+        return redirect(url_for('principalscreen'))
+    
+    project_id = request.args.get('project_id')
+    if project_id:
+        # Verificar que el proyecto pertenece al usuario
+        conn = psycopg2.connect(**POSTGRES_CONFIG)
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT 1 FROM proyectos WHERE id_proyecto = %s AND user_id = %s",
+            (project_id, session['user_id'])
+        )
+        if not cursor.fetchone():
+            flash('No tienes acceso a este proyecto', 'error')
+            return redirect(url_for('history'))
+        conn.close()
+    
     return render_template('paginaprincipal.html')
 
 @app.route('/registro', methods=['GET', 'POST'])
@@ -516,12 +533,21 @@ def delete_project():
         deleted_project = cursor.fetchone()
         if deleted_project:
             conn.commit()
-            flash(f'Proyecto "{deleted_project[0]}" eliminado', 'success')
+            return jsonify({
+                'success': True,
+                'message': f'Proyecto "{deleted_project[0]}" eliminado correctamente'
+            })
         else:
-            flash('No se pudo eliminar el proyecto', 'error')
+            return jsonify({
+                'success': False,
+                'message': 'No se encontró el proyecto o no tienes permisos'
+            }), 404
             
-    except Exception as e:
-        flash(f'Error al eliminar proyecto: {str(e)}', 'error')
+    except psycopg2.Error as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error al eliminar proyecto: {str(e)}'
+        }), 500
     finally:
         if conn:
             conn.close()
