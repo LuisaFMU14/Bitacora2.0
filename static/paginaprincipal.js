@@ -1,92 +1,95 @@
-document.addEventListener('DOMContentLoaded', function () {
-    console.log("DOM fully loaded");
-
-    const dropdownBtn = document.getElementById('dropdown-btn');
-    const dropdownMenu = document.getElementById('dropdown-menu');
-    const deleteProjectBtn = document.getElementById('delete-project-btn');
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Configuración inicial con verificación exhaustiva
+    console.log('[DEBUG] Iniciando configuración de eliminación de proyectos');
+    
+    const deleteBtn = document.getElementById('delete-project-btn');
     const confirmModal = document.getElementById('confirmModal');
-    const confirmYesBtn = document.getElementById('confirm-yes');
-    const confirmNoBtn = document.getElementById('confirm-no');
-    const currentProjectName = document.getElementById('current-project-name');
-
-    // Obtener parámetros de la URL
+    const confirmYes = document.getElementById('confirm-yes');
+    const confirmNo = document.getElementById('confirm-no');
     const urlParams = new URLSearchParams(window.location.search);
-    const projectName = urlParams.get('project');
     const projectId = urlParams.get('project_id');
 
-    // 1. Configuración del menú desplegable
-    if (dropdownBtn && dropdownMenu) {
-        dropdownBtn.addEventListener('click', function (event) {
-            event.stopPropagation();
-            dropdownMenu.classList.toggle('show');
-        });
+    // 2. Verificación de elementos (con logs detallados)
+    if (!deleteBtn) console.error('[ERROR] No se encontró el botón de eliminar');
+    if (!confirmModal) console.error('[ERROR] No se encontró el modal de confirmación');
+    if (!projectId) console.warn('[WARNING] No se encontró project_id en la URL');
 
-        document.addEventListener('click', function (event) {
-            if (!dropdownMenu.contains(event.target)) {
-                dropdownMenu.classList.remove('show');
+    // 3. Evento de eliminación con máxima visibilidad
+    if (deleteBtn) {
+        console.log('[DEBUG] Registrando evento para botón eliminar');
+        
+        deleteBtn.addEventListener('click', function() {
+            console.log('[DEBUG] Click en botón eliminar');
+            
+            if (!projectId) {
+                console.error('[ERROR] No hay project_id definido');
+                alert('No hay proyecto seleccionado para eliminar');
+                return;
             }
-        });
-    }
 
-    // 2. Mostrar nombre del proyecto actual (si existe)
-    if (currentProjectName && projectName) {
-        currentProjectName.textContent = "Proyecto: " + decodeURIComponent(projectName);
-    }
-
-    // 3. Configuración de la eliminación de proyectos
-    if (deleteProjectBtn && confirmModal && confirmYesBtn && confirmNoBtn) {
-        // Mostrar modal de confirmación
-        deleteProjectBtn.addEventListener('click', function() {
-            if (projectId) {
+            if (confirmModal) {
+                console.log('[DEBUG] Mostrando modal de confirmación');
                 confirmModal.style.display = 'block';
             } else {
-                alert('No hay proyecto seleccionado para eliminar');
+                console.error('[ERROR] No se puede mostrar el modal');
             }
-        });
-
-        // Confirmar eliminación
-        confirmYesBtn.addEventListener('click', async function() {
-            confirmModal.style.display = 'none';
-            await deleteProject(projectId);
-        });
-
-        // Cancelar eliminación
-        confirmNoBtn.addEventListener('click', function() {
-            confirmModal.style.display = 'none';
         });
     }
 
-    // Función para eliminar proyecto (usando Fetch API)
-    async function deleteProject(projectId) {
-        if (!projectId) return;
-
-        try {
-            const response = await fetch('/delete_project', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ project_id: projectId })
-            });
+    // 4. Confirmación con petición Fetch completa
+    if (confirmYes) {
+        confirmYes.addEventListener('click', async function() {
+            console.log('[DEBUG] Confirmación de eliminación recibida');
             
-            const result = await response.json();
-            
-            if (result.success) {
-                alert(result.message);
-                // Redirigir a la página de proyectos después de eliminar
-                window.location.href = "{{ url_for('registros') }}";
-            } else {
-                alert('Error: ' + result.message);
+            if (!projectId) {
+                console.error('[ERROR] Intento de eliminación sin project_id');
+                return;
             }
-        } catch (error) {
-            console.error('Error al eliminar proyecto:', error);
-            alert('Error al conectar con el servidor');
-        }
+
+            if (confirmModal) {
+                confirmModal.style.display = 'none';
+            }
+
+            console.log('[DEBUG] Enviando petición de eliminación para project_id:', projectId);
+            
+            try {
+                const response = await fetch('/delete_project', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token() }}'  // Importante para seguridad
+                    },
+                    body: JSON.stringify({
+                        project_id: projectId
+                    })
+                });
+
+                console.log('[DEBUG] Respuesta recibida:', response);
+
+                const result = await response.json();
+                console.log('[DEBUG] Resultado de eliminación:', result);
+
+                if (result.success) {
+                    alert(result.message);
+                    console.log('[DEBUG] Redirigiendo a /registros');
+                    window.location.href = "{{ url_for('registros') }}";
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                console.error('[ERROR] Fallo en la petición:', error);
+                alert('Error de conexión con el servidor');
+            }
+        });
     }
 
-    // 4. Actualizar enlace de bitácora con parámetro del proyecto
-    const bitacoraBtn = document.getElementById('bitacora-btn');
-    if (bitacoraBtn && projectName) {
-        bitacoraBtn.href = `{{ url_for('index') }}?project=${encodeURIComponent(projectName)}`;
+    // 5. Cancelación de eliminación
+    if (confirmNo) {
+        confirmNo.addEventListener('click', function() {
+            console.log('[DEBUG] Eliminación cancelada');
+            if (confirmModal) {
+                confirmModal.style.display = 'none';
+            }
+        });
     }
 });
