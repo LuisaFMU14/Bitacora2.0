@@ -108,8 +108,13 @@ body, html {
     margin: 0 auto;              /* Centrar horizontalmente */
 }
 
+.a i {
+    font-size: 24px;              /* Ajustar el tamaño del icono */
+    margin-bottom: 5px;           /* Espacio entre el icono y el texto */
+}
+
 .a:hover {
-    background-color: #ff9e03;    /* Color de fondo al pasar el mouse */
+    background-color: #f3bd65;    /* Color de fondo al pasar el mouse */
 }
 
 /* Asegúrate de que el icono se vea bien */
