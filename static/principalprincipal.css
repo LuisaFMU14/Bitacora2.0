@@ -107,7 +107,7 @@ body, html {
     text-decoration: none;        /* Quitar subrayado */
     font-size: 16px;              /* Tamaño de fuente */
     margin: 0 auto;              /* Centrar horizontalmente */
-    
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra debajo del botón */
 }
 
 .a i {
