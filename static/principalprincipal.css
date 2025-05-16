@@ -102,7 +102,7 @@ body, html {
     width: 90%;                   /* Ancho del botón */
     border-radius: 10px; 
     border-color: #f8b126;         /* Bordes redondeados */
-    text-align: center;           /* Centrar texto */
+    text-align: justify;           /* Centrar texto */
     text-decoration: none;        /* Quitar subrayado */
     font-size: 16px;              /* Tamaño de fuente */
     margin: 0 auto;              /* Centrar horizontalmente */
