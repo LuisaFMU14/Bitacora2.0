@@ -98,7 +98,7 @@ body, html {
     align-items: center;          /* Centrar el contenido */
     background-color: #ffffff;   /* Color de fondo */
     color: rgb(0, 0, 0);                 /* Color del texto */
-    padding: 10px;                /* Espaciado interno */
+    padding: 15px;                /* Espaciado interno */
     width: 90%;                   /* Ancho del botón */
     border-radius: 10px; 
     border-color: #f8b126;         /* Bordes redondeados */
