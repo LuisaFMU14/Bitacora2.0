@@ -99,7 +99,7 @@ body, html {
     background-color: #ffffff;   /* Color de fondo */
     color: rgb(0, 0, 0);                 /* Color del texto */
     padding: 15px;                /* Espaciado interno */
-    width: 90%;                   /* Ancho del botón */
+    width: 80%;                   /* Ancho del botón */
     border-radius: 10px; 
     border-color: #f8b126;         /* Bordes redondeados */
     text-align: center;           /* Centrar texto */
@@ -109,7 +109,7 @@ body, html {
 }
 
 .a:hover {
-    background-color: #412801;    /* Color de fondo al pasar el mouse */
+    background-color: #ff9e03;    /* Color de fondo al pasar el mouse */
 }
 
 /* Asegúrate de que el icono se vea bien */
