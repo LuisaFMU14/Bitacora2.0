@@ -92,14 +92,14 @@ body, html {
     margin: 0 auto;              /* Centrar horizontalmente */
 }
 
-.a{
+.a {
     display: flex;                /* Usar flex para centrar el contenido */
     flex-direction: column;       /* Colocar icono encima del texto */
     align-items: center;          /* Centrar el contenido */
     background-color: #ffffff;   /* Color de fondo */
     color: rgb(0, 0, 0);                 /* Color del texto */
     padding: 15px;                /* Espaciado interno */
-    width: 80%;                   /* Ancho del botón */
+    width: 70%;                   /* Ancho del botón */
     border-radius: 10px; 
     border-color: #f8b126;         /* Bordes redondeados */
     text-align: center;           /* Centrar texto */
