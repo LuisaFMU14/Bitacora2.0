@@ -13,7 +13,7 @@ body, html {
 /* Contenedor principal, que se adapta al tamaño de la pantalla */
 .main-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 490px;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -51,9 +51,12 @@ body, html {
 .buttons-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    padding: 20px;
-    justify-items: center;
+    gap: 15px;
+    padding: 15px;
+    width: 90%;         /* Reducir el ancho del contenedor para centrarlo mejor */
+    max-width: 350px;   /* Establecer un ancho máximo */
+    margin: 0 auto;     /* Centrar el contenedor horizontalmente */
+    justify-content: center;
 }
 
 /* Estilos para los enlaces que actúan como botones */
@@ -133,9 +136,9 @@ body, html {
 }
 
 /* Ajustes responsivos para los botones */
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 490px) {
     .bottom-button {
-        font-size: 18px;  /* Reducir tamaño de icono en pantallas pequeñas */
+        font-size: 15px;  /* Reducir tamaño de icono en pantallas pequeñas */
         padding: 8px 10px;
     }
 
