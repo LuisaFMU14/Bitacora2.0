@@ -79,7 +79,8 @@
         function redirectToProjectDetails(projectName, projectId) {
             // Redirigir a la página de detalles del proyecto con el nombre como parámetro
             //window.location.href = `{{ url_for('projectdetails') }}?name=${encodeURIComponent(projectName)}`;
-            window.location.href = `{{ url_for('paginaprincipal') }}?project=${encodeURIComponent(projectName)}?id=${encodeURIComponent(projectId)}`;
+            //window.location.href = `{{ url_for('paginaprincipal') }}?project=${encodeURIComponent(projectName)}?id=${encodeURIComponent(projectId)}`;
+            window.location.href = `/index?project_id=${projectId}&project=${encodeURIComponent(projectName)}`;
         }
         document.addEventListener('DOMContentLoaded', function () {
             const dropdownBtn = document.getElementById('dropdown-btn');
