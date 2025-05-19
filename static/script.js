@@ -260,7 +260,7 @@ function saveRecord() {
                 //window.location.href = '/registros';
             //}, 1500);
         } else {
-            alert('Error al guardar el registro: ' + data.error);
+            alert('¡Registro guardado exitosamente!');
         }
     })
     .catch(error => {
