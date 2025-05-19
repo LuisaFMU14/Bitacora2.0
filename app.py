@@ -650,5 +650,34 @@ def guardar_registro():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route('/eliminar-proyecto', methods=['POST'])
+def eliminar_proyecto():
+    if 'user_id' not in session:
+        return jsonify({'error': 'No autorizado'}), 401
+
+    data = request.get_json()
+    proyecto_id = data.get('id_proyecto')
+
+    if not proyecto_id:
+        return jsonify({'error': 'Falta el ID del proyecto'}), 400
+
+    try:
+        conn = psycopg2.connect(**POSTGRES_CONFIG)
+        cursor = conn.cursor()
+
+        # Asegurarse de que el proyecto pertenece al usuario
+        cursor.execute("""
+            DELETE FROM proyectos
+            WHERE id_proyecto = %s AND user_id = %s
+        """, (proyecto_id, session['user_id']))
+        conn.commit()
+
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        if conn:
+            conn.close()
+
 if __name__ == '__main__':
     app.run(debug=True)
