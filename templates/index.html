@@ -65,20 +65,14 @@
                 <!-- Botón de adjuntar archivos -->
                 <button id="attach-clip" class="clip-button" onclick="triggerFileInput()">📎</button>
                 <input type="file" id="file-input" class="file-input" accept="image/*" style="display:none;">
-                <!-- Agrega este campo oculto para el ID del proyecto -->
-                <input type="hidden" id="project-id">
                 <!--<button id="save-sharepoint-list" onclick="saveToSharePointList()"> Guardar registro en lista</button>-->
-                <button id="save-record" onclick="saveToDatabase()">Guardar registro</button>
+                <button id="save-record" onclick="saveRecord()">Guardar registro</button>
             </div>            
             <input type="hidden" id="base64-photo">
 
             
             <!-- Mensaje de éxito -->
             <div id="successMessage" style="display:none;" class="centrar">
-                <div class="success-alert">
-                    <i class="fas fa-check-circle"></i>
-                    <span>Registro guardado exitosamente!</span>
-                </div>
             </div>
         </div>
     </div>
