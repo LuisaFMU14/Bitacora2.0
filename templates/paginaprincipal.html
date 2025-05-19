@@ -41,11 +41,13 @@
             <button class="menu-button" id="pedido-btn">
                 <i class="fas fa-check-square"></i> <!-- Ícono de checklist -->
                 <span>Reporte de pedido</span>
-            </button>
-            <button id="delete-project-btn" class="menu-button" style="background-color: #e74c3c; color: white; margin: 10px;">
-                <i class="fas fa-trash-alt"></i> Eliminar Proyecto
-            </button>
+            </button> 
         </div>
+        <!-- Botón para eliminar proyecto -->
+        <button id="delete-project-btn" class="delete-project-button">
+            <i class="fas fa-trash"></i> <!-- Ícono de papelera -->
+            <span>Eliminar proyecto</span>
+        
         
         <div class="bottom-menu">
             <a href="{{ url_for('registros') }}" class="bottom-button">
