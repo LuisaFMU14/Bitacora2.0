@@ -110,6 +110,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const projectName = urlParams.get('project');
         
+        
         // Mostrar el nombre del proyecto actual
         /*
         if (projectName) {
@@ -168,6 +169,48 @@
     }
 
     });
+
+    // Mostrar el modal al hacer clic en el botón de eliminar
+    const deleteProjectBtn = document.getElementById('delete-project-btn');
+    if (deleteProjectBtn) {
+        deleteProjectBtn.addEventListener('click', () => {
+            const confirmModal = document.getElementById('confirmModal');
+            confirmModal.style.display = 'block';
+        });
+    }
+
+    // Confirmar eliminación
+    const confirmYesBtn = document.getElementById('confirm-yes');
+    confirmYesBtn.addEventListener('click', () => {
+        const projectId = new URLSearchParams(window.location.search).get('project_id');
+        fetch('/eliminar-proyecto', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_proyecto: projectId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert("Proyecto eliminado correctamente.");
+                window.location.href = '/registros';  // redirigir a lista
+            } else {
+                alert("Error al eliminar: " + data.error);
+            }
+        })
+        .catch(err => {
+            console.error("Error en solicitud:", err);
+            alert("Ocurrió un error inesperado.");
+        });
+
+        document.getElementById('confirmModal').style.display = 'none';
+    });
+
+    // Cancelar eliminación
+    const confirmNoBtn = document.getElementById('confirm-no');
+    confirmNoBtn.addEventListener('click', () => {
+        document.getElementById('confirmModal').style.display = 'none';
+    });
+
 
 </script>
 </html>
