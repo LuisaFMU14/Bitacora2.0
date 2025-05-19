@@ -49,11 +49,15 @@ body, html {
 
 /* Contenedor de los botones principales */
 .buttons-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    padding: 20px;
-    justify-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra horizontalmente los botones */
+    justify-content: center;
+    gap: 15px; /* Espacio entre botones */
+    margin: 0 auto; /* Centra el contenedor */
+    padding: 10px;
+    width: 100%;
+    max-width: 400px; /* O ajusta al ancho deseado */
 }
 
 /* Estilos para los enlaces que actúan como botones */
