@@ -24,6 +24,16 @@ async function saveToDatabase() {
             coordenadas: coordenadas,
             id_proyecto: idProyecto
         };
+
+        const response = await fetch('/guardar_registro', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(respuestas)
+        });
+
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || "Error al guardar");
+
     } catch (error) {
         console.error("Error:", error);
         alert(`Error: ${error.message}`);
