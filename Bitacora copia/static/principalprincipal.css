@@ -13,7 +13,7 @@ body, html {
 /* Contenedor principal, que se adapta al tamaño de la pantalla */
 .main-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 490px;
     height: 100vh;
     display: flex;
     flex-direction: column;
