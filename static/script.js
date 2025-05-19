@@ -30,6 +30,8 @@ async function saveToDatabase() {
     }
 }
 
+// Modificar el evento de guardar para usar la nueva función
+document.getElementById('save-button').addEventListener('click', saveToDatabase);
 
 async function saveToSharePointList() {
     try {
