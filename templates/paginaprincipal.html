@@ -151,11 +151,13 @@
     // Obtener el parámetro del proyecto de la URL
     const urlParams = new URLSearchParams(window.location.search);
     const projectName = urlParams.get('project');
+    const projectId = urlParams.get('project_id');
     
     // Modificar el enlace al formulario de bitácora para incluir el proyecto
     const bitacoraBtn = document.getElementById('bitacora-btn');
-    if (bitacoraBtn && projectName) {
-        bitacoraBtn.href = `{{ url_for('index') }}?project=${encodeURIComponent(projectName)}`;
+    if (bitacoraBtn && projectName && projectId) {
+        bitacoraBtn.href = `/index?project_id=${projectId}&project=${encodeURIComponent(projectName)}`;
+        
     }
 
     });
