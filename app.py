@@ -122,9 +122,9 @@ def insert_registro_bitacora(respuestas, id_proyecto):
             respuestas.get('disciplina'),
             respuestas.get('lugar_obra'),
             respuestas.get('especialidad'),
-            respuestas.get('descripcion_actividades'),
+            respuestas.get('actividades'),
             respuestas.get('responsable'),
-            respuestas.get('estado_actividad'),
+            respuestas.get('estado'),
             id_proyecto
         ))
 

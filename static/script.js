@@ -225,7 +225,7 @@ function saveRecord() {
 
     // Hacer la solicitud al backend para guardar el registro
     //fetch('http://127.0.0.1:5000/guardar-registro', {
-    fetch('http://127.0.0.1:5000/guardar-registro', {
+    fetch('/guardar-registro', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
