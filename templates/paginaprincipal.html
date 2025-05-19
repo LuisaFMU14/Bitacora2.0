@@ -59,13 +59,15 @@
                 <i class="fas fa-user-plus"></i>
             </button>
             <!-- Modal de compartir proyecto -->
-            <div id = "shareModal" class=""modal>
-                <div class="modal-content">
-                    <span class="close" id="closeShareModal">&times;</span>
+            <div id = "shareModal" class="confirm-modal">
+                <div class="confirm-modal-content">
                     <h2>Compartir proyecto</h2>
                     <p>Ingresa el correo electrónico del usuario con el que deseas compartir este proyecto:</p>
                     <input type="email" id="share-email" placeholder="correo@ejemplo.com" required />
-                    <button id="share-submit-btn" class="share-btn">Compartir</button>
+                    <div class="confirm-modal-buttons">
+                        <button id="share-confirm" class="confirm-yes">Compartir</button>
+                        <button id="share-cancel" class="confirm-no">Cancelar</button>
+                    </div>
                     <p id="share-success-message" style="display: none; color: green; margin-top: 10px;">
                         ¡Proyecto compartido exitosamente!
                     </p>
@@ -121,33 +123,36 @@
 
         const shareBtn = document.getElementById('share-btn');
         const shareModal = document.getElementById('shareModal');
-        const closeShareModal = document.getElementById('closeShareModal');
-        const shareSubmitBtn = document.getElementById('share-submit-btn');
+        const shareCancel = document.getElementById('share-cancel');
+        const shareConfirm = document.getElementById('share-confirm');
         const shareSuccessMsg = document.getElementById('share-success-message');
+        const shareEmail = document.getElementById('share-email');
 
-        // Mostrar modal
-        shareBtn.addEventListener('click', () => {
-            shareModal.style.display = 'flex';
-            shareSuccessMsg.style.display = 'none'; // Reiniciar mensaje
-        });
+        if (shareBtn) {
+            shareBtn.addEventListener('click', () => {
+                shareModal.style.display = 'flex';
+                shareSuccessMsg.style.display = 'none';
+                shareEmail.value = '';
+            });
+        }
 
-        // Cerrar modal
-        closeShareModal.addEventListener('click', () => {
-            shareModal.style.display = 'none';
-        });
+        if (shareCancel) {
+            shareCancel.addEventListener('click', () => {
+                shareModal.style.display = 'none';
+            });
+        }
 
-        // Simular envío al dar clic en "Compartir"
-        shareSubmitBtn.addEventListener('click', () => {
-            const email = document.getElementById('share-email').value;
-            if (email.trim() === '') {
-                alert('Por favor ingresa un correo válido.');
-                return;
-            }
-
-            // Simular acción exitosa
-            shareSuccessMsg.style.display = 'block';
-            document.getElementById('share-email').value = '';
-        });
+        if (shareConfirm) {
+            shareConfirm.addEventListener('click', () => {
+                const email = shareEmail.value.trim();
+                if (!email) {
+                    alert("Por favor ingresa un correo válido.");
+                    return;
+                }
+                shareSuccessMsg.style.display = 'block';
+                shareEmail.value = '';
+            });
+        }
 
         // Obtener el parámetro del proyecto de la URL
         const urlParams = new URLSearchParams(window.location.search);
