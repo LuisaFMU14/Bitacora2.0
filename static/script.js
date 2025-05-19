@@ -238,12 +238,29 @@ function saveRecord() {
     })
     .then(response => response.json())
     .then(data => {
-        if (!data.success) {
-            //alert('Error al guardar el registro: ' + data.error);
-            alert('Registro guardado exitosamente!');
+        if (data.success) {
+            // Limpiar campos del formulario
+            document.getElementById('question_0').value = '';
+            document.getElementById('question_1').value = '';
+            document.getElementById('question_2').value = '';
+            document.getElementById('question_3').value = '';
+            document.getElementById('question_4').value = '';
+            document.getElementById('question_5').value = '';
+
+            // Limpiar canvas de foto si aplica
+            const canvas = document.getElementById('photoCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Mostrar mensaje
+            alert('¡Registro guardado exitosamente!');
+
+            // Redirigir después de 1.5 segundos
+            //setTimeout(() => {
+                //window.location.href = '/registros';
+            //}, 1500);
         } else {
-            // Aquí puedes mostrar un mensaje o redirigir al usuario
-            alert('Registro guardado exitosamente!');
+            alert('Error al guardar el registro: ' + data.error);
         }
     })
     .catch(error => {
