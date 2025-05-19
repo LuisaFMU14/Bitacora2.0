@@ -55,22 +55,22 @@
             <a href="{{ url_for('registros') }}" class="bottom-button">
                 <i class="fas fa-home"></i>
             </a>
-            <div class="dropdown">
-                <button id="share-btn" class="bottom-button">
-                    <i class="fas fa-user-plus"></i>
-                </button>
-                <div id = "shareModal" class=""modal>
-                    <div class="modal-content">
-                        <span class="close" id="closeShareModal">&times;</span>
-                        <h2>Compartir proyecto</h2>
-                        <p>Ingresa el correo electrónico del usuario con el que deseas compartir este proyecto:</p>
-                        <input type="email" id="share-email" placeholder="correo@ejemplo.com" required />
-                        <button id="share-submit-btn" class="share-btn">Compartir</button>
-                        <p id="share-success-message" style="display: none; color: green; margin-top: 10px;">
-                           ¡Proyecto compartido exitosamente!
-                        </p>
-                    </div>
+            <button id="share-btn" class="bottom-button">
+                <i class="fas fa-user-plus"></i>
+            </button>
+            <!-- Modal de compartir proyecto -->
+            <div id = "shareModal" class=""modal>
+                <div class="modal-content">
+                    <span class="close" id="closeShareModal">&times;</span>
+                    <h2>Compartir proyecto</h2>
+                    <p>Ingresa el correo electrónico del usuario con el que deseas compartir este proyecto:</p>
+                    <input type="email" id="share-email" placeholder="correo@ejemplo.com" required />
+                    <button id="share-submit-btn" class="share-btn">Compartir</button>
+                    <p id="share-success-message" style="display: none; color: green; margin-top: 10px;">
+                        ¡Proyecto compartido exitosamente!
+                    </p>
                 </div>
+            </div>
                 <!--
                 <div id="dropdown-menu" class="dropdown-menu">
                     <a href="{{ url_for('registros') }}" class="dropdown-item">
@@ -78,7 +78,7 @@
                     <a href="{{ url_for('inventario') }}" class="dropdown-item">
                         <i class="fas fa-clipboard-check"></i> Inventario</a>
                 </div>-->
-            </div>
+            
             <a href="{{ url_for('usuario') }}" class="bottom-button">
                 <i class="fas fa-user"></i>
             </a>
