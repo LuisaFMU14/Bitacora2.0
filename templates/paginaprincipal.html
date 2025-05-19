@@ -56,15 +56,28 @@
                 <i class="fas fa-home"></i>
             </a>
             <div class="dropdown">
-                <button id="dropdown-btn" class="bottom-button">
+                <button id="share-btn" class="bottom-button">
                     <i class="fas fa-user-plus"></i>
                 </button>
+                <div id = "shareModal" class=""modal>
+                    <div class="modal-content">
+                        <span class="close" id="closeShareModal">&times;</span>
+                        <h2>Compartir proyecto</h2>
+                        <p>Ingresa el correo electrónico del usuario con el que deseas compartir este proyecto:</p>
+                        <input type="email" id="share-email" placeholder="correo@ejemplo.com" required />
+                        <button id="share-submit-btn" class="share-btn">Compartir</button>
+                        <p id="share-success-message" style="display: none; color: green; margin-top: 10px;">
+                           ¡Proyecto compartido exitosamente!
+                        </p>
+                    </div>
+                </div>
+                <!--
                 <div id="dropdown-menu" class="dropdown-menu">
                     <a href="{{ url_for('registros') }}" class="dropdown-item">
                         <i class="fas fa-clock"></i> Proyectos</a>
                     <a href="{{ url_for('inventario') }}" class="dropdown-item">
                         <i class="fas fa-clipboard-check"></i> Inventario</a>
-                </div>
+                </div>-->
             </div>
             <a href="{{ url_for('usuario') }}" class="bottom-button">
                 <i class="fas fa-user"></i>
@@ -105,6 +118,36 @@
         const confirmYesBtn = document.getElementById('confirm-yes');
         const confirmNoBtn = document.getElementById('confirm-no');
         const currentProjectName = document.getElementById('current-project-name');
+
+        const shareBtn = document.getElementById('share-btn');
+        const shareModal = document.getElementById('shareModal');
+        const closeShareModal = document.getElementById('closeShareModal');
+        const shareSubmitBtn = document.getElementById('share-submit-btn');
+        const shareSuccessMsg = document.getElementById('share-success-message');
+
+        // Mostrar modal
+        shareBtn.addEventListener('click', () => {
+            shareModal.style.display = 'flex';
+            shareSuccessMsg.style.display = 'none'; // Reiniciar mensaje
+        });
+
+        // Cerrar modal
+        closeShareModal.addEventListener('click', () => {
+            shareModal.style.display = 'none';
+        });
+
+        // Simular envío al dar clic en "Compartir"
+        shareSubmitBtn.addEventListener('click', () => {
+            const email = document.getElementById('share-email').value;
+            if (email.trim() === '') {
+                alert('Por favor ingresa un correo válido.');
+                return;
+            }
+
+            // Simular acción exitosa
+            shareSuccessMsg.style.display = 'block';
+            document.getElementById('share-email').value = '';
+        });
 
         // Obtener el parámetro del proyecto de la URL
         const urlParams = new URLSearchParams(window.location.search);
