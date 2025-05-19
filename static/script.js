@@ -13,7 +13,9 @@ const responses = [];
 // Función para guardar el registro en PostgreSQL
 async function saveToDatabase() {
     try {
-        
+        // Obtener el ID del proyecto (asumo que está en un campo oculto)
+        const idProyecto = document.getElementById('project-id').value;
+
         const respuestas = {
             disciplina: document.getElementById('question_0').value,
             lugar_obra: document.getElementById('question_1').value,
@@ -21,9 +23,13 @@ async function saveToDatabase() {
             actividades: document.getElementById('question_3').value,
             responsable: document.getElementById('question_4').value,
             estado: document.getElementById('question_5').value,
-            coordenadas: coordenadas,
             id_proyecto: idProyecto
         };
+        const response = await fetch('/guardar_registro', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(respuestas)
+        });
     } catch (error) {
         console.error("Error:", error);
         alert(`Error: ${error.message}`);
