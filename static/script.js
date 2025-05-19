@@ -212,7 +212,7 @@ function saveRecord() {
 
     const respuestas = {
         disciplina : document.getElementById('question_0').value,
-        lugar: document.getElementById('question_1').value,
+        lugar_obra: document.getElementById('question_1').value,
         especialidad: document.getElementById('question_2').value,
         descripcion: document.getElementById('question_3').value,
         responsable: document.getElementById('question_4').value,
@@ -221,16 +221,19 @@ function saveRecord() {
 
     const canvas = document.getElementById('photoCanvas');
     const foto = canvas.toDataURL(); // Obtener la imagen en formato Base64
+    const projectId = new URLSearchParams(window.location.search).get("project_id");
 
     // Hacer la solicitud al backend para guardar el registro
-    fetch('http://127.0.0.1:5000/guardar-registro', {
+    //fetch('http://127.0.0.1:5000/guardar-registro', {
+    fetch('/guardar-registro', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             respuestas: respuestas,
-            foto: foto
+            foto: foto,
+            project_id: projectId
         })
     })
     .then(response => response.json())

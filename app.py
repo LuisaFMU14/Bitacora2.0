@@ -102,6 +102,40 @@ def verify_user(email, password):
         if conn:
             conn.close()
 
+def insert_registro_bitacora(respuestas, id_proyecto):
+    try:
+        conn = psycopg2.connect(**POSTGRES_CONFIG)
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            INSERT INTO registrosbitacora (
+                disciplina,
+                lugar_obra,
+                especialidad,
+                actividades,
+                responsable,
+                estado,
+                id_proyecto
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """, (
+            respuestas.get('disciplina'),
+            respuestas.get('lugar_obra'),
+            respuestas.get('especialidad'),
+            respuestas.get('descripcion_actividades'),
+            respuestas.get('responsable'),
+            respuestas.get('estado_actividad'),
+            id_proyecto
+        ))
+
+        conn.commit()
+        print("Registro guardado en PostgreSQL.")
+    except Exception as e:
+        print(f"Error al guardar en PostgreSQL: {str(e)}")
+    finally:
+        if conn:
+            conn.close()
+
 def create_project(user_id, nombre, fecha_inicio, fecha_fin, director, ubicacion, coordenadas):
     try:
         conn = psycopg2.connect(**POSTGRES_CONFIG)
@@ -526,7 +560,7 @@ def ask_question_route():
     else:
         return jsonify({'error': 'Error al sintetizar la pregunta.'}), 500
 
-
+'''
 @app.route('/guardar-registro', methods=['POST'])
 def guardar_registro():
     try:
@@ -585,7 +619,24 @@ def guardar_registro():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+'''
+@app.route('/guardar-registro', methods=['POST'])
+def guardar_registro():
+    try:
+        data = request.get_json()
+        respuestas = data.get('respuestas')
+        project_id = data.get('project_id')
 
+        if not respuestas or not project_id:
+            return jsonify({"error": "Faltan datos requeridos."}), 400
+
+        # Guardar en PostgreSQL
+        insert_registro_bitacora(respuestas, int(project_id))
+
+        return jsonify({"mensaje": "Registro guardado exitosamente en PostgreSQL."}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
