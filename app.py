@@ -624,6 +624,7 @@ def guardar_registro():
 def guardar_registro():
     try:
         data = request.get_json()
+        print("Datos recibidos:", data)  # 🐞 DEBUG
         respuestas = data.get('respuestas')
         project_id = data.get('project_id')
 
