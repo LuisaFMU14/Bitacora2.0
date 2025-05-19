@@ -79,7 +79,7 @@
         function redirectToProjectDetails(projectName, projectId) {
             // Redirigir a la página de detalles del proyecto con el nombre como parámetro
             //window.location.href = `{{ url_for('projectdetails') }}?name=${encodeURIComponent(projectName)}`;
-            window.location.href = `/paginaprincipal'?project_id=${projectId}&project=${encodeURIComponent(projectName)}?id=${encodeURIComponent(projectId)}`;
+            window.location.href = `/paginaprincipal?project_id=${projectId}&project=${encodeURIComponent(projectName)}?id=${encodeURIComponent(projectId)}`;
             //window.location.href = `/index?project_id=${projectId}&project=${encodeURIComponent(projectName)}`;
         }
         document.addEventListener('DOMContentLoaded', function () {
