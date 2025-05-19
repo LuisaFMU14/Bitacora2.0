@@ -29,7 +29,7 @@
         <div class="records-container">
             <!-- Proyectos dinámicos desde base de datos -->
             {% for project in db_projects %}
-             <button class="record-button" onclick="redirectToProjectDetails('{{ project.id_proyecto }}')">
+             <button class="record-button" onclick="redirectToProjectDetails('{{ project.id_proyecto }}', '{{ project.name }}')">
                 {{ project.name }}<br><small>Inicio: {{ project.fecha_inicio }}</small>
             </button>
             {% else %}

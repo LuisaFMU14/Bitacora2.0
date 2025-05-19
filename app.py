@@ -404,32 +404,41 @@ def historialregistro():
     project_id = request.args.get('project_id')
     project_name = request.args.get('project_name', 'Proyecto')
     
+    if not project_id:
+        flash("No se proporcionó el ID del proyecto", "error")
+        return redirect(url_for('history'))
+
     # Aquí puedes agregar lógica para obtener registros reales de la base de datos
     # Por ahora usaremos los datos quemados como solicitaste
     
     # Datos quemados de ejemplo (2 registros)
-    registros = [
-        {
-            'id': 1,
-            'fecha': '2024-05-15',
-            'disciplina': 'Electricidad',
-            'lugar_obra': 'Edificio Principal',
-            'especialidad': 'Instalación eléctrica',
-            'actividades': 'Instalación de cableado en planta baja',
-            'responsable': 'Juan Pérez',
-            'estado': 'Completado'
-        },
-        {
-            'id': 2,
-            'fecha': '2024-05-14',
-            'disciplina': 'Plomería',
-            'lugar_obra': 'Edificio Principal',
-            'especialidad': 'Instalación hidráulica',
-            'actividades': 'Instalación de tuberías en baños',
-            'responsable': 'María Gómez',
-            'estado': 'En progreso'
-        }
-    ]
+    registros = []
+    try:
+        conn = psycopg2.connect(**POSTGRES_CONFIG)
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            SELECT id_registro, disciplina, lugar_obra, especialidad, actividades, responsable, estado
+            FROM registrosbitacora
+            WHERE id_proyecto = %s
+            ORDER BY id_registro DESC
+        """, (project_id,))
+
+        for row in cursor.fetchall():
+            registros.append({
+                'id': row[0],
+                'disciplina': row[1],
+                'lugar_obra': row[2],
+                'especialidad': row[3],
+                'actividades': row[4],
+                'responsable': row[5],
+                'estado': row[6],
+            })
+    except Exception as e:
+        print(f"Error al obtener registros: {str(e)}")
+    finally:
+        if conn:
+            conn.close()
     
     return render_template('historialRegistro.html',
                          registros=registros,
