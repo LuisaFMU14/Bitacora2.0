@@ -166,7 +166,7 @@ def get_user_projects(user_id):
         cursor = conn.cursor()
         
         cursor.execute(
-            """SELECT id_proyecto, nombre_proyecto, fecha_inicio, director_obra 
+            """SELECT id_proyecto, nombre_proyecto, fecha_inicio, director_obra, user_id 
                FROM proyectos WHERE user_id = %s ORDER BY fecha_inicio DESC""",
             (user_id,)
         )
@@ -174,10 +174,12 @@ def get_user_projects(user_id):
         projects = []
         for row in cursor.fetchall():
             projects.append({
-                'user_id': row[0],
+                'id_proyecto': row[0],
                 'name': row[1],
                 'fecha_inicio': row[2].strftime('%Y-%m-%d'),
-                'director_obra': row[3]
+                'director_obra': row[3],
+                'user_id': row[4],
+
             })
         
         return projects
