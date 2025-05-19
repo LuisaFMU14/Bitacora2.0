@@ -513,47 +513,6 @@ def add_project():
     return render_template('addproject.html')
 
 
-@app.route('/delete_project', methods=['POST'])
-def delete_project():
-    if 'user_id' not in session:
-        return redirect(url_for('principalscreen'))
-    
-    try:
-        project_id = request.form.get('project_id')
-        
-        conn = psycopg2.connect(**POSTGRES_CONFIG)
-        cursor = conn.cursor()
-        
-        # Verificar que el proyecto pertenece al usuario
-        cursor.execute(
-            "DELETE FROM proyectos WHERE id_proyecto = %s AND user_id = %s RETURNING nombre_proyecto",
-            (project_id, session['user_id'])
-        )
-        
-        deleted_project = cursor.fetchone()
-        if deleted_project:
-            conn.commit()
-            return jsonify({
-                'success': True,
-                'message': f'Proyecto "{deleted_project[0]}" eliminado correctamente'
-            })
-        else:
-            return jsonify({
-                'success': False,
-                'message': 'No se encontró el proyecto o no tienes permisos'
-            }), 404
-            
-    except psycopg2.Error as e:
-        return jsonify({
-            'success': False,
-            'message': f'Error al eliminar proyecto: {str(e)}'
-        }), 500
-    finally:
-        if conn:
-            conn.close()
-    
-    return redirect(url_for('registros'))
-
 @app.route('/ask', methods=['POST'])
 def ask_question_route():
     data = request.json
@@ -627,71 +586,6 @@ def guardar_registro():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-@app.route('/guardar_registro', methods=['POST'])
-def guardarregistro():
-    if 'user_id' not in session:
-        return jsonify({'success': False, 'message': 'No autorizado'}), 401
-
-    try:
-        # Obtener datos del formulario
-        data = request.get_json()
-        required_fields = ['disciplina', 'lugar_obra', 'especialidad', 
-                          'actividades', 'responsable', 'estado', 'id_proyecto']
-        
-        # Validar campos obligatorios
-        for field in required_fields:
-            if field not in data or not data[field]:
-                return jsonify({'success': False, 'message': f'Falta el campo {field}'}), 400
-
-        # Conexión a la base de datos
-        conn = psycopg2.connect(**POSTGRES_CONFIG)
-        cursor = conn.cursor()
-
-        # Verificar que el proyecto existe y pertenece al usuario
-        cursor.execute(
-            "SELECT 1 FROM proyectos WHERE id_proyecto = %s AND user_id = %s",
-            (data['id_proyecto'], session['user_id'])
-        )
-        if not cursor.fetchone():
-            return jsonify({'success': False, 'message': 'Proyecto no válido'}), 400
-
-        # Insertar registro
-        cursor.execute(
-            """INSERT INTO registrosbitacora 
-               (disciplina, lugar_obra, especialidad, actividades, 
-                responsable, coordenadas, estado, id_proyecto)
-               VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id_registro""",
-            (data['disciplina'], data['lugar_obra'], data['especialidad'],
-             data['actividades'], data['responsable'], data.get('coordenadas'),
-             data['estado'], data['id_proyecto'])
-        )
-
-        registro_id = cursor.fetchone()[0]
-        conn.commit()
-
-        return jsonify({
-            'success': True,
-            'message': 'Registro guardado correctamente',
-            'registro_id': registro_id
-        })
-
-    except psycopg2.Error as e:
-        conn.rollback()
-        return jsonify({
-            'success': False,
-            'message': f'Error de base de datos: {str(e)}'
-        }), 500
-        
-    except Exception as e:
-        return jsonify({
-            'success': False,
-            'message': f'Error inesperado: {str(e)}'
-        }), 500
-        
-    finally:
-        if 'conn' in locals() and conn:
-            conn.close()
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -10,45 +10,6 @@ const questions = [
 ];
 const responses = [];
 
-// Función para guardar el registro en PostgreSQL
-async function saveToDatabase() {
-    const formData = {
-        disciplina: document.getElementById('disciplina').value,
-        lugar_obra: document.getElementById('lugar_obra').value,
-        especialidad: document.getElementById('especialidad').value,
-        actividades: document.getElementById('actividades').value,
-        responsable: document.getElementById('responsable').value,
-        coordenadas: document.getElementById('coordenadas').value || null,
-        estado: document.getElementById('estado').value,
-        id_proyecto: new URLSearchParams(window.location.search).get('project_id')
-    };
-
-    try {
-        const response = await fetch('/guardar_registro', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify(formData)
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-            alert('Registro guardado con ID: ' + result.registro_id);
-            // Redirigir o limpiar el formulario
-            window.location.href = `/historialRegistro?project_id=${formData.id_proyecto}`;
-        } else {
-            alert('Error: ' + result.message);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error al guardar el registro');
-    }
-}
-
-
 async function saveToSharePointList() {
     try {
         const respuestas = {
