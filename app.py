@@ -629,7 +629,7 @@ def guardar_registro():
 
 
 @app.route('/guardar_registro', methods=['POST'])
-def guardar_registro():
+def guardarregistro():
     if 'user_id' not in session:
         return jsonify({'success': False, 'message': 'No autorizado'}), 401
 
