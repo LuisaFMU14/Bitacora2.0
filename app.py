@@ -567,7 +567,7 @@ def ask_question_route():
     else:
         return jsonify({'error': 'Error al sintetizar la pregunta.'}), 500
 
-'''
+
 @app.route('/guardar-registro', methods=['POST'])
 def guardar_registro():
     try:
@@ -626,7 +626,7 @@ def guardar_registro():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-'''
+
 
 @app.route('/guardar_registro', methods=['POST'])
 def guardar_registro():
