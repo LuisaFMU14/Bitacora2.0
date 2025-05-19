@@ -260,6 +260,19 @@ function saveRecord() {
                 //window.location.href = '/registros';
             //}, 1500);
         } else {
+            // Limpiar campos del formulario
+            document.getElementById('question_0').value = '';
+            document.getElementById('question_1').value = '';
+            document.getElementById('question_2').value = '';
+            document.getElementById('question_3').value = '';
+            document.getElementById('question_4').value = '';
+            document.getElementById('question_5').value = '';
+
+            // Limpiar canvas de foto si aplica
+            const canvas = document.getElementById('photoCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
             alert('¡Registro guardado exitosamente!');
         }
     })
