@@ -76,10 +76,10 @@
             window.location.href = "{{ url_for('add_project') }}";
         }
 
-        function redirectToProjectDetails(projectName) {
+        function redirectToProjectDetails(projectName, projectId) {
             // Redirigir a la página de detalles del proyecto con el nombre como parámetro
             //window.location.href = `{{ url_for('projectdetails') }}?name=${encodeURIComponent(projectName)}`;
-            window.location.href = `{{ url_for('paginaprincipal') }}?project=${encodeURIComponent(projectName)}`;
+            window.location.href = `{{ url_for('paginaprincipal') }}?project=${encodeURIComponent(projectName)}?id=${encodeURIComponent(projectId)}`;
         }
         document.addEventListener('DOMContentLoaded', function () {
             const dropdownBtn = document.getElementById('dropdown-btn');
