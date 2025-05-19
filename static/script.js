@@ -256,7 +256,9 @@ document.getElementById('successMessage').style.display = 'block';
 
 // Empezar el proceso de preguntas en cuanto cargue la página
 window.onload = function() {
-    askNextQuestion();
+    setTimeout(() => {
+        askNextQuestion();
+    }, 1500); // 1500 milisegundos = 1.5 segundos   
 };
 
 
