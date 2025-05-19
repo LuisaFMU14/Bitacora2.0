@@ -214,7 +214,7 @@ function saveRecord() {
         disciplina : document.getElementById('question_0').value,
         lugar_obra: document.getElementById('question_1').value,
         especialidad: document.getElementById('question_2').value,
-        descripcion: document.getElementById('question_3').value,
+        actividades: document.getElementById('question_3').value,
         responsable: document.getElementById('question_4').value,
         estado: document.getElementById('question_5').value,
     };
