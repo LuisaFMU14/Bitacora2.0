@@ -67,7 +67,7 @@ body, html {
     background-color: #ffffff;   /* Color de fondo */
     color: rgb(0, 0, 0);                 /* Color del texto */
     padding: 15px;                /* Espaciado interno */
-    width: 50%;                   /* Ancho del botón */
+    width: 90%;                   /* Ancho del botón */
     border-radius: 10px; 
     border-color: #f8b126;         /* Bordes redondeados */
     text-align: center;           /* Centrar texto */
@@ -83,7 +83,7 @@ body, html {
     background-color: #ffffff;   /* Color de fondo */
     color: rgb(0, 0, 0);                 /* Color del texto */
     padding: 15px;                /* Espaciado interno */
-    width: 50%;                   /* Ancho del botón */
+    width: 90%;                   /* Ancho del botón */
     border-radius: 10px; 
     border-color: #f8b126;         /* Bordes redondeados */
     text-align: center;           /* Centrar texto */
