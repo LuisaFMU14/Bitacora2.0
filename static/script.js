@@ -1,7 +1,5 @@
 // Variables globales
 let currentQuestionIndex = 0;
-let currentCamera = 'environment'; // 'environment' = cámara trasera, 'user' = frontal
-let currentStream = null;
 const questions = [
     "¿Cuál es la disciplina?",
     "¿Cuál es el lugar de la obra?",
@@ -101,51 +99,22 @@ function askNextQuestion() {
 }
 
 // Iniciar la cámara automáticamente cuando se completen las preguntas
-function startCamera(facingMode = 'environment') {
+function startCamera() {
     const video = document.getElementById('videoElement');
-    const switchCameraButton = document.getElementById('switch-camera');
+    const cameraContainer = document.getElementById('camera-container');
+    const takePhotoButton = document.getElementById('take-photo');
+    const startCameraButton = document.getElementById('start-camera');
 
-    // Detener el stream actual si existe
-    if (currentStream) {
-        currentStream.getTracks().forEach(track => track.stop());
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+            video.srcObject = stream;
+            cameraContainer.style.display = 'block';  // Mostrar la cámara
+            takePhotoButton.style.display = 'block';  // Mostrar el botón "Tomar foto"
+            startCameraButton.style.display = 'none'; // Ocultar el botón "Iniciar cámara"
+        });
+    } else {
+        alert("No se puede acceder a la cámara.");
     }
-
-    const constraints = {
-        video: {
-            facingMode: { exact: facingMode },
-            width: { ideal: 1280 },
-            height: { ideal: 720 }
-        }
-    };
-
-    navigator.mediaDevices.getUserMedia(constraints)
-    .then(stream => {
-        currentStream = stream;
-        video.srcObject = stream;
-        currentCamera = facingMode;
-        
-        // Mostrar botón de cambio de cámara solo si hay más de una
-        navigator.mediaDevices.enumerateDevices()
-            .then(devices => {
-                const videoDevices = devices.filter(device => device.kind === 'videoinput');
-                switchCameraButton.style.display = videoDevices.length > 1 ? 'block' : 'none';
-            });
-    })
-    .catch(error => {
-        console.error('Error al acceder a la cámara:', error);
-        // Fallback a cámara frontal si la trasera no está disponible
-        if (facingMode === 'environment') {
-            startCamera('user');
-        } else {
-            alert('No se pudo acceder a ninguna cámara');
-        }
-    });
-}
-
-// Función para cambiar entre cámaras
-function switchCamera() {
-    const newFacingMode = currentCamera === 'environment' ? 'user' : 'environment';
-    startCamera(newFacingMode);
 }
 
 // Tomar la foto
@@ -303,7 +272,7 @@ function saveRecord() {
             const canvas = document.getElementById('photoCanvas');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+            
             alert('¡Registro guardado exitosamente!');
         }
     })
