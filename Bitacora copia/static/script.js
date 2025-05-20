@@ -78,12 +78,37 @@ function startCamera() {
     const startCameraButton = document.getElementById('start-camera');
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-            video.srcObject = stream;
-            cameraContainer.style.display = 'block';  // Mostrar la cámara
-            takePhotoButton.style.display = 'block';  // Mostrar el botón "Tomar foto"
-            startCameraButton.style.display = 'none'; // Ocultar el botón "Iniciar cámara"
-        });
+        // Configuración para usar específicamente la cámara trasera
+        const constraints = {
+            video: {
+                facingMode: { exact: "environment" }
+            }
+        };
+
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function(stream) {
+                video.srcObject = stream;
+                cameraContainer.style.display = 'block';  // Mostrar la cámara
+                takePhotoButton.style.display = 'block';  // Mostrar el botón "Tomar foto"
+                startCameraButton.style.display = 'none'; // Ocultar el botón "Iniciar cámara"
+            })
+            .catch(function(err) {
+                console.log("Error específico de cámara trasera: ", err);
+                
+                // Si falla con la cámara trasera, intentar con configuración genérica
+                console.log("Intentando con configuración de cámara alternativa...");
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        video.srcObject = stream;
+                        cameraContainer.style.display = 'block';
+                        takePhotoButton.style.display = 'block';
+                        startCameraButton.style.display = 'none';
+                    })
+                    .catch(function(err) {
+                        console.error("No se puede acceder a ninguna cámara:", err);
+                        alert("No se puede acceder a la cámara.");
+                    });
+            });
     } else {
         alert("No se puede acceder a la cámara.");
     }
