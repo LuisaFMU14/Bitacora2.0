@@ -132,7 +132,7 @@ function takePhoto() {
     canvas.width = videoElement.videoWidth;
     canvas.height = videoElement.videoHeight;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
     // Obtén la imagen en formato Base64
     const fotoBase64 = canvas.toDataURL('image/jpeg', 0.7);
