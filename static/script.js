@@ -1,5 +1,7 @@
 // Variables globales
 let currentQuestionIndex = 0;
+let currentFacingMode = "environment";
+let currentStream = null;
 const questions = [
     "¿Cuál es la disciplina?",
     "¿Cuál es el lugar de la obra?",
@@ -99,37 +101,32 @@ function askNextQuestion() {
 }
 
 // Iniciar la cámara automáticamente cuando se completen las preguntas
-function startCamera() {
+function startCamera(facingMode = "environment") {
     const video = document.getElementById('videoElement');
     const cameraContainer = document.getElementById('camera-container');
     const takePhotoButton = document.getElementById('take-photo');
     const startCameraButton = document.getElementById('start-camera');
 
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({
-            video: { facingMode: { exact: "environment" } }
-        }).then(function(stream) {
-            video.srcObject = stream;
-            cameraContainer.style.display = 'block';
-            takePhotoButton.style.display = 'block';
-            startCameraButton.style.display = 'none';
-        }).catch(function(error) {
-            console.warn("No se pudo acceder a la cámara trasera. Probando con cualquier cámara...");
-            // Fallback: usar cualquier cámara disponible
-            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-                video.srcObject = stream;
-                cameraContainer.style.display = 'block';
-                takePhotoButton.style.display = 'block';
-                startCameraButton.style.display = 'none';
-            }).catch(function(error) {
-                alert("No se puede acceder a ninguna cámara.");
-                console.error(error);
-            });
-        });
-    } else {
-        alert("Este navegador no soporta acceso a la cámara.");
+    // Detener cualquier stream anterior
+    if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
     }
+
+    navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: facingMode } }
+    }).then(function (stream) {
+        currentStream = stream;
+        video.srcObject = stream;
+        video.style.display = 'block';
+        cameraContainer.style.display = 'block';
+        takePhotoButton.style.display = 'block';
+        startCameraButton.style.display = 'none';
+    }).catch(function (error) {
+        console.warn(`No se pudo abrir la cámara con modo: ${facingMode}`, error);
+        alert("No se pudo acceder a la cámara. Por favor, revisa los permisos.");
+    });
 }
+
 
 // Tomar la foto
 function takePhoto() {
@@ -357,5 +354,10 @@ function triggerFileInput() {
     document.getElementById('file-input').click();
 }
 
+document.getElementById('switch-camera').addEventListener('click', function () {
+    // Alternar entre "user" y "environment"
+    currentFacingMode = (currentFacingMode === "environment") ? "user" : "environment";
+    startCamera(currentFacingMode);
+});
 
 
