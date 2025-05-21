@@ -132,7 +132,7 @@ body, html {
 .bottom-menu {
     display: flex;
     justify-content: space-around;
-    padding: 30px;
+    padding: 5px;
     background-color: #fff;
 }
 .bottom-button {
