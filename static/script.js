@@ -339,21 +339,5 @@ function triggerFileInput() {
     document.getElementById('file-input').click();
 }
 
-// Acción cuando se acepta la foto
-document.getElementById('accept-photo').addEventListener('click', function () {
-    // Oculta la cámara y los controles, deja la miniatura
-    document.getElementById('videoElement').style.display = 'none';
-    document.getElementById('photoControls').style.display = 'none';
-});
 
-// Acción cuando se quiere tomar una nueva foto
-document.getElementById('retake-photo').addEventListener('click', function () {
-    // Vuelve a mostrar la cámara
-    document.getElementById('videoElement').style.display = 'block';
-    document.getElementById('photoControls').style.display = 'none';
-
-    // Limpia la miniatura
-    document.getElementById('photoThumbnails').innerHTML = '';
-    document.getElementById('base64-photo').value = '';
-});
 
