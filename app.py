@@ -115,9 +115,10 @@ def insert_registro_bitacora(respuestas, id_proyecto):
                 actividades,
                 responsable,
                 estado,
-                id_proyecto
+                id_proyecto,
+                foto_base64
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """, (
             respuestas.get('disciplina'),
             respuestas.get('lugar_obra'),
@@ -125,7 +126,8 @@ def insert_registro_bitacora(respuestas, id_proyecto):
             respuestas.get('actividades'),
             respuestas.get('responsable'),
             respuestas.get('estado'),
-            id_proyecto
+            id_proyecto,
+            respuestas.get('estado')
         ))
 
         conn.commit()
@@ -418,7 +420,7 @@ def historialregistro():
         cursor = conn.cursor()
 
         cursor.execute("""
-            SELECT id_registro, disciplina, lugar_obra, especialidad, actividades, responsable, estado
+            SELECT id_registro, disciplina, lugar_obra, especialidad, actividades, responsable, estado, foto_base64
             FROM registrosbitacora
             WHERE id_proyecto = %s
             ORDER BY id_registro DESC
@@ -433,6 +435,7 @@ def historialregistro():
                 'actividades': row[4],
                 'responsable': row[5],
                 'estado': row[6],
+                'foto_base64': row[8],
             })
     except Exception as e:
         print(f"Error al obtener registros: {str(e)}")

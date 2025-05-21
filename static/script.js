@@ -274,8 +274,10 @@ function saveRecord() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            respuestas: respuestas,
-            foto: foto,
+            respuestas: {
+                ...respuestas,
+                foto_base64: document.getElementById('base64-photo').value
+            },
             project_id: projectId
         })
     })
