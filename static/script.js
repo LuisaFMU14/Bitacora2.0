@@ -106,6 +106,7 @@ function startCamera(facingMode = "environment") {
     const cameraContainer = document.getElementById('camera-container');
     const takePhotoButton = document.getElementById('take-photo');
     const startCameraButton = document.getElementById('start-camera');
+    const switchCameraButton = document.getElementById('switch-camera');
 
     // Detener cualquier stream anterior
     if (currentStream) {
@@ -120,6 +121,7 @@ function startCamera(facingMode = "environment") {
         video.style.display = 'block';
         cameraContainer.style.display = 'block';
         takePhotoButton.style.display = 'block';
+        switchCameraButton.style.display = 'block';
         startCameraButton.style.display = 'none';
     }).catch(function (error) {
         console.warn(`No se pudo abrir la cámara con modo: ${facingMode}`, error);
