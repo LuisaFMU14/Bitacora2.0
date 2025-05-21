@@ -131,12 +131,16 @@ body, html {
 /* Menú inferior */
 .bottom-menu {
     display: flex;
+    bottom: 0;
+    left: 0;
+    right: 0;
     justify-content: space-around;
-    padding: 5px;
+    padding: 10px 0;
     background-color: #fff;
+    z-index: 100;
 }
 .bottom-button {
-    background-color: #ffd073;
+    background-color: #f8b126;
     color: white;
     padding: 10px 15px;
     border-radius: 10px;
