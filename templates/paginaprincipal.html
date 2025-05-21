@@ -169,6 +169,13 @@
             deleteProjectBtn.style.display = 'none';
         }*/
 
+        if (dropdownBtn && dropdownMenu) {
+            // Alternar el menú desplegable al hacer clic en el botón
+            dropdownBtn.addEventListener('click', function (event) {
+                event.stopPropagation(); // Evitar que el clic cierre el menú
+                dropdownMenu.classList.toggle('show');
+            });
+        }
         // Alternar el menú desplegable al hacer clic en el botón
         dropdownBtn.addEventListener('click', function (event) {
             event.stopPropagation(); // Evitar que el clic cierre el menú
