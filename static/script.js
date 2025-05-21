@@ -106,14 +106,28 @@ function startCamera() {
     const startCameraButton = document.getElementById('start-camera');
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+        navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { exact: "environment" } }
+        }).then(function(stream) {
             video.srcObject = stream;
-            cameraContainer.style.display = 'block';  // Mostrar la cámara
-            takePhotoButton.style.display = 'block';  // Mostrar el botón "Tomar foto"
-            startCameraButton.style.display = 'none'; // Ocultar el botón "Iniciar cámara"
+            cameraContainer.style.display = 'block';
+            takePhotoButton.style.display = 'block';
+            startCameraButton.style.display = 'none';
+        }).catch(function(error) {
+            console.warn("No se pudo acceder a la cámara trasera. Probando con cualquier cámara...");
+            // Fallback: usar cualquier cámara disponible
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                video.srcObject = stream;
+                cameraContainer.style.display = 'block';
+                takePhotoButton.style.display = 'block';
+                startCameraButton.style.display = 'none';
+            }).catch(function(error) {
+                alert("No se puede acceder a ninguna cámara.");
+                console.error(error);
+            });
         });
     } else {
-        alert("No se puede acceder a la cámara.");
+        alert("Este navegador no soporta acceso a la cámara.");
     }
 }
 
