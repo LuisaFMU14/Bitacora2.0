@@ -182,12 +182,14 @@
             //dropdownMenu.classList.toggle('show');
         //});
 
-        // Cerrar el menú al hacer clic fuera de él
-        document.addEventListener('click', function (event) {
-            if (!dropdownMenu.contains(event.target)) {
-                dropdownMenu.classList.remove('show');
-            }
-        });
+        if (dropdownBtn && dropdownMenu) {
+            // Cerrar el menú al hacer clic fuera de él
+            document.addEventListener('click', function (event) {
+                if (!dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+        }
     });
 
     // Obtener elementos
