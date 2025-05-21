@@ -277,6 +277,10 @@ function saveRecord() {
             document.getElementById('question_4').value = '';
             document.getElementById('question_5').value = '';
 
+            // Limpiar miniatura y botón de foto
+            document.getElementById('photoThumbnails').innerHTML = '';
+            document.getElementById('base64-photo').value = '';
+
             // Limpiar canvas de foto si aplica
             const canvas = document.getElementById('photoCanvas');
             const ctx = canvas.getContext('2d');
