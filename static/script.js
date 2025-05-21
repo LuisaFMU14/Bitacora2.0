@@ -178,7 +178,7 @@ function takePhoto() {
     document.getElementById('base64-photo').value = fotoBase64;
 
     // Mostrar los controles de aceptar/rechazar
-    document.getElementById('photoControls').style.display = 'block';
+    //document.getElementById('photoControls').style.display = 'block';
 
     // Ocultar la cámara
     document.getElementById('videoElement').style.display = 'none';
