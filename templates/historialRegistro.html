@@ -66,7 +66,7 @@
             {% if registros %}
                 {% for registro in registros %}
                 <div class="record-details">
-                    <h3>Registro #{{ registro.id }} - {{ registro.fecha }}</h3>
+                    <h3>Código de registro: {{ registro.id }} - {{ registro.fecha }}</h3>
                     <div class="record-field">
                         <label>Disciplina:</label>
                         <span>{{ registro.disciplina }}</span>
@@ -91,6 +91,12 @@
                         <label>Estado:</label>
                         <span>{{ registro.estado }}</span>
                     </div>
+                    {% if registro.foto_base64 %}
+                    <div class="record-field" style="margin-top: 10px;">
+                        <label>Foto:</label><br>
+                        <img src="{{ registro.foto_base64 }}" alt="Foto registrada" style="max-width: 300px; border: 1px solid #ccc; border-radius: 4px;">
+                    </div>
+                    {% endif %}
                 </div>
                 {% endfor %}
             {% else %}
