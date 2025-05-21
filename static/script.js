@@ -152,6 +152,12 @@ function takePhoto() {
 
     // Guarda la imagen como Base64 en el input para enviarla
     document.getElementById('base64-photo').value = fotoBase64;
+
+    // Mostrar los controles de aceptar/rechazar
+    document.getElementById('photoControls').style.display = 'block';
+
+    // Ocultar la cámara
+    document.getElementById('videoElement').style.display = 'none';
 }
 const foto = document.getElementById('base64-photo').value;
 console.log(foto);
@@ -308,4 +314,22 @@ window.onload = function() {
 function triggerFileInput() {
     document.getElementById('file-input').click();
 }
+
+// Acción cuando se acepta la foto
+document.getElementById('accept-photo').addEventListener('click', function () {
+    // Oculta la cámara y los controles, deja la miniatura
+    document.getElementById('videoElement').style.display = 'none';
+    document.getElementById('photoControls').style.display = 'none';
+});
+
+// Acción cuando se quiere tomar una nueva foto
+document.getElementById('retake-photo').addEventListener('click', function () {
+    // Vuelve a mostrar la cámara
+    document.getElementById('videoElement').style.display = 'block';
+    document.getElementById('photoControls').style.display = 'none';
+
+    // Limpia la miniatura
+    document.getElementById('photoThumbnails').innerHTML = '';
+    document.getElementById('base64-photo').value = '';
+});
 
