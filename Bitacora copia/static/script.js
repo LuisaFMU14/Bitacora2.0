@@ -72,6 +72,8 @@ function askNextQuestion() {
 
 // Iniciar la cámara automáticamente cuando se completen las preguntas
 function startCamera() {
+    console.log("startCamera(): Iniciando verificación de cámara...");
+
     const video = document.getElementById('videoElement');
     const cameraContainer = document.getElementById('camera-container');
     const takePhotoButton = document.getElementById('take-photo');
@@ -88,6 +90,7 @@ function startCamera() {
         navigator.mediaDevices.getUserMedia(constraints)
             .then(function(stream) {
                 video.srcObject = stream;
+                console.log("✅ Cámara activada y transmisión iniciada.");
                 cameraContainer.style.display = 'block';  // Mostrar la cámara
                 takePhotoButton.style.display = 'block';  // Mostrar el botón "Tomar foto"
                 startCameraButton.style.display = 'none'; // Ocultar el botón "Iniciar cámara"
@@ -100,6 +103,7 @@ function startCamera() {
                 navigator.mediaDevices.getUserMedia({ video: true })
                     .then(function(stream) {
                         video.srcObject = stream;
+                        console.log("✅ Cámara activada y transmisión iniciada.");
                         cameraContainer.style.display = 'block';
                         takePhotoButton.style.display = 'block';
                         startCameraButton.style.display = 'none';
@@ -116,8 +120,12 @@ function startCamera() {
 
 // Tomar la foto
 function takePhoto() {
+    console.log("takePhoto(): Intentando capturar imagen...");
+
     const canvas = document.getElementById('photoCanvas');
     const videoElement = document.getElementById('videoElement');
+
+    console.log("🎥 Estado del video:", videoElement.readyState);
 
     // Validar que el video esté transmitiendo
     if (video.readyState !== 4) { // 4 = HAVE_ENOUGH_DATA
@@ -135,7 +143,9 @@ function takePhoto() {
     const fotoBase64 = canvas.toDataURL('image/jpeg', 0.7);
     // Muestra la foto como miniatura para asegurarse de que se capturó correctamente
     const photoThumbnails = document.getElementById('photoThumbnails');
-    photoThumbnails.innerHTML = `<img src="${fotoBase64}" width="100px">`;
+    //photoThumbnails.innerHTML = `<img src="${fotoBase64}" width="100px">`;
+    addPhotoThumbnail(fotoBase64);
+
 
     // Verificar formato correcto
     if (!fotoBase64.startsWith('data:image/jpeg;base64,')) {
@@ -143,15 +153,25 @@ function takePhoto() {
     }
     
     // Verificar longitud mínima
-    if (fotoBase64.length < 100) {
+    if (fotoBase64.length < 5000) {
         throw new Error('La imagen es demasiado pequeña');
     }
+    // Mostrar miniatura
+    console.log("🖼 Mostrando miniatura de la imagen capturada...");
+    addPhotoThumbnail(fotoBase64);
+
+    // Guardar en campo oculto
+    document.getElementById('base64-photo').value = fotoBase64;
+    console.log("✅ Imagen Base64 almacenada en campo oculto.");
 
     // Guarda la imagen como Base64 en el input para enviarla
     document.getElementById('base64-photo').value = fotoBase64;
+
+    const foto = document.getElementById('base64-photo').value;
+    console.log(foto);
 }
-const foto = document.getElementById('base64-photo').value;
-console.log(foto);
+
+
 
 
 // Función para agregar la miniatura de la foto
@@ -202,6 +222,13 @@ function sendPhotoData() {
 // Función para guardar el registro
 function saveRecord() {
     const fotoBase64 = document.getElementById('base64-photo').value;
+
+    if (!fotoBase64 || fotoBase64.length < 5000) {
+        console.warn("⚠️ Imagen no válida o vacía. Longitud:", fotoBase64.length);
+    } else {
+        console.log("✅ Imagen lista para enviar. Tamaño:", fotoBase64.length, "bytes.");
+    }
+    
     // Mostrar el mensaje de éxito inmediatamente
     document.getElementById('successMessage').style.display = 'block';
 
