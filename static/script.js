@@ -138,7 +138,26 @@ function takePhoto() {
     const fotoBase64 = canvas.toDataURL('image/jpeg', 0.7);
     // Muestra la foto como miniatura para asegurarse de que se capturó correctamente
     const photoThumbnails = document.getElementById('photoThumbnails');
-    photoThumbnails.innerHTML = `<img src="${fotoBase64}" width="100px">`;
+    photoThumbnails.innerHTML = `
+        <div class="photo-thumbnail-wrapper">
+            <img src="${fotoBase64}" class="thumbnail-image">
+            <div class="photo-controls">
+                <button id="accept-photo" class="photo-button">✅</button>
+                <button id="retake-photo" class="photo-button">❌</button>
+            </div>
+        </div>
+    `;
+    // Agrega los listeners luego de crear los botones dinámicamente
+    document.getElementById('accept-photo').addEventListener('click', function () {
+        document.getElementById('videoElement').style.display = 'none';
+        document.getElementById('photoThumbnails').style.display = 'block';
+    });
+
+    document.getElementById('retake-photo').addEventListener('click', function () {
+        document.getElementById('videoElement').style.display = 'block';
+        document.getElementById('photoThumbnails').innerHTML = '';
+        document.getElementById('base64-photo').value = '';
+    });
 
     // Verificar formato correcto
     if (!fotoBase64.startsWith('data:image/jpeg;base64,')) {

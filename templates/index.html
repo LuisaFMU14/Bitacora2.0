@@ -7,6 +7,40 @@
     <link rel="icon" href="{{ url_for('static', filename='logo.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    .photo-thumbnail-wrapper {
+        display: inline-block;
+        text-align: center;
+        width: 100px;
+        margin-top: 10px;
+    }
+
+    .thumbnail-image {
+        width: 100%;
+        height: auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .photo-controls {
+        margin-top: 4px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .photo-button {
+        font-size: 16px;
+        padding: 2px 6px;
+        border: none;
+        background: white;
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 0 3px rgba(0,0,0,0.3);
+        width: 32px;
+        height: 32px;
+        line-height: 1;
+    }
+</style>
 </head>
 <body>
     <div id="app">
@@ -54,11 +88,6 @@
                 </div>
                 <canvas id="photoCanvas" style="display:none;"></canvas>
                 <div id="photoThumbnails" class="photo-thumbnails"></div>
-                <!-- Controles para aceptar o rechazar la foto -->
-                <div id="photoControls" style="display:none; text-align:center; margin-top:10px;">
-                    <button id="accept-photo" style="font-size: 24px; margin: 5px;">✅</button>
-                    <button id="retake-photo" style="font-size: 24px; margin: 5px;">❌</button>
-                </div>
             </div>
             <div class="centrar">
                 <button id="start-camera" style="display:none;" onclick="startCamera()">Iniciar cámara</button>
