@@ -120,7 +120,7 @@ function takePhoto() {
     const videoElement = document.getElementById('videoElement');
 
     // Validar que el video esté transmitiendo
-    if (video.readyState !== 4) { // 4 = HAVE_ENOUGH_DATA
+    if (videoElement.readyState !== 4) { // 4 = HAVE_ENOUGH_DATA
         alert('La cámara no está lista. Espere un momento.');
         return;
     }
