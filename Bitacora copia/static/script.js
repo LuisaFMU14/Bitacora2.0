@@ -129,7 +129,7 @@ function takePhoto() {
     canvas.width = videoElement.videoWidth;
     canvas.height = videoElement.videoHeight;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
     // Obtén la imagen en formato Base64
     const fotoBase64 = canvas.toDataURL('image/jpeg', 0.7);
@@ -149,9 +149,11 @@ function takePhoto() {
 
     // Guarda la imagen como Base64 en el input para enviarla
     document.getElementById('base64-photo').value = fotoBase64;
+    const foto = document.getElementById('base64-photo').value;
+    console.log(foto);
+
 }
-const foto = document.getElementById('base64-photo').value;
-console.log(foto);
+
 
 
 // Función para agregar la miniatura de la foto
