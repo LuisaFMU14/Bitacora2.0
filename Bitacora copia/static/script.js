@@ -78,12 +78,37 @@ function startCamera() {
     const startCameraButton = document.getElementById('start-camera');
 
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
-            video.srcObject = stream;
-            cameraContainer.style.display = 'block';  // Mostrar la cámara
-            takePhotoButton.style.display = 'block';  // Mostrar el botón "Tomar foto"
-            startCameraButton.style.display = 'none'; // Ocultar el botón "Iniciar cámara"
-        });
+        // Configuración para usar específicamente la cámara trasera
+        const constraints = {
+            video: {
+                facingMode: { exact: "environment" }
+            }
+        };
+
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function(stream) {
+                video.srcObject = stream;
+                cameraContainer.style.display = 'block';  // Mostrar la cámara
+                takePhotoButton.style.display = 'block';  // Mostrar el botón "Tomar foto"
+                startCameraButton.style.display = 'none'; // Ocultar el botón "Iniciar cámara"
+            })
+            .catch(function(err) {
+                console.log("Error específico de cámara trasera: ", err);
+                
+                // Si falla con la cámara trasera, intentar con configuración genérica
+                console.log("Intentando con configuración de cámara alternativa...");
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function(stream) {
+                        video.srcObject = stream;
+                        cameraContainer.style.display = 'block';
+                        takePhotoButton.style.display = 'block';
+                        startCameraButton.style.display = 'none';
+                    })
+                    .catch(function(err) {
+                        console.error("No se puede acceder a ninguna cámara:", err);
+                        alert("No se puede acceder a la cámara.");
+                    });
+            });
     } else {
         alert("No se puede acceder a la cámara.");
     }
@@ -95,7 +120,7 @@ function takePhoto() {
     const videoElement = document.getElementById('videoElement');
 
     // Validar que el video esté transmitiendo
-    if (video.readyState !== 4) { // 4 = HAVE_ENOUGH_DATA
+    if (videoElement.readyState !== 4) { // 4 = HAVE_ENOUGH_DATA
         alert('La cámara no está lista. Espere un momento.');
         return;
     }
@@ -104,7 +129,7 @@ function takePhoto() {
     canvas.width = videoElement.videoWidth;
     canvas.height = videoElement.videoHeight;
     const ctx = canvas.getContext('2d');
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
     // Obtén la imagen en formato Base64
     const fotoBase64 = canvas.toDataURL('image/jpeg', 0.7);
@@ -124,9 +149,11 @@ function takePhoto() {
 
     // Guarda la imagen como Base64 en el input para enviarla
     document.getElementById('base64-photo').value = fotoBase64;
+    const foto = document.getElementById('base64-photo').value;
+    console.log(foto);
+
 }
-const foto = document.getElementById('base64-photo').value;
-console.log(foto);
+
 
 
 // Función para agregar la miniatura de la foto
