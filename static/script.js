@@ -147,14 +147,19 @@ function takePhoto() {
             </div>
         </div>
     `;
-    // Agrega los listeners luego de crear los botones dinámicamente
+    // Ocultar cámara
+    videoElement.style.display = 'none';
+
+    // Agregar listeners a los botones recién insertados
     document.getElementById('accept-photo').addEventListener('click', function () {
-        document.getElementById('videoElement').style.display = 'none';
-        document.getElementById('photoThumbnails').style.display = 'block';
+        // No hacer nada más, simplemente se deja la miniatura
+        console.log("Foto aceptada.");
     });
 
     document.getElementById('retake-photo').addEventListener('click', function () {
-        document.getElementById('videoElement').style.display = 'block';
+        // Mostrar cámara de nuevo
+        videoElement.style.display = 'block';
+        // Limpiar miniatura y base64
         document.getElementById('photoThumbnails').innerHTML = '';
         document.getElementById('base64-photo').value = '';
     });
