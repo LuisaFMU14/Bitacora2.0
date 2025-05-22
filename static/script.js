@@ -225,6 +225,51 @@ function addPhotoThumbnail(photoSrc) {
     document.getElementById('photoThumbnails').appendChild(photoContainer);
 }
 
+document.getElementById('file-input').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const base64 = e.target.result;
+
+        // Insertar miniatura
+        const photoThumbnails = document.getElementById('photoThumbnails');
+        photoThumbnails.innerHTML = `
+            <div class="photo-thumbnail-wrapper">
+                <img src="${base64}" class="thumbnail-image">
+                <div class="photo-controls">
+                    <button id="accept-photo" class="photo-button">✅</button>
+                    <button id="retake-photo" class="photo-button">❌</button>
+                </div>
+            </div>
+        `;
+
+        // Guardar en campo oculto
+        document.getElementById('base64-photo').value = base64;
+
+        // Ocultar cámara si estaba abierta
+        document.getElementById('videoElement').style.display = 'none';
+
+        // Agregar eventos a botones
+        document.getElementById('accept-photo').addEventListener('click', function () {
+            console.log("Foto aceptada desde archivo.");
+        });
+
+        document.getElementById('retake-photo').addEventListener('click', function () {
+            document.getElementById('videoElement').style.display = 'block';
+            document.getElementById('photoThumbnails').innerHTML = '';
+            document.getElementById('base64-photo').value = '';
+        });
+    };
+
+    reader.readAsDataURL(file); // Convierte el archivo a base64
+});
+
+
+
 // Cuando estés listo para enviar la imagen al backend:
 function sendPhotoData() {
     const foto = document.getElementById('base64-photo').value;
