@@ -62,7 +62,7 @@ input {
     padding: 10px;
     margin: 15px 0;
     display: block;
-    background-color: #fee047;  /* Fondo azul */
+    background-color: #f8b126;  /* Fondo azul */
     color: white;               /* Texto blanco */
     border: none;
     border-radius: 5px;
@@ -73,7 +73,7 @@ input {
 }
 
 #start-register-button:hover {
-    background-color: #ffdb49;
+    background-color: #f3bd65;
 }
 
 #camera-container {
