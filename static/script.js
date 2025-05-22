@@ -125,10 +125,20 @@ function startCamera(facingMode = "environment") {
         startCameraButton.style.display = 'none';
     }).catch(function (error) {
         console.warn(`No se pudo abrir la cámara con modo: ${facingMode}`, error);
-        alert("No se pudo acceder a la cámara. Por favor, revisa los permisos.");
+        // Fallback: intentar con la cámara predeterminada del dispositivo
+        navigator.mediaDevices.getUserMedia({ video: true }).then(function (fallbackStream) {
+            currentStream = fallbackStream;
+            video.srcObject = fallbackStream;
+            video.style.display = 'block';
+            cameraContainer.style.display = 'block';
+            takePhotoButton.style.display = 'block';
+            startCameraButton.style.display = 'none';
+        }).catch(function (fallbackError) {
+            console.error("No se pudo acceder a ninguna cámara.", fallbackError);
+            alert("No se pudo acceder a la cámara. Por favor, revisa los permisos del navegador.");
+        });
     });
 }
-
 
 // Tomar la foto
 function takePhoto() {
