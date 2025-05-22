@@ -17,6 +17,21 @@ body {
     padding: 20px;
 }
 
+/* Contenedor principal, que se adapta al tamaño de la pantalla */
+.main-container {
+    width: 80vw;
+    max-width: 400px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;  /* Evitar que haya scroll innecesario */
+    padding: 15px;
+    box-sizing: border-box;
+}
+
 /* Contenedor principal */
 .records-container {
     width: 100%;
