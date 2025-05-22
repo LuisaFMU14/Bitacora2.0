@@ -337,11 +337,16 @@ document.getElementById('successMessage').style.display = 'block';
 
 
 // Empezar el proceso de preguntas en cuanto cargue la página
-window.onload = function() {
+/*window.onload = function() {
     setTimeout(() => {
         askNextQuestion();
-    }, 1500); // 1500 milisegundos = 1.5 segundos   
-};
+    }, 1000); // 1000 milisegundos = 1 segundo
+};*/
+
+document.getElementById('start-register-button').addEventListener('click', function () {
+    console.log("Inicio de registro activado por el usuario");
+    askNextQuestion();
+});
 
 
 // Abrir modal al presionar "Adjuntar plano"
