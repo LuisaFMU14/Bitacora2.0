@@ -57,6 +57,25 @@ input {
     border-radius: 5px;
 }
 
+#start-register-button {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    display: block;
+    background-color: #fee047;  /* Fondo azul */
+    color: white;               /* Texto blanco */
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+#start-register-button:hover {
+    background-color: #ffdb49;
+}
+
 #camera-container {
     display: none;
     text-align: center;
