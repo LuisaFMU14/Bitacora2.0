@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash, request, jsonnify
+from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash
 import azure.cognitiveservices.speech as speechsdk
 from azure.storage.blob import BlobServiceClient,BlobClient,ContainerClient
 import base64
@@ -20,10 +20,8 @@ import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session
 import secrets
-from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = 'uploads'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
 
 # Configuración PostgreSQL
 POSTGRES_CONFIG = {
@@ -270,31 +268,6 @@ def get_projects_from_blob():
         print(f"Error al obtener proyectos del Blob Storage: {e}")
     
     return projects
-
-@app.route('/transcribe-audio', methods=['POST'])
-def transcribe_audio():
-    try:
-        if 'audio' not in request.files:
-            return jsonify({"error": "No se envió el archivo de audio"}), 400
-
-        file = request.files['audio']
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(UPLOAD_FOLDER, filename)
-        file.save(filepath)
-
-        # Azure Speech-to-Text
-        speech_config = get_speech_config()
-        audio_config = speechsdk.audio.AudioConfig(filename=filepath)
-        recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
-
-        result = recognizer.recognize_once_async().get()
-
-        if result.reason == speechsdk.ResultReason.RecognizedSpeech:
-            return jsonify({"text": result.text})
-        else:
-            return jsonify({"error": "No se reconoció el audio."}), 400
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 @app.after_request
 def add_header(response):

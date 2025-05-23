@@ -2,9 +2,6 @@
 let currentQuestionIndex = 0;
 let currentFacingMode = "environment";
 let currentStream = null;
-let mediaRecorder ;
-let audioChunks = [];
-
 const questions = [
     "¿Cuál es la disciplina?",
     "¿Cuál es el lugar de la obra?",
@@ -42,93 +39,6 @@ async function saveToSharePointList() {
         alert(`Error: ${error.message}`);
     }
 }
-
-
-// Función para iniciar la grabación de audio con Azure
-/*
-function startRecording() {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        mediaRecorder = new MediaRecorder(stream);
-        audioChunks = [];
-
-        mediaRecorder.ondataavailable = event => {
-            if (event.data.size > 0) {
-                audioChunks.push(event.data);
-            }
-        };
-
-        mediaRecorder.onstop = () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            const formData = new FormData();
-            formData.append('audio', audioBlob, 'grabacion.webm');
-
-            fetch('/transcribe-audio', {
-                method: 'POST',
-                body: formData
-            }).then(response => response.json())
-              .then(data => {
-                  if (data.text) {
-                      // Coloca el texto en el campo actual
-                      const currentInput = document.querySelector('input:focus');
-                      if (currentInput) currentInput.value = data.text;
-                  } else {
-                      alert("No se pudo transcribir el audio.");
-                  }
-              });
-        };
-
-        mediaRecorder.start();
-
-        // Detener la grabación después de 5 segundos
-        setTimeout(() => {
-            mediaRecorder.stop();
-        }, 5000); // Puedes ajustar el tiempo
-    });
-}
-*/
-
-function startRecording() {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        const mediaRecorder = new MediaRecorder(stream);
-        const audioChunks = [];
-
-        mediaRecorder.ondataavailable = event => {
-            if (event.data.size > 0) {
-                audioChunks.push(event.data);
-            }
-        };
-
-        mediaRecorder.onstop = () => {
-            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            const formData = new FormData();
-            formData.append('audio', audioBlob, 'respuesta.webm');
-
-            fetch('/transcribe-audio', {
-                method: 'POST',
-                body: formData
-            }).then(res => res.json())
-              .then(data => {
-                  const currentInput = document.getElementById(`question_${questionIndex}`);
-                  if (currentInput && data.text) {
-                      currentInput.value = data.text;
-                  }
-
-                  // Continuar con la siguiente pregunta si hay más
-                  if (questionIndex < questions.length - 1) {
-                      questionIndex++;
-                      askNextQuestion();
-                  }
-              });
-        };
-
-        mediaRecorder.start();
-
-        setTimeout(() => {
-            mediaRecorder.stop();
-        }, 5000); // Tiempo para responder (ajustable)
-    });
-}
-
 
 // Función para iniciar la grabación de voz
 function startSpeechRecognition() {
@@ -185,11 +95,7 @@ function askNextQuestion() {
         speechSynthesis.speak(utterance);
 
         utterance.onend = function() {
-            // Esperar un poco antes de iniciar la grabación
-            setTimeout(() => {
-                startRecording(); // Esta es la función de grabar + enviar + insertar
-            }, 500);
-            //startSpeechRecognition(); // Iniciar reconocimiento de voz después de hacer la pregunta
+            startSpeechRecognition(); // Iniciar reconocimiento de voz después de hacer la pregunta
         };
     }
 }
