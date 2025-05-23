@@ -348,21 +348,6 @@ def login():
 def index():
     return render_template('index.html')
 
-'''
-@app.route('/registros')
-def registros():
-    # Obtener proyectos del Blob Storage
-    blob_projects = get_projects_from_blob()
-
-    # Combinar con proyectos estáticos si es necesario
-    #static_projects = [
-        #{'name': 'Proyecto A', 'date': '2024-09-22'},
-        #{'name': 'Proyecto B', 'date': '2024-09-21'},
-        #{'name': 'Proyecto C', 'date': '2024-09-20'}
-    #]
-
-    return render_template('registros.html', blob_projects=blob_projects)
-'''
 @app.route('/registros')
 def registros():
     if 'user_id' not in session:
@@ -457,70 +442,6 @@ def disciplinerecords():
 def projectdetails():
     return render_template('projectdetails.html')
 
-'''
-@app.route('/addproject', methods=['GET', 'POST'])
-def add_project():
-    if 'user_id' not in session:
-        return redirect(url_for('principalscreen'))
-    
-    if request.method == 'POST':
-        try:
-            project_name = request.form['project-name']
-            start_date = request.form['start-date']
-            end_date = request.form['end-date']
-            director = request.form['director']
-            location = request.form['location']
-            coordinates = request.form['coordinates']
-
-             # Conexión a SharePoint
-            ctx_auth = AuthenticationContext(SHAREPOINT_SITE_URL)
-            if ctx_auth.acquire_token_for_user(SHAREPOINT_USER, SHAREPOINT_PASSWORD):
-
-                ctx = ClientContext(SHAREPOINT_SITE_URL, ctx_auth)
-                
-                # Obtener la lista de SharePoint
-                sp_list = ctx.web.lists.get_by_title(LIST_NAME)
-
-                # Crear el item en SharePoint
-                item_properties = {
-                    'Title': project_name,
-                    'FechaInicio': start_date,
-                    'FechaFin': end_date,
-                    'Director': director,
-                    'Ubicacion': location,
-                    'Coordenadas': coordinates
-                }
-                
-                new_item = sp_list.add_item(item_properties)
-                ctx.execute_query()
-
-            # Crear el nuevo proyecto y agregarlo a la lista
-            # Crear el contenido del proyecto
-            project_content = f"""
-            Nombre del Proyecto: {project_name}
-            Fecha de Inicio: {start_date}
-            Fecha de Fin: {end_date}
-            Director: {director}
-            Ubicación: {location}
-            Coordenadas: {coordinates}
-            """
-            # Nombre único para el archivo
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            blob_name = f"Proyectos/{project_name}/{project_name}.txt"
-            ##projects.append(new_project)
-            # Subir a Azure Blob Storage
-            blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-            blob_client.upload_blob(project_content, content_settings=ContentSettings(content_type='text/plain'))
-        
-            # Redirigir a la página principal (donde se muestra la lista de proyectos)
-            return redirect(url_for('registros'))
-        except KeyError as e:
-            return f"Falta el campo requerido: {str(e)}", 400
-        except Exception as e:
-            return f"Error al guardar el proyecto: {str(e)}", 500
-        
-    return render_template('addproject.html')
-'''
 @app.route('/addproject', methods=['GET', 'POST'])
 def add_project():
     if 'user_id' not in session:  # Asegúrate de tener el user_id en la sesión
@@ -575,66 +496,6 @@ def ask_question_route():
     else:
         return jsonify({'error': 'Error al sintetizar la pregunta.'}), 500
 
-'''
-@app.route('/guardar-registro', methods=['POST'])
-def guardar_registro():
-    try:
-        # Obtener datos del frontend
-        data = request.get_json()
-        foto_base64 = data.get('foto')
-        respuestas = data.get('respuestas')
-
-        if not foto_base64 or not respuestas:
-            return jsonify({"error": "Faltan datos."}), 400
-
-        # Procesar la imagen Base64
-        foto_data = base64.b64decode(foto_base64.split(',')[1])
-        imagen_nombre = f"foto_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-
-        # Guardar la imagen en Azure Blob Storage
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=imagen_nombre)
-        blob_client.upload_blob(foto_data, overwrite=True, content_settings=ContentSettings(content_type='image/png'))
-
-        # Crear el archivo .txt con las respuestas
-        respuestas_texto = "\n".join([f"{clave}: {valor}" for clave, valor in respuestas.items()])
-        archivo_nombre = f"registro_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
-
-        # Guardar el archivo .txt en Azure Blob Storage
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=archivo_nombre)
-        blob_client.upload_blob(respuestas_texto, overwrite=True, content_settings=ContentSettings(content_type='text/plain'))
-
-        # Guardar en SharePoint (nueva funcionalidad)
-        try:
-            ctx_auth = AuthenticationContext(SHAREPOINT_SITE_URL)
-            if ctx_auth.acquire_token_for_user(SHAREPOINT_USER, SHAREPOINT_PASSWORD):
-                ctx = ClientContext(SHAREPOINT_SITE_URL, ctx_auth)
-                registros_list = ctx.web.lists.get_by_title(LIST_NAME_REGISTROS)
-                
-                # Mapeo de campos a SharePoint
-                item_properties = {
-                    'Title': f"Registro_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
-                    'Disciplina': respuestas.get('disciplina', ''),
-                    'LugarObra': respuestas.get('lugar_obra', ''),
-                    'Especialidad': respuestas.get('especialidad', ''),
-                    'Descripcion': respuestas.get('descripcion_actividades', ''),
-                    'Responsable': respuestas.get('responsable', ''),
-                    'Estado': respuestas.get('estado_actividad', 'Pendiente'),          
-                    'FechaRegistro': datetime.now().isoformat(),
-                    'Foto': foto_base64,
-                }
-                
-                new_item = registros_list.add_item(item_properties)
-                ctx.execute_query()
-        except Exception as sp_ex:
-            app.logger.error(f"Error al guardar en SharePoint: {str(sp_ex)}")
-            # No falla la operación, solo registra el error
-
-
-        return jsonify({"mensaje": "Registro guardado exitosamente."}), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-'''
 @app.route('/guardar-registro', methods=['POST'])
 def guardar_registro():
     try:
