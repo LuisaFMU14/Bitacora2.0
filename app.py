@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash, request, jsonnify
+from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash, request, jsonify
 import azure.cognitiveservices.speech as speechsdk
 from azure.storage.blob import BlobServiceClient,BlobClient,ContainerClient
 import base64
