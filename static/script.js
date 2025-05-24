@@ -42,8 +42,7 @@ async function saveToSharePointList() {
 
 // Función para iniciar el reconocimiento de voz mediante Azure
 function startRecording() {
-    console.log("🎙️ Iniciando grabación...");
-
+    console.log("Iniciando grabación de audio...");
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         const mediaRecorder = new MediaRecorder(stream);
         const audioChunks = [];
@@ -55,10 +54,10 @@ function startRecording() {
         };
 
         mediaRecorder.onstop = () => {
-            console.log("🛑 Grabación terminada. Enviando audio...");
-            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            console.log("Grabación terminada. Enviando audio...");
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
             const formData = new FormData();
-            formData.append('audio', audioBlob, 'respuesta.webm');
+            formData.append('audio', audioBlob, 'respuesta.wav');
 
             fetch('/transcribe-audio', {
                 method: 'POST',
@@ -67,34 +66,34 @@ function startRecording() {
             .then(res => res.json())
             .then(data => {
                 if (data.text) {
-                    console.log("✅ Transcripción:", data.text);
-                    const input = document.getElementById(`question_${currentQuestionIndex}`);
-                    if (input) input.value = data.text;
-
+                    console.log("Texto transcrito:", data.text);
+                    document.getElementById(`question_${currentQuestionIndex}`).value = data.text;
                     currentQuestionIndex++;
                     if (currentQuestionIndex < questions.length) {
                         askNextQuestion();
                     } else {
                         console.log("✅ Todas las preguntas han sido respondidas.");
+                        startCamera(); // opcional
                     }
                 } else {
                     console.error("⚠️ Transcripción fallida:", data.error);
-                    alert("No se pudo transcribir el audio.");
+                    alert("No se pudo transcribir la respuesta.");
                 }
             }).catch(err => {
-                console.error("❌ Error al enviar audio:", err);
-                alert("Error al enviar el audio al servidor.");
+                console.error("Error al enviar audio:", err);
+                alert("Error de red o servidor.");
             });
         };
 
         mediaRecorder.start();
-        setTimeout(() => mediaRecorder.stop(), 5000);
+        setTimeout(() => {
+            mediaRecorder.stop();
+        }, 5000); // Grabar 5 segundos por pregunta
     }).catch(err => {
-        console.error("❌ Error al acceder al micrófono:", err);
+        console.error("Error al acceder al micrófono:", err);
         alert("No se pudo acceder al micrófono.");
     });
 }
-
 
 // Función para iniciar la grabación de voz
 function startSpeechRecognition() {
