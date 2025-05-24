@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash
+from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash, jsonify
 import azure.cognitiveservices.speech as speechsdk
 from azure.storage.blob import BlobServiceClient,BlobClient,ContainerClient
 import base64
@@ -20,6 +20,7 @@ import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session
 import secrets
+from werkzeug.utils import secure_filename
 
 
 
@@ -543,6 +544,40 @@ def eliminar_proyecto():
     finally:
         if conn:
             conn.close()
+
+@app.route('/transcribe-audio', methods=['POST'])
+def transcribe_audio():
+    try:
+        if 'audio' not in request.files:
+            print("No se recibió archivo de audio.")
+            return jsonify({"error": "No se envió el archivo de audio"}), 400
+
+        file = request.files['audio']
+        audio_data = file.read()
+
+        # Guardar temporalmente en memoria
+        temp_filename = 'temp_audio.wav'
+        with open(temp_filename, 'wb') as f:
+            f.write(audio_data)
+
+        print("Audio recibido y guardado como:", temp_filename)
+
+        # Configuración de Azure
+        speech_config = get_speech_config()
+        audio_config = speechsdk.audio.AudioConfig(filename=temp_filename)
+        recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+
+        result = recognizer.recognize_once_async().get()
+        print("Resultado Azure:", result.text)
+
+        if result.reason == speechsdk.ResultReason.RecognizedSpeech:
+            return jsonify({"text": result.text})
+        else:
+            print("⚠️ Azure no reconoció el audio.")
+            return jsonify({"error": "No se reconoció el audio"}), 400
+    except Exception as e:
+        print("Error en transcribe_audio:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
