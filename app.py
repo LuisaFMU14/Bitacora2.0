@@ -21,6 +21,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session
 import secrets
 from werkzeug.utils import secure_filename
+from pydub import AudioSegment
+import tempfile
 
 
 
@@ -549,34 +551,38 @@ def eliminar_proyecto():
 def transcribe_audio():
     try:
         if 'audio' not in request.files:
-            print("No se recibió archivo de audio.")
+            print("🔴 No se recibió archivo de audio.")
             return jsonify({"error": "No se envió el archivo de audio"}), 400
 
         file = request.files['audio']
-        audio_data = file.read()
+        print(f"📥 Recibido archivo: {file.filename}")
 
-        # Guardar temporalmente en memoria
-        temp_filename = 'temp_audio.wav'
-        with open(temp_filename, 'wb') as f:
-            f.write(audio_data)
+        # Guardar temporalmente el WebM
+        temp_webm = tempfile.NamedTemporaryFile(delete=False, suffix=".webm")
+        file.save(temp_webm.name)
+        print("💾 Guardado en:", temp_webm.name)
 
-        print("Audio recibido y guardado como:", temp_filename)
+        # Convertir WebM a WAV
+        audio = AudioSegment.from_file(temp_webm.name, format="webm")
+        temp_wav = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
+        audio.export(temp_wav.name, format="wav")
+        print("🔄 Convertido a WAV:", temp_wav.name)
 
-        # Configuración de Azure
+        # Transcribir con Azure
         speech_config = get_speech_config()
-        audio_config = speechsdk.audio.AudioConfig(filename=temp_filename)
+        audio_config = speechsdk.audio.AudioConfig(filename=temp_wav.name)
         recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
-
         result = recognizer.recognize_once_async().get()
-        print("Resultado Azure:", result.text)
 
         if result.reason == speechsdk.ResultReason.RecognizedSpeech:
+            print("✅ Texto reconocido:", result.text)
             return jsonify({"text": result.text})
         else:
-            print("⚠️ Azure no reconoció el audio.")
-            return jsonify({"error": "No se reconoció el audio"}), 400
+            print("⚠️ No se reconoció el audio:", result.reason)
+            return jsonify({"error": "No se reconoció el audio."}), 400
+
     except Exception as e:
-        print("Error en transcribe_audio:", str(e))
+        print("❌ Error en transcribe_audio:", str(e))
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
