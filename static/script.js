@@ -40,6 +40,60 @@ async function saveToSharePointList() {
     }
 }
 
+// Función para iniciar el reconocimiento de voz mediante Azure
+function startRecording() {
+    console.log("🎙️ Iniciando grabación...");
+
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        const audioChunks = [];
+
+        mediaRecorder.ondataavailable = event => {
+            if (event.data.size > 0) {
+                audioChunks.push(event.data);
+            }
+        };
+
+        mediaRecorder.onstop = () => {
+            console.log("🛑 Grabación terminada. Enviando a Azure...");
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'respuesta.webm');
+
+            fetch('/transcribe-audio', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.text) {
+                    console.log("✅ Azure respondió:", data.text);
+                    const input = document.getElementById(`question_${currentQuestionIndex}`);
+                    if (input) input.value = data.text;
+
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        askNextQuestion();
+                    } else {
+                        console.log("🎉 Todas las preguntas respondidas.");
+                        startCamera();
+                    }
+                } else {
+                    console.error("⚠️ Transcripción fallida:", data.error);
+                }
+            }).catch(err => {
+                console.error("❌ Error al enviar a Azure:", err);
+            });
+        };
+
+        mediaRecorder.start();
+        setTimeout(() => mediaRecorder.stop(), 5000);
+    }).catch(err => {
+        console.error("❌ Error al acceder al micrófono:", err);
+    });
+}
+
 // Función para iniciar la grabación de voz
 function startSpeechRecognition() {
     if (!('webkitSpeechRecognition' in window)) {
@@ -94,9 +148,15 @@ function askNextQuestion() {
         utterance.lang = 'es-ES';
         speechSynthesis.speak(utterance);
 
-        utterance.onend = function() {
-            startSpeechRecognition(); // Iniciar reconocimiento de voz después de hacer la pregunta
+        utterance.onend = function () {
+            console.log("🔊 Pregunta leída. Iniciando grabación...");
+            setTimeout(() => {
+                startRecording();
+            }, 300);
         };
+        //utterance.onend = function() {
+            //startSpeechRecognition(); // Iniciar reconocimiento de voz después de hacer la pregunta
+        //};
     }
 }
 
