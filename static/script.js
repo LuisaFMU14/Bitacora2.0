@@ -2,6 +2,8 @@
 let currentQuestionIndex = 0;
 let currentFacingMode = "environment";
 let currentStream = null;
+let mediaRecorder;
+let audioChunks = [];
 const questions = [
     "¿Cuál es la disciplina?",
     "¿Cuál es el lugar de la obra?",
@@ -38,6 +40,60 @@ async function saveToSharePointList() {
         console.error("Error:", error);
         alert(`Error: ${error.message}`);
     }
+}
+
+function startRecording() {
+    console.log("🎙️ Iniciando grabación...");
+
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        const mediaRecorder = new MediaRecorder(stream);
+        const audioChunks = [];
+
+        mediaRecorder.ondataavailable = event => {
+            if (event.data.size > 0) {
+                audioChunks.push(event.data);
+            }
+        };
+
+        mediaRecorder.onstop = () => {
+            console.log("🛑 Grabación terminada. Enviando audio...");
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'respuesta.webm');
+
+            fetch('/transcribe-audio', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.text) {
+                    console.log("✅ Transcripción:", data.text);
+                    const input = document.getElementById(`question_${currentQuestionIndex}`);
+                    if (input) input.value = data.text;
+
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        askNextQuestion();
+                    } else {
+                        console.log("✅ Todas las preguntas han sido respondidas.");
+                    }
+                } else {
+                    console.error("⚠️ Transcripción fallida:", data.error);
+                    alert("No se pudo transcribir el audio.");
+                }
+            }).catch(err => {
+                console.error("❌ Error al enviar audio:", err);
+                alert("Error al enviar el audio al servidor.");
+            });
+        };
+
+        mediaRecorder.start();
+        setTimeout(() => mediaRecorder.stop(), 5000);
+    }).catch(err => {
+        console.error("❌ Error al acceder al micrófono:", err);
+        alert("No se pudo acceder al micrófono.");
+    });
 }
 
 // Función para iniciar la grabación de voz
@@ -95,7 +151,10 @@ function askNextQuestion() {
         speechSynthesis.speak(utterance);
 
         utterance.onend = function() {
-            startSpeechRecognition(); // Iniciar reconocimiento de voz después de hacer la pregunta
+            console.log("🔊 Pregunta leída. Iniciando grabación...");
+            setTimeout(() => {
+                startRecording();
+            }, 300);
         };
     }
 }

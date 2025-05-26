@@ -1,6 +1,7 @@
-from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash
+from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash, jsonify
 import azure.cognitiveservices.speech as speechsdk
 from azure.storage.blob import BlobServiceClient,BlobClient,ContainerClient
+from werkzeug.utils import secure_filename
 import base64
 import io
 from io import BytesIO
@@ -20,8 +21,11 @@ import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import session
 import secrets
+from pydub import AudioSegment
+import tempfile
 
-
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Configuración PostgreSQL
 POSTGRES_CONFIG = {
@@ -543,6 +547,44 @@ def eliminar_proyecto():
     finally:
         if conn:
             conn.close()
+
+@app.route('/transcribe-audio', methods=['POST'])
+def transcribe_audio():
+    try:
+        if 'audio' not in request.files:
+            print("🔴 No se recibió archivo de audio.")
+            return jsonify({"error": "No se envió el archivo de audio"}), 400
+
+        file = request.files['audio']
+        print(f"📥 Recibido archivo: {file.filename}")
+
+        # Guardar temporalmente el WebM
+        temp_webm = tempfile.NamedTemporaryFile(delete=False, suffix=".webm")
+        file.save(temp_webm.name)
+        print("💾 Guardado en:", temp_webm.name)
+
+        # Convertir WebM a WAV
+        audio = AudioSegment.from_file(temp_webm.name, format="webm")
+        temp_wav = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
+        audio.export(temp_wav.name, format="wav")
+        print("🔄 Convertido a WAV:", temp_wav.name)
+
+        # Transcribir con Azure
+        speech_config = get_speech_config()
+        audio_config = speechsdk.audio.AudioConfig(filename=temp_wav.name)
+        recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+        result = recognizer.recognize_once_async().get()
+
+        if result.reason == speechsdk.ResultReason.RecognizedSpeech:
+            print("✅ Texto reconocido:", result.text)
+            return jsonify({"text": result.text})
+        else:
+            print("⚠️ No se reconoció el audio:", result.reason)
+            return jsonify({"error": "No se reconoció el audio."}), 400
+
+    except Exception as e:
+        print("❌ Error en transcribe_audio:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
