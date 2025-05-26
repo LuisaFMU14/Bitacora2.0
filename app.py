@@ -23,6 +23,7 @@ from flask import session
 import secrets
 from pydub import AudioSegment
 import tempfile
+import traceback
 
 UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -558,16 +559,38 @@ def transcribe_audio():
         file = request.files['audio']
         print(f"📥 Recibido archivo: {file.filename}")
 
-        # Guardar temporalmente el WebM
-        temp_webm = tempfile.NamedTemporaryFile(delete=False, suffix=".webm")
-        file.save(temp_webm.name)
-        print("💾 Guardado en:", temp_webm.name)
+        # Guardar el archivo temporalmente
+        temp_input = tempfile.NamedTemporaryFile(delete=False, suffix=".webm")
+        file.save(temp_input.name)
+        print(f"💾 Guardado en: {temp_input.name}")
 
-        # Convertir WebM a WAV
-        audio = AudioSegment.from_file(temp_webm.name, format="webm")
         temp_wav = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
+        formato_detectado = None
+
+        try:
+            print("🔍 Intentando decodificar como webm...")
+            audio = AudioSegment.from_file(temp_input.name, format="webm")
+            print("✅ Decodificado como webm.")
+            formato_detectado = "webm"
+        except Exception as e_webm:
+            print("⚠️ Falla al decodificar como webm:", str(e_webm))
+            try:
+                print("🔁 Intentando decodificar como mp4...")
+                audio = AudioSegment.from_file(temp_input.name, format="mp4")
+                print("✅ Decodificado como mp4.")
+                formato_detectado = "mp4"
+            except Exception as e_mp4:
+                print("❌ Fallo total al decodificar audio.")
+                traceback.print_exc()
+                return jsonify({
+                    "error": "No se pudo procesar el audio.",
+                    "error_webm": str(e_webm),
+                    "error_mp4": str(e_mp4)
+                }), 500
+
+        # Exportar a WAV
         audio.export(temp_wav.name, format="wav")
-        print("🔄 Convertido a WAV:", temp_wav.name)
+        print("🔄 Exportado a WAV:", temp_wav.name)
 
         # Transcribir con Azure
         speech_config = get_speech_config()
@@ -577,13 +600,20 @@ def transcribe_audio():
 
         if result.reason == speechsdk.ResultReason.RecognizedSpeech:
             print("✅ Texto reconocido:", result.text)
-            return jsonify({"text": result.text})
+            return jsonify({
+                "text": result.text,
+                "formato_detectado": formato_detectado
+            })
         else:
             print("⚠️ No se reconoció el audio:", result.reason)
-            return jsonify({"error": "No se reconoció el audio."}), 400
+            return jsonify({
+                "error": "No se reconoció el audio.",
+                "formato_detectado": formato_detectado
+            }), 400
 
     except Exception as e:
-        print("❌ Error en transcribe_audio:", str(e))
+        print("❌ Error general en transcribe_audio:", str(e))
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
