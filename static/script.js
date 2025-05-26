@@ -40,50 +40,44 @@ async function saveToSharePointList() {
     }
 }
 
-function grabarYEnviarAudio() {
-    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        const mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
-        const chunks = [];
-
-        mediaRecorder.ondataavailable = e => chunks.push(e.data);
-
-        mediaRecorder.onstop = () => {
-            const audioBlob = new Blob(chunks, { type: 'audio/webm' });
-            const formData = new FormData();
-            formData.append('audio', audioBlob, 'voz.webm');
-
-            fetch('/transcribir-audio', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.transcripcion) {
-                    handleResponse(data.transcripcion);
-                    askNextQuestion();
-                } else {
-                    alert('No se pudo transcribir el audio.');
-                }
-            })
-            .catch(err => {
-                console.error('Error de transcripción:', err);
-                alert('Error al enviar audio al servidor.');
-            });
-        };
-
-        mediaRecorder.start();
-        setTimeout(() => mediaRecorder.stop(), 5000); // graba por 5 segundos
-    }).catch(err => {
-        console.error('Acceso al micrófono falló:', err);
-        alert('No se pudo acceder al micrófono.');
-    });
-}
-
 // Función para iniciar la grabación de voz
 function startSpeechRecognition() {
-    grabarYEnviarAudio();
-}
+    if (!('webkitSpeechRecognition' in window)) {
+        alert("Este navegador no soporta reconocimiento de voz.");
+        return;
+    }
 
+    const recognition = new webkitSpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = function() {
+        console.log("Reconocimiento de voz iniciado.");
+    };
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        console.log(`Respuesta recibida: ${transcript}`);
+        handleResponse(transcript);
+    };
+
+    recognition.onerror = function(event) {
+        console.log('Error de reconocimiento de voz:', event.error);
+    };
+
+    recognition.onend = function() {
+        // Si hay más preguntas, continuar
+        if (currentQuestionIndex < questions.length) {
+            askNextQuestion();
+        } else {
+            // Todas las preguntas contestadas, mostrar la cámara
+            startCamera();
+        }
+    };
+
+    recognition.start();
+}
 
 // Función para manejar la respuesta y colocarla en el campo correspondiente
 function handleResponse(response) {
