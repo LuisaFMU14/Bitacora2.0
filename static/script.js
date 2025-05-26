@@ -80,10 +80,6 @@ function startRecording() {
             mediaRecorder.stop();
         }, 5000); // Puedes ajustar el tiempo
     });
-    if (questionIndex < questions.length - 1) {
-        questionIndex++;
-        askNextQuestion();
-    }
 }
 
 // Función para iniciar la grabación de voz
