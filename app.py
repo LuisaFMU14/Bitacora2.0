@@ -557,7 +557,7 @@ def transcribe_google():
         audio_file = request.files['audio']
         audio_content = audio_file.read()
 
-        credentials = service_account.Credentials.from_service_account_file("google_credentials.json")
+        credentials = service_account.Credentials.from_service_account_file("AIzaSyDyuynF3_Z66n3W-ssvUQSVtmJzCJnV89U")
         client = speech.SpeechClient(credentials=credentials)
 
         audio = speech.RecognitionAudio(content=audio_content)
