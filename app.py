@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash
+from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash, jsonify
 import azure.cognitiveservices.speech as speechsdk
 from azure.storage.blob import BlobServiceClient,BlobClient,ContainerClient
 import base64
@@ -543,6 +543,37 @@ def eliminar_proyecto():
     finally:
         if conn:
             conn.close()
+
+@app.route('/transcribir-audio', methods=['POST'])
+def transcribir_audio():
+    try:
+        audio_file = request.files['audio']
+
+        # Configurar Azure Speech
+        speech_config = get_speech_config()
+
+        # Convertir audio en BytesIO stream
+        audio_stream = speechsdk.AudioConfig(stream=speechsdk.audio.AudioInputStream.create_push_stream())
+        push_stream = speechsdk.audio.PushAudioInputStream()
+        audio_config = speechsdk.audio.AudioConfig(stream=push_stream)
+
+        recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+
+        audio_bytes = audio_file.read()
+        push_stream.write(audio_bytes)
+        push_stream.close()
+
+        result = recognizer.recognize_once_async().get()
+
+        if result.reason == speechsdk.ResultReason.RecognizedSpeech:
+            return jsonify({'transcripcion': result.text})
+        else:
+            return jsonify({'error': 'No se reconoció el audio'}), 400
+
+    except Exception as e:
+        print("Error de transcripción:", str(e))
+        return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
