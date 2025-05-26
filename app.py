@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash
+from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash, jsonify
 import azure.cognitiveservices.speech as speechsdk
 from azure.storage.blob import BlobServiceClient,BlobClient,ContainerClient
 import base64
@@ -18,10 +18,12 @@ from office365.sharepoint.lists.list import List
 from office365.sharepoint.listitems.listitem import ListItem
 import psycopg2
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from flask import session
 import secrets
 
-
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Configuración PostgreSQL
 POSTGRES_CONFIG = {
@@ -543,6 +545,31 @@ def eliminar_proyecto():
     finally:
         if conn:
             conn.close()
+
+@app.route('/transcribe-audio', methods=['POST'])
+def transcribe_audio():
+    try:
+        if 'audio' not in request.files:
+            return jsonify({"error": "No se envió el archivo de audio"}), 400
+
+        file = request.files['audio']
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(filepath)
+
+        # Azure Speech-to-Text
+        speech_config = get_speech_config()
+        audio_config = speechsdk.audio.AudioConfig(filename=filepath)
+        recognizer = speechsdk.SpeechRecognizer(speech_config=speech_config, audio_config=audio_config)
+
+        result = recognizer.recognize_once_async().get()
+
+        if result.reason == speechsdk.ResultReason.RecognizedSpeech:
+            return jsonify({"text": result.text})
+        else:
+            return jsonify({"error": "No se reconoció el audio."}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
