@@ -77,6 +77,7 @@ function startRecording() {
                         askNextQuestion();
                     } else {
                         console.log("✅ Todas las preguntas han sido respondidas.");
+                        startCamera();
                     }
                 } else {
                     console.error("⚠️ Transcripción fallida:", data.error);
