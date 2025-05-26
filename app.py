@@ -1,8 +1,10 @@
-from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash
+from flask import Flask, request, jsonify, render_template, send_file, redirect,url_for, flash, jsonify
 import azure.cognitiveservices.speech as speechsdk
 from azure.storage.blob import BlobServiceClient,BlobClient,ContainerClient
 import base64
 import io
+from google.cloud import speech_v1p1beta1 as speech
+from google.oauth2 import service_account
 from io import BytesIO
 from PIL import Image
 import os
@@ -542,7 +544,42 @@ def eliminar_proyecto():
         return jsonify({'error': str(e)}), 500
     finally:
         if conn:
+ 
             conn.close()
+
+@app.route('/transcribe-google', methods=['POST'])
+def transcribe_google():
+    try:
+        if 'audio' not in request.files:
+            print("🔴 No se recibió audio.")
+            return jsonify({"error": "Audio no encontrado"}), 400
+
+        audio_file = request.files['audio']
+        audio_content = audio_file.read()
+
+        credentials = service_account.Credentials.from_service_account_file("google_credentials.json")
+        client = speech.SpeechClient(credentials=credentials)
+
+        audio = speech.RecognitionAudio(content=audio_content)
+        config = speech.RecognitionConfig(
+            encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+            sample_rate_hertz=44100,
+            language_code="es-CO",
+        )
+
+        response = client.recognize(config=config, audio=audio)
+
+        if not response.results:
+            print("⚠️ Google no reconoció nada.")
+            return jsonify({"error": "No se reconoció el audio"}), 400
+
+        transcript = response.results[0].alternatives[0].transcript
+        print("✅ Transcripción:", transcript)
+        return jsonify({"text": transcript})
+
+    except Exception as e:
+        print("❌ Error:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
