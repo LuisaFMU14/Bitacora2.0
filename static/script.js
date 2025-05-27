@@ -484,4 +484,20 @@ document.getElementById('switch-camera').addEventListener('click', function () {
     startCamera(currentFacingMode);
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const disciplinaInput = document.getElementById("question_0");
+    const cameraButton = document.getElementById("manual-start-camera");
+
+    if (disciplinaInput) {
+        disciplinaInput.addEventListener("input", function () {
+            if (disciplinaInput.value.trim().length > 0) {
+                cameraButton.style.display = "inline-block";
+                console.log("📸 Botón de cámara habilitado (campo Disciplina tiene texto)");
+            } else {
+                cameraButton.style.display = "none";
+                console.log("🔒 Botón de cámara oculto (campo Disciplina vacío)");
+            }
+        });
+    }
+});
 
