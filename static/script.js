@@ -178,7 +178,8 @@ function startCamera(facingMode = "environment") {
     }).then(function (stream) {
         currentStream = stream;
         video.srcObject = stream;
-        video.style.display = 'block';
+        video.play();
+        //video.style.display = 'block';
         cameraContainer.style.display = 'block';
         takePhotoButton.style.display = 'block';
         //switchCameraButton.style.display = 'block';
@@ -189,7 +190,8 @@ function startCamera(facingMode = "environment") {
         navigator.mediaDevices.getUserMedia({ video: true }).then(function (fallbackStream) {
             currentStream = fallbackStream;
             video.srcObject = fallbackStream;
-            video.style.display = 'block';
+            video.play();
+            //video.style.display = 'block';
             cameraContainer.style.display = 'block';
             takePhotoButton.style.display = 'block';
             startCameraButton.style.display = 'none';
