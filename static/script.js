@@ -153,11 +153,25 @@ function askNextQuestion() {
 
         utterance.onend = function() {
             console.log("🔊 Pregunta leída. Iniciando grabación...");
-            setTimeout(() => {
-                startRecording();
-            }, 300);
+             // Detectar plataforma y elegir método de transcripción
+            if (isIOS()) {
+                setTimeout(() => {
+                    startRecording();
+                }, 300);
+            }else{
+                console.log("🤖 Usando webkitSpeechRecognition para Android/PC.");
+                setTimeout(() => {
+                    startSpeechRecognition(); 
+                }, 300);
+            }
+            
         };
     }
+}
+
+//Función para detectar el tipo de dispositivo
+function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 }
 
 // Iniciar la cámara automáticamente cuando se completen las preguntas
